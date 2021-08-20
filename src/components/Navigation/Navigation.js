@@ -1,6 +1,7 @@
 import React from "react";
 import "./Navigation.css";
 import { Link } from "react-router-dom";
+import { HashLink } from 'react-router-hash-link';
 
 export default function Navigation({ place }) {
   return (
@@ -37,28 +38,28 @@ export default function Navigation({ place }) {
         <nav className="navigation navigation_place_menu">
           <ul className="navigation__links">
             <li className="navigation__list navigation__list_type_menu">
-              <Link
+              <HashLink
                 className="navigation__link navigation__link_type_menu"
-                to="#"
+                smooth to="#about-project"
               >
                 О проекте
-              </Link>
+              </HashLink>
             </li>
             <li className="navigation__list navigation__list_type_menu">
-              <Link
+              <HashLink
                 className="navigation__link navigation__link_type_menu"
-                to="#"
+                smooth to="#technology"
               >
                 Технологии
-              </Link>
+              </HashLink>
             </li>
             <li className="navigation__list navigation__list_type_menu">
-              <Link
+              <HashLink
                 className="navigation__link navigation__link_type_menu"
-                to="#"
+                smooth to="#about-me"
               >
                 Студент
-              </Link>
+              </HashLink>
             </li>
           </ul>
         </nav>
@@ -70,6 +71,7 @@ export default function Navigation({ place }) {
               <Link
                 className="navigation__link navigation__link_type_about-me"
                 to="https://t.me/nikolaymishaev"
+                target="_blank"
               >
                 Telegram
               </Link>
@@ -78,6 +80,7 @@ export default function Navigation({ place }) {
               <Link
                 className="navigation__link navigation__link_type_about-me"
                 to="https://github.com/NikolayMishaev"
+                target="_blank"
               >
                 Github
               </Link>
@@ -86,6 +89,7 @@ export default function Navigation({ place }) {
               <Link
                 className="navigation__link navigation__link_type_about-me"
                 to="https://www.codewars.com/users/NikolayMishaev"
+                target="_blank"
               >
                 Codewars
               </Link>
@@ -101,6 +105,7 @@ export default function Navigation({ place }) {
               <Link
                 className="navigation__link navigation__link_type_footer"
                 to="https://practicum.yandex.ru"
+                target="_blank"
               >
                 Яндекс.Практикум
               </Link>
@@ -109,6 +114,7 @@ export default function Navigation({ place }) {
               <Link
                 className="navigation__link navigation__link_type_footer"
                 to="https://github.com/NikolayMishaev"
+                target="_blank"
               >
                 Github
               </Link>
@@ -117,6 +123,7 @@ export default function Navigation({ place }) {
               <Link
                 className="navigation__link navigation__link_type_footer"
                 to="https://t.me/nikolaymishaev"
+                target="_blank"
               >
                 Telegram
               </Link>

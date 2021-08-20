@@ -35,3 +35,16 @@
 .section-title_type_about-me::after {
   margin-bottom: 66px;
 }
+
+@media (max-width: 400px) {
+  .section-title {
+    font-size: 18px;
+    line-height: 22px;
+  }
+}
+
+@media (max-width: 400px) {
+  .section-title:after {
+    margin: 28px 0 60px;
+  }
+}

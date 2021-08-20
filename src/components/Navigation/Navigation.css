@@ -31,12 +31,25 @@
   margin-left: 30px;
 }
 
+@media (max-width: 400px) {
+  .navigation__list_type_signin {
+    padding: 5px 12px;
+    margin-left: 14px;
+  }
+}
+
 .navigation__list_type_about-me {
   margin-right: 20px;
 }
 
 .navigation__list_type_menu {
   margin-right: 40px;
+}
+
+@media (max-width: 400px) {
+  .navigation__list_type_menu {
+    margin-right: 24px;
+  }
 }
 
 .navigation__list_type_footer {
@@ -51,6 +64,12 @@
   font-size: 12px;
   line-height: 16px;
   color: #000;
+}
+
+@media (max-width: 400px) {
+  .navigation__link {
+    font-size: 10px;
+  }
 }
 
 .navigation__link_type_main {
@@ -68,6 +87,12 @@
   color: #fff;
   font-size: 13px;
   line-height: 16px;
+}
+
+@media (max-width: 400px) {
+  .navigation__link_type_menu {
+    font-size: 11px;
+  }
 }
 
 .navigation__link_type_about-me {
