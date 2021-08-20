@@ -63,6 +63,36 @@ export default function Navigation({ place }) {
           </ul>
         </nav>
       )}
+      {place === "about-me" && (
+        <nav className="navigation">
+          <ul className="navigation__links">
+            <li className="navigation__list navigation__list_type_about-me">
+              <Link
+                className="navigation__link navigation__link_type_about-me"
+                to="#"
+              >
+                Telegram
+              </Link>
+            </li>
+            <li className="navigation__list navigation__list_type_about-me">
+              <Link
+                className="navigation__link navigation__link_type_about-me"
+                to="#"
+              >
+                Github
+              </Link>
+            </li>
+            <li className="navigation__list navigation__list_type_about-me">
+              <Link
+                className="navigation__link navigation__link_type_about-me"
+                to="#"
+              >
+                Codewars
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      )}
     </>
   );
 }

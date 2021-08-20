@@ -27,12 +27,20 @@
   margin-left: 30px;
 }
 
-.navigation__list_type_menu:first-child {
-  margin-left: 0;
+.navigation__list_type_about-me {
+  margin-right: 20px;
+}
+
+.navigation__list_type_about-me:last-child {
+  margin-right: 0;
 }
 
 .navigation__list_type_menu {
-  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.navigation__list_type_menu:last-child {
+  margin-right: 0;
 }
 
 .navigation__link {
@@ -58,4 +66,11 @@
 .navigation__link_type_menu {
   text-decoration: underline;
   color: #fff;
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.navigation__link_type_about-me {
+  font-size: 14px;
+  line-height: 17px;
 }
