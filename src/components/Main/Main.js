@@ -4,6 +4,7 @@ import Navigation from "../Navigation/Navigation";
 import AboutProject from "../AboutProject/AboutProject";
 import Technology from "../Technology/Technology";
 import AboutMe from "../AboutMe/AboutMe";
+import Portfolio from "../Portfolio/Portfolio";
 
 export default function Main() {
   return (
@@ -12,6 +13,7 @@ export default function Main() {
       <AboutProject />
       <Technology/>
       <AboutMe/>
+      <Portfolio/>
     </>
   );
 }

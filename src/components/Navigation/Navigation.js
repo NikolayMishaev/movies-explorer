@@ -69,7 +69,7 @@ export default function Navigation({ place }) {
             <li className="navigation__list navigation__list_type_about-me">
               <Link
                 className="navigation__link navigation__link_type_about-me"
-                to="#"
+                to="https://t.me/nikolaymishaev"
               >
                 Telegram
               </Link>
@@ -77,7 +77,7 @@ export default function Navigation({ place }) {
             <li className="navigation__list navigation__list_type_about-me">
               <Link
                 className="navigation__link navigation__link_type_about-me"
-                to="#"
+                to="https://github.com/NikolayMishaev"
               >
                 Github
               </Link>
@@ -85,7 +85,7 @@ export default function Navigation({ place }) {
             <li className="navigation__list navigation__list_type_about-me">
               <Link
                 className="navigation__link navigation__link_type_about-me"
-                to="#"
+                to="https://www.codewars.com/users/NikolayMishaev"
               >
                 Codewars
               </Link>
