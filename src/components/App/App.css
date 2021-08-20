@@ -12,3 +12,22 @@
 .page_align_center {
   margin: 0 auto;
 }
+
+.section-title {
+  width: 100%;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 22px;
+  line-height: 27px;
+  letter-spacing: -0.04em;
+  color: #000;
+  margin: 0;
+}
+
+.section-title::after {
+  content: "";
+  border-bottom: 1px solid #000;
+  display: block;
+  width: 100%;
+  margin: 23px 0 70px;
+}

@@ -1,61 +1,61 @@
 .navigation {
-    width: 100%;
-  }
-  
-.navigation_place_menu {
-    background-color: #000;
-    min-height: 66px;
-    display: flex;
+  width: 100%;
 }
 
-  .navigation__links {
-    display: flex;
-    list-style-type: none;
-    margin: 0 auto;
-    padding: 0;
-    align-items: center;
-  }
-  
-  .navigation__list_type_main {
-      margin-right: auto;
-  }
-  
-  .navigation__list_type_signin {
-      border-radius: 3px;
-      padding: 8px 20px;
-      background-color: black;
-      margin-left: 30px;
-  }
-  
-  .navigation__list_type_menu:first-child {
-    margin-left: 0;
+.navigation_place_menu {
+  background-color: #000;
+  min-height: 66px;
+  display: flex;
+}
+
+.navigation__links {
+  display: flex;
+  list-style-type: none;
+  margin: 0 auto;
+  padding: 0;
+  align-items: center;
+}
+
+.navigation__list_type_main {
+  margin-right: auto;
+}
+
+.navigation__list_type_signin {
+  border-radius: 3px;
+  padding: 8px 20px;
+  background-color: black;
+  margin-left: 30px;
+}
+
+.navigation__list_type_menu:first-child {
+  margin-left: 0;
 }
 
 .navigation__list_type_menu {
-    margin-left: 40px;
+  margin-left: 40px;
 }
 
-  .navigation__link {
-      text-decoration: none;
-      display: block;
-      font-style: normal;
-      font-weight: 500;
-      font-size: 12px;
-      line-height: 16px;
-      color: #000;
-    }
-  
-  .navigation__link_type_main {
-    width: 38px;
-    height: 38px;
-    background: url(../../images/navigation-link-main.svg) center center no-repeat;
-  }
-  
-  .navigation__link_type_signin {
-      color: #FFF;
-  }
+.navigation__link {
+  text-decoration: none;
+  display: block;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #000;
+}
 
-  .navigation__link_type_menu {
-      text-decoration: underline;
-      color:#FFF;
-  }
+.navigation__link_type_main {
+  width: 38px;
+  height: 38px;
+  background: url(../../images/navigation-link-main.svg) center center no-repeat;
+}
+
+.navigation__link_type_signin {
+  color: #fff;
+}
+
+.navigation__link_type_menu {
+  text-decoration: underline;
+  color: #fff;
+}

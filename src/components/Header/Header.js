@@ -7,10 +7,8 @@ export default function Header() {
   return (
     <>
       <header className="header">
-        <Navigation
-        place="header"
-        />
-        <Promo/>
+        <Navigation place="header" />
+        <Promo />
       </header>
     </>
   );

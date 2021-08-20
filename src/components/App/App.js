@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="page page_align_center">
       <Header />
-      <Main/>
+      <Main />
     </div>
   );
 }

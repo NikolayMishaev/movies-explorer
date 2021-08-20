@@ -1,18 +1,18 @@
 .promo {
-    min-height: 320px;
-    background: url(../../images/promo-logo.svg) no-repeat center center;
-    display: flex;
-    margin-top: 100px;
+  min-height: 320px;
+  background: url(../../images/promo-logo.svg) no-repeat center center;
+  display: flex;
+  margin-top: 100px;
 }
 
 .promo__title {
-font-style: normal;
-font-weight: normal;
-font-size: 50px;
-line-height: 58px;
-text-align: center;
-letter-spacing: -0.04em;
-color: #000000;
-max-width: 730px;
-margin: auto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 50px;
+  line-height: 58px;
+  text-align: center;
+  letter-spacing: -0.04em;
+  color: #000000;
+  max-width: 730px;
+  margin: auto;
 }
