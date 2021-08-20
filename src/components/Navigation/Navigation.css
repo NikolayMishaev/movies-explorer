@@ -16,6 +16,10 @@
   align-items: center;
 }
 
+.navigation__list:last-child {
+  margin-right: 0;
+}
+
 .navigation__list_type_main {
   margin-right: auto;
 }
@@ -31,16 +35,12 @@
   margin-right: 20px;
 }
 
-.navigation__list_type_about-me:last-child {
-  margin-right: 0;
-}
-
 .navigation__list_type_menu {
   margin-right: 40px;
 }
 
-.navigation__list_type_menu:last-child {
-  margin-right: 0;
+.navigation__list_type_footer {
+  margin-right: 20px;
 }
 
 .navigation__link {
@@ -73,4 +73,17 @@
 .navigation__link_type_about-me {
   font-size: 14px;
   line-height: 17px;
+}
+
+.navigation__link_type_footer {
+  font-size: 13px;
+}
+
+.navigation__text {
+  margin-right: auto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  color: #000;
 }

@@ -93,6 +93,37 @@ export default function Navigation({ place }) {
           </ul>
         </nav>
       )}
+      {place === "footer" && (
+        <nav className="navigation">
+          <ul className="navigation__links">
+            <p className="navigation__text">&copy;2021</p>
+            <li className="navigation__list navigation__list_type_footer">
+              <Link
+                className="navigation__link navigation__link_type_footer"
+                to="https://practicum.yandex.ru"
+              >
+                Яндекс.Практикум
+              </Link>
+            </li>
+            <li className="navigation__list navigation__list_type_footer">
+              <Link
+                className="navigation__link navigation__link_type_footer"
+                to="https://github.com/NikolayMishaev"
+              >
+                Github
+              </Link>
+            </li>
+            <li className="navigation__list navigation__list_type_footer">
+              <Link
+                className="navigation__link navigation__link_type_footer"
+                to="https://t.me/nikolaymishaev"
+              >
+                Telegram
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      )}
     </>
   );
 }
