@@ -7,13 +7,14 @@
 
 @media (max-width: 800px) {
   .promo {
-    margin-top: 260px;
+    margin-top: 242px;
   }
 }
 
 @media (max-width: 400px) {
   .promo {
     min-height: 248px;
+    margin-top: 160px;
   }
 }
 

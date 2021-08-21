@@ -14,7 +14,7 @@ export default function Technology() {
                       <li className="technology__item">React</li>
                       <li className="technology__item">Git</li>
                       <li className="technology__item">Express.js</li>
-                      <li className="technology__item">MongoDB</li>
+                      <li className="technology__item">mongoDB</li>
                   </ul>
         </section>
     );

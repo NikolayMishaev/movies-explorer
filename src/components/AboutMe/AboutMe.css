@@ -8,7 +8,7 @@
 
 @media (max-width: 800px) {
   .about-me {
-    padding: 90px 50px;
+    padding: 90px 50px 90px;
   }
 }
 
@@ -95,11 +95,11 @@
   max-width: 600px;
   margin: 0 0 34px;
   display: -webkit-box;
-    -webkit-line-clamp: 7;
-    -webkit-box-orient: vertical;
-overflow-y: scroll;
-overflow-x: unset;
-padding-right: 10px;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow-y: scroll;
+  overflow-x: unset;
+  padding-right: 10px;
 }
 
 .about-me__text::-webkit-scrollbar {
@@ -115,8 +115,16 @@ padding-right: 10px;
   .about-me__text {
     font-size: 12px;
     line-height: 18px;
-    display: block;
-    padding-right: unset;
+    -webkit-line-clamp: 8;
+    margin-bottom: 51px;
+  }
+}
+
+@media (max-width: 600px) {
+  .about-me__text {
+    display: -webkit-box;
+    margin-bottom: 23px;
+    padding-right: 10px;
   }
 }
 
@@ -144,8 +152,8 @@ padding-right: 10px;
 
 @media (max-width: 700px) {
   .about-me__photo {
-margin: 0 auto 40px;
-max-height: 352px;
-min-width: 292px;
+    margin: 0 auto 40px;
+    max-height: 352px;
+    min-width: 292px;
   }
 }

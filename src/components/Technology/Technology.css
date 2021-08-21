@@ -16,6 +16,7 @@
 @media (max-width: 400px) {
   .technology {
     padding: 70px 18px 65px;
+    background: #FFF;
   }
 }
 
@@ -85,8 +86,9 @@
 
 @media (max-width: 400px) {
   .technology__items {
-    max-width: 200px;
+    max-width: 188px;
     margin: 0 auto;
+    justify-content: unset;
   }
 }
 

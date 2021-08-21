@@ -66,7 +66,7 @@ export default function Navigation({ place }) {
       )}
       {place === "about-me" && (
         <nav className="navigation">
-          <ul className="navigation__links">
+          <ul className="navigation__links navigation__links_type_about-me">
             <li className="navigation__list navigation__list_type_about-me">
               <Link
                 className="navigation__link navigation__link_type_about-me"
@@ -100,7 +100,7 @@ export default function Navigation({ place }) {
       {place === "footer" && (
         <nav className="navigation">
           <ul className="navigation__links navigation__links_type_footer">
-            <p className="navigation__text">&copy;2021</p>
+            <p className="navigation__text">&copy; 2021</p>
             <li className="navigation__list navigation__list_type_footer">
               <Link
                 className="navigation__link navigation__link_type_footer"

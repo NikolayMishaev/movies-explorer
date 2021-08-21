@@ -2,6 +2,13 @@
   width: 100%;
 }
 
+@media (max-width: 400px) {
+  .navigation {
+    padding: 0 4px 0;
+    box-sizing: border-box;
+  }
+}
+
 .navigation_place_menu {
   background-color: #000;
   min-height: 66px;
@@ -16,6 +23,10 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.navigation__links_type_about-me {
+  justify-content: unset;
 }
 
   @media (max-width: 400px) {
