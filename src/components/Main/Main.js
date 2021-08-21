@@ -12,10 +12,10 @@ export default function Main() {
     <>
       <Navigation place="menu" />
       <AboutProject />
-      <Technology/>
-      <AboutMe/>
-      <Portfolio/>
-      <Footer/>
+      <Technology />
+      <AboutMe />
+      <Portfolio />
+      <Footer />
     </>
   );
 }

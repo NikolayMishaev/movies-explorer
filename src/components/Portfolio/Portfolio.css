@@ -64,12 +64,12 @@
   padding-right: 30px;
   width: 100%;
   box-sizing: border-box;
-  transition: background-color .7s, transform .4s,opacity .5s;
+  transition: background-color 0.7s, transform 0.4s, opacity 0.5s;
 }
 
 .portfolio__link:hover {
-  opacity: .6;
-  transform: scale(1.010);
+  opacity: 0.6;
+  transform: scale(1.01);
   background-image: url(../../images/portfolio-image-link-active.png);
   background-size: 25px;
   background-color: #f5f5f5;

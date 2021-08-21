@@ -1,7 +1,7 @@
 import React from "react";
 import "./Navigation.css";
 import { Link } from "react-router-dom";
-import { HashLink } from 'react-router-hash-link';
+import { HashLink } from "react-router-hash-link";
 
 export default function Navigation({ place }) {
   return (
@@ -40,7 +40,8 @@ export default function Navigation({ place }) {
             <li className="navigation__list navigation__list_type_menu">
               <HashLink
                 className="navigation__link navigation__link_type_menu"
-                smooth to="#about-project"
+                smooth
+                to="#about-project"
               >
                 О проекте
               </HashLink>
@@ -48,7 +49,8 @@ export default function Navigation({ place }) {
             <li className="navigation__list navigation__list_type_menu">
               <HashLink
                 className="navigation__link navigation__link_type_menu"
-                smooth to="#technology"
+                smooth
+                to="#technology"
               >
                 Технологии
               </HashLink>
@@ -56,7 +58,8 @@ export default function Navigation({ place }) {
             <li className="navigation__list navigation__list_type_menu">
               <HashLink
                 className="navigation__link navigation__link_type_menu"
-                smooth to="#about-me"
+                smooth
+                to="#about-me"
               >
                 Студент
               </HashLink>
@@ -68,31 +71,34 @@ export default function Navigation({ place }) {
         <nav className="navigation">
           <ul className="navigation__links navigation__links_type_about-me">
             <li className="navigation__list navigation__list_type_about-me">
-              <Link
+              <a
                 className="navigation__link navigation__link_type_about-me"
-                to="https://t.me/nikolaymishaev"
+                href="https://t.me/nikolaymishaev"
                 target="_blank"
+                rel="noreferrer"
               >
                 Telegram
-              </Link>
+              </a>
             </li>
             <li className="navigation__list navigation__list_type_about-me">
-              <Link
+              <a
                 className="navigation__link navigation__link_type_about-me"
-                to="https://github.com/NikolayMishaev"
+                href="https://github.com/NikolayMishaev"
                 target="_blank"
+                rel="noreferrer"
               >
                 Github
-              </Link>
+              </a>
             </li>
             <li className="navigation__list navigation__list_type_about-me">
-              <Link
+              <a
                 className="navigation__link navigation__link_type_about-me"
-                to="https://www.codewars.com/users/NikolayMishaev"
+                href="https://www.codewars.com/users/NikolayMishaev"
                 target="_blank"
+                rel="noreferrer"
               >
                 Codewars
-              </Link>
+              </a>
             </li>
           </ul>
         </nav>
@@ -102,31 +108,34 @@ export default function Navigation({ place }) {
           <ul className="navigation__links navigation__links_type_footer">
             <p className="navigation__text">&copy; 2021</p>
             <li className="navigation__list navigation__list_type_footer">
-              <Link
+              <a
                 className="navigation__link navigation__link_type_footer"
-                to="https://practicum.yandex.ru"
+                href="https://practicum.yandex.ru"
                 target="_blank"
+                rel="noreferrer"
               >
                 Яндекс.Практикум
-              </Link>
+              </a>
             </li>
             <li className="navigation__list navigation__list_type_footer">
-              <Link
+              <a
                 className="navigation__link navigation__link_type_footer"
-                to="https://github.com/NikolayMishaev"
+                href="https://github.com/NikolayMishaev"
                 target="_blank"
+                rel="noreferrer"
               >
                 Github
-              </Link>
+              </a>
             </li>
             <li className="navigation__list navigation__list_type_footer">
-              <Link
+              <a
                 className="navigation__link navigation__link_type_footer"
-                to="https://t.me/nikolaymishaev"
+                href="https://t.me/nikolaymishaev"
                 target="_blank"
+                rel="noreferrer"
               >
                 Telegram
-              </Link>
+              </a>
             </li>
           </ul>
         </nav>
