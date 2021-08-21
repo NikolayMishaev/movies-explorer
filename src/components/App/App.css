@@ -7,6 +7,9 @@
   min-height: 100vh;
   min-width: 320px;
   position: relative;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
 }
 
 .page_align_center {
