@@ -94,6 +94,7 @@
 
 .about-project__direction-item {
   margin-top: 110px;
+  min-width: 20%;
 }
 
 @media (max-width: 800px) {
@@ -121,7 +122,6 @@
   text-align: center;
   min-height: 36px;
   color: #fff;
-  min-width: 228px;
   background-color: #000;
   display: flex;
   justify-content: center;
@@ -130,7 +130,7 @@
 
 @media (max-width: 800px) {
   .about-project__time {
-    min-width: 140px;
+    min-width: 100px;
   }
 }
 
@@ -138,7 +138,6 @@
   .about-project__time {
     font-size: 11px;
     line-height: 13px;
-    min-width: 100px;
   }
 }
 

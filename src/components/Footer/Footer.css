@@ -4,6 +4,18 @@
   box-sizing: border-box;
 }
 
+@media (max-width: 800px) {
+  .footer {
+    padding: 79px 30px 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  .footer {
+    padding: 59px 10px 10px;
+  }
+}
+
 .footer__description {
   font-style: normal;
   font-weight: normal;
@@ -13,10 +25,23 @@
   color: #a0a0a0;
 }
 
+@media (max-width: 400px) {
+  .footer__description {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}
+
 .footer__description::after {
   content: "";
   border-bottom: 1px solid #e8e8e8;
   display: block;
   width: 100%;
   margin: 20px 0;
+}
+
+@media (max-width: 400px) {
+  .footer__description::after {
+    margin: 21px 0 30px;
+  }
 }
