@@ -3,19 +3,23 @@ import "./Navigation.css";
 import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 
-export default function Navigation({ place }) {
+export default function Navigation({ place, loggedIn }) {
   return (
     <>
       {place === "header" && (
         <nav className="navigation">
           <ul className="navigation__links">
-            <li className="navigation__list navigation__list_type_main">
+            <li className="navigation__list">
               <Link
                 className="navigation__link navigation__link_type_main"
                 to="#"
               ></Link>
             </li>
-            <li className="navigation__list">
+            <li
+              className={`navigation__list navigation__list_type_signup ${
+                loggedIn ? "display-none" : ""
+              }`}
+            >
               <Link
                 className="navigation__link navigation__link_type_signup"
                 to="#"
@@ -23,13 +27,37 @@ export default function Navigation({ place }) {
                 Регистрация
               </Link>
             </li>
-            <li className="navigation__list navigation__list_type_signin">
+            <li
+              className={` navigation__list navigation__list_type_signin ${
+                loggedIn ? "display-none" : ""
+              } `}
+            >
               <Link
                 className="navigation__link navigation__link_type_signin"
                 to="#"
               >
                 Войти
               </Link>
+            </li>
+            <li className="navigation__list navigation__list_type_movie">
+              <Link className="navigation__link navigation__link_type_movie" to="#">
+                Фильмы
+              </Link>
+            </li>
+            <li className="navigation__list">
+              <Link className="navigation__link navigation__link_type_movie" to="#">
+                Сохранённые фильмы
+              </Link>
+            </li>
+            <li className="navigation__list navigation__list_type_account">
+              <Link className="navigation__link navigation__link_type_account" to="#">
+                Аккаунт
+              </Link>
+            </li>
+            <li className="navigation__list">
+              <button className="navigation__button-burger-menu" type="button">
+                
+              </button>
             </li>
           </ul>
         </nav>

@@ -70,7 +70,7 @@
 .portfolio__link:hover {
   opacity: 0.6;
   transform: scale(1.01);
-  background-image: url(../../images/portfolio-image-link-active.png);
+  background-image: url(../../images/portfolio-image-link-active.svg);
   background-size: 25px;
   background-color: #f5f5f5;
 }
