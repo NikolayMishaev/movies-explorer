@@ -12,6 +12,7 @@ export default function Movies({ checkboxOn, handleMovieCheckbox }) {
         handleMovieCheckbox={handleMovieCheckbox}
       />
       <MoviesCardList/>
+      <button className="movies__button-add-more-cards" type="button">Ещё</button>
       </section>
   );
 }

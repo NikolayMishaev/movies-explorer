@@ -1,0 +1,18 @@
+.movies {
+  display: flex;
+  flex-direction: column;
+}
+
+.movies__button-add-more-cards {
+  width: 320px;
+  min-height: 36px;
+  margin: 0 auto 67px;
+  border: 1px solid #e8e8e8;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: center;
+  background-color: #fff;
+  border-radius: 10px;
+}
