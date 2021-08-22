@@ -244,6 +244,7 @@
   .navigation__link_type_mobile-menu-account {
     opacity: 1;
     visibility: visible;
+    width: unset;
   }
 }
 

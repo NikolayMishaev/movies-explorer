@@ -16,6 +16,12 @@
   margin: 0 auto;
 }
 
+.content {
+  width: 100%;
+  display: flex;
+    flex-direction: column;
+}
+
 .section-title {
   width: 100%;
   font-style: normal;

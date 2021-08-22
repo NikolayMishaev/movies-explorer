@@ -16,11 +16,13 @@ function App() {
   return (
     <div className="page page_align_center">
       <Header loggedIn={loggedIn} />
+      <main className="content">
       {/* <Main/> */}
       <Movies
         checkboxOn={shortMovieCheckbox}
         handleMovieCheckbox={handleMovieCheckbox}
       />
+      </main>
       <Footer />
     </div>
   );
