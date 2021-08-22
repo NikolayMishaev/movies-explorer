@@ -1,0 +1,139 @@
+.movies {
+  width: 100%;
+  padding: 80px 70px 40px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 800px) {
+  .movies {
+    padding: 80px 30px 40px;
+  }
+}
+
+@media (max-width: 400px) {
+  .movies {
+    padding: 80px 14px 40px;
+  }
+}
+
+.movies::after {
+  content: "";
+  border-bottom: 1px solid #e8e8e8;
+  display: block;
+  width: 100%;
+  margin: 28px 0;
+}
+
+@media (max-width: 400px) {
+  .movies::after {
+    margin: 33px 0;
+  }
+}
+
+.movies__search {
+  display: flex;
+  align-items: center;
+}
+
+.movies__input {
+  flex: 1;
+  background: #f9f9f9;
+  border-radius: 4px;
+  padding: 15px 22px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  border: none;
+}
+
+@media (max-width: 400px) {
+  .movies__input {
+    font-size: 12px;
+    padding: 13px 16px;
+  }
+}
+
+.movies__input::placeholder {
+  color: #a0a0a0;
+}
+
+.movies__input:focus {
+  outline-color: #f3c1f8;
+  background: #fff;
+}
+
+.movies__button-submit {
+  border: none;
+  background: #000000;
+  border-radius: 3px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #ffffff;
+  min-width: 70px;
+  padding: 0;
+  margin-left: 10px;
+  height: 44px;
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.movies__button-submit:hover {
+  cursor: pointer;
+  opacity: 0.7;
+  transform: scale(1.05);
+}
+
+.movies__filter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 19px;
+}
+
+@media (max-width: 400px) {
+  .movies__filter {
+    margin-top: 35px;
+  }
+}
+
+.movies__checkbox {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.movies__visible-checkbox {
+  width: 36px;
+  height: 20px;
+  background: url(../../images/movie-checkbox-turn-off.svg) no-repeat;
+  transition: all 0.25s;
+}
+
+.movies__visible-checkbox:hover {
+  cursor: pointer;
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+.movies__visible-checkbox_active {
+  background: url(../../images/movie-checkbox-turn-on.svg) no-repeat;
+}
+
+.movies__checkbox-name {
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 18px;
+  padding-left: 12px;
+}
+
+@media (max-width: 400px) {
+  .movies__checkbox-name {
+    font-size: 11px;
+  }
+}
