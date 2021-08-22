@@ -7,12 +7,20 @@ import Movies from "../Movies/Movies";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(true);
+  const [shortMovieCheckbox, setShortMovieCheckbox] = useState(false);
+
+  function handleMovieCheckbox() {
+    setShortMovieCheckbox(!shortMovieCheckbox);
+  }
 
   return (
     <div className="page page_align_center">
       <Header loggedIn={loggedIn} />
       {/* <Main/> */}
-      <Movies />
+      <Movies
+        checkboxOn={shortMovieCheckbox}
+        handleMovieCheckbox={handleMovieCheckbox}
+      />
       <Footer />
     </div>
   );
