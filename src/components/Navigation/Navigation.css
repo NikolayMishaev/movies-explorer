@@ -9,6 +9,36 @@
   }
 }
 
+@media (max-width: 800px) {
+  .navigation_type_mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+    transition: all 1s;
+  }
+}
+
+@media (max-width: 800px) {
+  .navigation_type_mobile-menu:hover {
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 800px) {
+  .navigation_type_mobile-menu-close {
+    opacity: 0;
+  }
+}
+
+@media (min-width: 801px) {
+  .navigation_type_visible_only-mobile {
+    display: none;
+  }
+}
+
 .navigation_place_menu {
   background-color: #000;
   min-height: 66px;
@@ -23,6 +53,36 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  transition: all 1s;
+}
+
+@media (max-width: 800px) {
+  .navigation__links_type_mobile-menu {
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #fff;
+    width: 67.7%;
+    height: 100%;
+    justify-content: unset;
+  }
+}
+
+@media (max-width: 800px) {
+  .navigation__links_type_mobile-menu:hover {
+    cursor: auto;
+  }
+}
+
+@media (max-width: 400px) {
+  .navigation__links_type_mobile-menu {
+    width: 100%;
+  }
+}
+
+.navigation__links_type_header {
+  justify-content: space-between;
 }
 
 .navigation__links_type_about-me {
@@ -39,9 +99,29 @@
   margin-right: 0;
 }
 
+@media (max-width: 800px) {
+  .navigation__list_type_button-burger-mobile-menu {
+    order: -1;
+    margin: 22px 0 72px auto;
+  }
+}
+
+@media (max-width: 400px) {
+  .navigation__list_type_button-burger-mobile-menu {
+    margin-top: 14px;
+    margin-bottom: 69px;
+  }
+}
+
 .navigation__list_type_movie {
   margin-left: 44px;
   margin-right: 16px;
+}
+
+@media (max-width: 800px) {
+  .navigation__list_type_mobile-menu {
+    margin: 0;
+  }
 }
 
 .navigation__list_type_account {
@@ -97,6 +177,18 @@
   }
 }
 
+@media (max-width: 800px) {
+  .navigation__list_type_mobile-menu-account {
+    margin: 623px 0 0;
+  }
+}
+
+@media (max-width: 400px) {
+  .navigation__list_type_mobile-menu-account {
+    margin-top: 446px;
+  }
+}
+
 .navigation__link {
   text-decoration: none;
   display: block;
@@ -122,24 +214,34 @@
 
 .navigation__link_type_movie {
   font-size: 13px;
-line-height: 18px;
+  line-height: 18px;
 }
 
 @media (max-width: 800px) {
   .navigation__link_type_movie {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
   }
 }
 
 .navigation__link_type_account {
-  background: url(../../images/navigation-link-account.png) no-repeat right center;
+  background: url(../../images/navigation-link-account.png) no-repeat right
+    center;
   padding: 4px 43px 6px 0;
   font-size: 14px;
 }
 
 @media (max-width: 800px) {
   .navigation__link_type_account {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 800px) {
+  .navigation__link_type_mobile-menu-account {
+    opacity: 1;
+    visibility: visible;
   }
 }
 
@@ -147,6 +249,7 @@ line-height: 18px;
   width: 38px;
   height: 38px;
   background: url(../../images/navigation-link-main.svg) center center no-repeat;
+  font-size: 0;
 }
 
 .navigation__link_type_main:hover {
@@ -186,6 +289,28 @@ line-height: 18px;
   }
 }
 
+@media (max-width: 800px) {
+  .navigation__link_type_mobile-menu {
+    opacity: 1;
+    visibility: visible;
+    font-size: 18px;
+    line-height: 22px;
+    background-image: unset;
+    width: unset;
+    height: unset;
+    padding-top: 28px;
+  }
+  .navigation__link_type_mobile-menu:hover {
+    transform: scale(1.05);
+  }
+}
+
+@media (max-width: 400px) {
+  .navigation__link_type_mobile-menu {
+    padding-top: 24px;
+  }
+}
+
 .navigation__text {
   margin: 0 auto 0 0;
   font-style: normal;
@@ -210,9 +335,10 @@ line-height: 18px;
   border: none;
   width: 40px;
   height: 35px;
-  background: url(../../images/navigation-button-burger-menu.svg) no-repeat right -3px;
+  background: url(../../images/navigation-button-burger-menu.svg) no-repeat
+    right -3px;
   padding: 0;
-  transition: opacity.4s, transform .4s;
+  transition: opacity.4s, transform 0.4s;
 }
 
 @media (min-width: 801px) {
@@ -223,16 +349,30 @@ line-height: 18px;
 
 @media (max-width: 400px) {
   .navigation__button-burger-menu {
-width: 30px;
+    width: 30px;
   }
 }
 
 .navigation__button-burger-menu:hover {
-opacity: .7;
-transform: scale(1.05);
-cursor: pointer;
+  opacity: 0.7;
+  transform: scale(1.05);
+  cursor: pointer;
 }
 
 .navigation__button-burger-menu:focus {
-outline: none;
+  outline: none;
+}
+
+@media (max-width: 800px) {
+  .navigation__button-burger-menu_type_mobile-menu {
+    background: url(../../images/navigation-button-burger-menu-mobile-menu.svg)
+      no-repeat;
+    width: 54px;
+  }
+}
+
+@media (max-width: 400px) {
+  .navigation__button-burger-menu_type_mobile-menu {
+    width: 45px;
+  }
 }

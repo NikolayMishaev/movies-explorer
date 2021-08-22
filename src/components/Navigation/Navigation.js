@@ -1,66 +1,171 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Navigation.css";
 import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 
 export default function Navigation({ place, loggedIn }) {
+  const [mobileMenuOn, setMobileMenuOn] = useState(false);
+  const [mobileMenuCloseOn, setMobileMenuCloseOn] = useState(false);
+
+  function handleButtonBurgerClick() {
+    if (mobileMenuOn) {
+      setMobileMenuCloseOn(true);
+      setTimeout(() => {
+        setMobileMenuCloseOn(false);
+        setMobileMenuOn(false);
+      }, 1000);
+    } else {
+      setMobileMenuOn(!mobileMenuOn);
+    }
+  }
+
   return (
     <>
       {place === "header" && (
-        <nav className="navigation">
-          <ul className="navigation__links">
-            <li className="navigation__list">
-              <Link
-                className="navigation__link navigation__link_type_main"
-                to="#"
-              ></Link>
-            </li>
-            <li
-              className={`navigation__list navigation__list_type_signup ${
-                loggedIn ? "display-none" : ""
-              }`}
-            >
-              <Link
-                className="navigation__link navigation__link_type_signup"
-                to="#"
-              >
-                Регистрация
-              </Link>
-            </li>
-            <li
-              className={` navigation__list navigation__list_type_signin ${
-                loggedIn ? "display-none" : ""
+        <>
+          <nav
+            className={` navigation ${
+              mobileMenuOn ? "navigation_type_mobile-menu" : ""
+            } ${mobileMenuCloseOn ? "navigation_type_mobile-menu-close" : ""} `}
+            onClick={(e) =>
+              e.target.classList.contains("navigation_type_mobile-menu")
+                ? handleButtonBurgerClick()
+                : ""
+            }
+          >
+            <ul
+              className={` navigation__links ${
+                mobileMenuOn ? "navigation__links_type_mobile-menu" : ""
               } `}
             >
-              <Link
-                className="navigation__link navigation__link_type_signin"
-                to="#"
+              <li className="navigation__list">
+                <Link
+                  className={` navigation__link navigation__link_type_main ${
+                    mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
+                  } `}
+                  to="#"
+                >
+                  Главная
+                </Link>
+              </li>
+              <li
+                className={`navigation__list navigation__list_type_signup ${
+                  loggedIn ? "display-none" : ""
+                }`}
               >
-                Войти
-              </Link>
-            </li>
-            <li className="navigation__list navigation__list_type_movie">
-              <Link className="navigation__link navigation__link_type_movie" to="#">
-                Фильмы
-              </Link>
-            </li>
-            <li className="navigation__list">
-              <Link className="navigation__link navigation__link_type_movie" to="#">
-                Сохранённые фильмы
-              </Link>
-            </li>
-            <li className="navigation__list navigation__list_type_account">
-              <Link className="navigation__link navigation__link_type_account" to="#">
-                Аккаунт
-              </Link>
-            </li>
-            <li className="navigation__list">
-              <button className="navigation__button-burger-menu" type="button">
-                
-              </button>
-            </li>
-          </ul>
-        </nav>
+                <Link
+                  className="navigation__link navigation__link_type_signup"
+                  to="#"
+                >
+                  Регистрация
+                </Link>
+              </li>
+              <li
+                className={` navigation__list navigation__list_type_signin ${
+                  loggedIn ? "display-none" : ""
+                } `}
+              >
+                <Link
+                  className="navigation__link navigation__link_type_signin"
+                  to="#"
+                >
+                  Войти
+                </Link>
+              </li>
+              <li
+                className={` navigation__list navigation__list_type_movie ${
+                  loggedIn ? "" : "display-none"
+                } ${mobileMenuOn ? "navigation__list_type_mobile-menu" : ""}
+              }`}
+              >
+                <Link
+                  className={` navigation__link navigation__link_type_movie ${
+                    mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
+                  } `}
+                  to="#"
+                >
+                  Фильмы
+                </Link>
+              </li>
+              <li
+                className={` navigation__list ${
+                  loggedIn ? "" : "display-none"
+                }`}
+              >
+                <Link
+                  className={` navigation__link navigation__link_type_movie ${
+                    mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
+                  } `}
+                  to="#"
+                >
+                  Сохранённые фильмы
+                </Link>
+              </li>
+              <li
+                className={` navigation__list navigation__list_type_account ${
+                  loggedIn ? "" : "display-none"
+                }
+                ${
+                  mobileMenuOn
+                    ? "navigation__list_type_mobile-menu-account"
+                    : ""
+                }
+                `}
+              >
+                <Link
+                  className={` navigation__link navigation__link_type_account ${
+                    mobileMenuOn
+                      ? "navigation__link_type_mobile-menu-account"
+                      : ""
+                  }`}
+                  to="#"
+                >
+                  Аккаунт
+                </Link>
+              </li>
+              <li
+                className={` navigation__list ${
+                  loggedIn ? "" : "display-none"
+                } ${
+                  mobileMenuOn
+                    ? "navigation__list_type_button-burger-mobile-menu"
+                    : ""
+                }`}
+              >
+                <button
+                  className={` navigation__button-burger-menu ${
+                    mobileMenuOn
+                      ? "navigation__button-burger-menu_type_mobile-menu"
+                      : ""
+                  }`}
+                  type="button"
+                  onClick={handleButtonBurgerClick}
+                ></button>
+              </li>
+            </ul>
+          </nav>
+          <nav
+            className={` navigation navigation_type_visible_only-mobile ${
+              mobileMenuOn ? "" : "display-none"
+            } `}
+          >
+            <ul className={` navigation__links navigation__links_type_header`}>
+              <li className="navigation__list">
+                <Link
+                  className={` navigation__link navigation__link_type_main `}
+                  to="#"
+                ></Link>
+              </li>
+              <li className={` navigation__list `}>
+                <button
+                  className={` navigation__button-burger-menu `}
+                  type="button"
+                  onClick={handleButtonBurgerClick}
+                ></button>
+              </li>
+            </ul>
+          </nav>
+        </>
       )}
       {place === "menu" && (
         <nav className="navigation navigation_place_menu">
