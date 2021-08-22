@@ -15,68 +15,69 @@ import image_14 from "../images/movies-cards-wallpaper/14.jpg";
 import image_15 from "../images/movies-cards-wallpaper/15.jpg";
 import image_16 from "../images/movies-cards-wallpaper/16.jpg";
 
-export const movieCards = [{
-    title: '33 слова о дизайне',
-    link: image_01
+export const movieCards = [
+  {
+    title: "33 слова о дизайне",
+    link: image_01,
   },
   {
-    title: 'Киноальманах «100 лет дизайна»',
-    link: image_02
+    title: "Киноальманах «100 лет дизайна»",
+    link: image_02,
   },
   {
-    title: 'В погоне за Бенкси',
-    link: image_03
+    title: "В погоне за Бенкси",
+    link: image_03,
   },
   {
-    title: 'Баския: Взрыв реальности',
-    link: image_04
+    title: "Баския: Взрыв реальности",
+    link: image_04,
   },
   {
-    title: 'Бег это свобода',
-    link: image_05
+    title: "Бег это свобода",
+    link: image_05,
   },
   {
-    title: 'Книготорговцы',
-    link: image_06
+    title: "Книготорговцы",
+    link: image_06,
   },
   {
-    title: 'Когда я думаю о Германии ночью',
-    link: image_07
+    title: "Когда я думаю о Германии ночью",
+    link: image_07,
   },
   {
-    title: 'Gimme Danger: История Игги и The Stooges',
-    link: image_08
+    title: "Gimme Danger: История Игги и The Stooges",
+    link: image_08,
   },
   {
-    title: 'Дженис: Маленькая девочка грустит',
-    link: image_09
+    title: "Дженис: Маленькая девочка грустит",
+    link: image_09,
   },
   {
-    title: 'Соберись перед прыжком',
-    link: image_10
+    title: "Соберись перед прыжком",
+    link: image_10,
   },
   {
-    title: 'Пи Джей Харви: A dog called money',
-    link: image_11
+    title: "Пи Джей Харви: A dog called money",
+    link: image_11,
   },
   {
-    title: 'По волнам: Искусство звука в кино',
-    link: image_12
+    title: "По волнам: Искусство звука в кино",
+    link: image_12,
   },
   {
-    title: 'Рудбой',
-    link: image_13
+    title: "Рудбой",
+    link: image_13,
   },
   {
-    title: 'Скейт — кухня',
-    link: image_14
+    title: "Скейт — кухня",
+    link: image_14,
   },
   {
-    title: 'Война искусств',
-    link: image_15
+    title: "Война искусств",
+    link: image_15,
   },
   {
-    title: 'Зона',
-    link: image_16
+    title: "Зона",
+    link: image_16,
   },
 ];
