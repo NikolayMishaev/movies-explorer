@@ -16,7 +16,7 @@ import Register from "../Register/Register";
 import Login from "../Login/Login";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
   const [shortMovieCheckbox, setShortMovieCheckbox] = useState(false);
   const [headerStyleMain, setHeaderStyleMain] = useState(true);
   const [cardMovieDelete, setCardMovieDelete] = useState(false);
@@ -47,7 +47,11 @@ function App() {
 
   return (
     <div className="page page_align_center">
-      <Header headerStyleMain={headerStyleMain} loggedIn={loggedIn} entryLocation={entryLocation}/>
+      <Header
+        headerStyleMain={headerStyleMain}
+        loggedIn={loggedIn}
+        entryLocation={entryLocation}
+      />
       <main className="content">
         <Switch>
           <Route exact path="/">
@@ -77,7 +81,7 @@ function App() {
           </Route>
         </Switch>
       </main>
-      <Footer entryLocation={entryLocation}/>
+      <Footer entryLocation={entryLocation} />
     </div>
   );
 }

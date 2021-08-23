@@ -56,7 +56,7 @@ export default function Register() {
           </label>
           <button
             aria-label="submit form"
-            className={` entry__button-submit `}
+            className={` entry__button-submit  `}
             type="submit"
           >
             Зарегистрироваться
