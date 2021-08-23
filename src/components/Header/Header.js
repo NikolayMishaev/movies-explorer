@@ -5,7 +5,7 @@ import Navigation from "../Navigation/Navigation";
 export default function Header({ headerStyleMain, loggedIn, entryLocation }) {
   return (
     <>
-      <header className={` ${entryLocation? "display-none" : "header" } ${headerStyleMain ? "" : "header_style_movie"} `}>
+      <header className={` ${entryLocation && !loggedIn? "display-none" : "header" } ${headerStyleMain ? "" : "header_style_movie"} `}>
         <Navigation loggedIn={loggedIn} place="header" />
       </header>
     </>

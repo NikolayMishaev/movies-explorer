@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import "./Navigation.css";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 
 export default function Navigation({ place, loggedIn }) {
   const [mobileMenuOn, setMobileMenuOn] = useState(false);
   const [mobileMenuCloseOn, setMobileMenuCloseOn] = useState(false);
-  const history = useHistory();
 
-  function handleButtonBurgerClick() {
+  function handleButtonBurgerClick(e) {
     if (mobileMenuOn) {
       setMobileMenuCloseOn(true);
       setTimeout(() => {
@@ -16,7 +15,9 @@ export default function Navigation({ place, loggedIn }) {
         setMobileMenuOn(false);
       }, 1000);
     } else {
-      setMobileMenuOn(!mobileMenuOn);
+      loggedIn &&
+        e.target.classList.contains("navigation__button-burger-menu") &&
+        setMobileMenuOn(true);
     }
   }
 
@@ -45,6 +46,7 @@ export default function Navigation({ place, loggedIn }) {
                     mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
                   } `}
                   to="/"
+                  onClick={handleButtonBurgerClick}
                 >
                   Главная
                 </Link>
@@ -84,6 +86,7 @@ export default function Navigation({ place, loggedIn }) {
                     mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
                   } `}
                   to="/movie"
+                  onClick={handleButtonBurgerClick}
                 >
                   Фильмы
                 </Link>
@@ -98,6 +101,7 @@ export default function Navigation({ place, loggedIn }) {
                     mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
                   } `}
                   to="/saved-movies"
+                  onClick={handleButtonBurgerClick}
                 >
                   Сохранённые фильмы
                 </Link>
@@ -119,7 +123,8 @@ export default function Navigation({ place, loggedIn }) {
                       ? "navigation__link_type_mobile-menu-account"
                       : ""
                   }`}
-                  to="#"
+                  to="/profile"
+                  onClick={handleButtonBurgerClick}
                 >
                   Аккаунт
                 </Link>
@@ -275,12 +280,8 @@ export default function Navigation({ place, loggedIn }) {
         </nav>
       )}
       {place === "entry" && (
-        <nav
-          className="navigation"
-        >
-          <ul
-            className="navigation__links navigation__links_type_entry"
-          >
+        <nav className="navigation">
+          <ul className="navigation__links navigation__links_type_entry">
             <li className="navigation__list">
               <Link
                 className="navigation__link navigation__link_type_main"

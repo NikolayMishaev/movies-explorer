@@ -71,6 +71,10 @@
   max-width: 396px;
 }
 
+.entry_type_profile {
+  max-width: 410px;
+}
+
 @media (max-width: 800px) {
   .entry {
     padding-top: 232px;
@@ -99,8 +103,26 @@
   }
 }
 
+.entry__title_type_profile {
+  margin: 4px auto 108px;
+}
+
+@media (max-width: 800px) {
+  .entry__title_type_profile {
+    margin-bottom: 80px;
+  }
+}
+
+@media (max-width: 400px) {
+  .entry__title_type_profile {
+    margin: 14px auto 64px;
+  }
+}
+
 .entry__form {
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .entry__field {
@@ -112,6 +134,22 @@
   line-height: 12px;
   color: #a0a0a0;
   position: relative;
+}
+
+.entry__field_type_profile {
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  font-size: 11px;
+  line-height: 13px;
+  color: #000;
+}
+
+.entry__field_type_profile:first-child::after {
+  content: "";
+  border-bottom: 1px solid #e8e8e8;
+  display: block;
+  width: 100%;
 }
 
 .entry__input {
@@ -135,6 +173,17 @@
 
 .entry__input_type_error {
   color: #ff4062;
+}
+
+.entry__input_type_profile {
+  text-align: right;
+  flex: 1;
+  background: unset;
+  margin: 0;
+  font-size: 11px;
+  line-height: 13px;
+  padding: 0;
+  margin-left: 30px;
 }
 
 .entry__input-error {
@@ -189,6 +238,41 @@
   opacity: 0.4;
 }
 
+.entry__button-submit_type_profile {
+  background: transparent;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  color: #000;
+  min-height: unset;
+  margin-top: 202px;
+}
+
+@media (max-width: 800px) {
+  .entry__button-submit_type_profile {
+    margin-top: 193px;
+  }
+}
+
+@media (max-width: 400px) {
+  .entry__button-submit_type_profile {
+    margin-top: 363px;
+    font-size: 12px;
+    line-height: 15px;
+    margin-bottom: 15px;
+  }
+}
+
+.entry__button-submit_type_signIn {
+  margin-top: 159px;
+}
+
+@media (max-width: 400px) {
+  .entry__button-submit_type_signIn {
+    margin-top: 247px;
+  }
+}
+
 .entry__text {
   display: inline-block;
   width: 100%;
@@ -219,4 +303,25 @@
   cursor: pointer;
   opacity: 0.7;
   transform: scale(1.05);
+}
+
+.entry__link_type_sign-out {
+  font-size: 13px;
+  line-height: 16px;
+  color: #ff4062;
+  margin: 0 auto;
+}
+
+.entry__link_type_profile {
+  font-size: 13px;
+  line-height: 16px;
+  color: #ff4062;
+  margin: 0 auto;
+}
+
+@media (max-width: 400px) {
+  .entry__link_type_profile {
+    font-size: 12px;
+    line-height: 15px;
+  }
 }
