@@ -56,7 +56,7 @@ export default function Navigation({ place, loggedIn }) {
               >
                 <Link
                   className="navigation__link navigation__link_type_signup"
-                  to="#"
+                  to="/sign-up"
                 >
                   Регистрация
                 </Link>
@@ -68,7 +68,7 @@ export default function Navigation({ place, loggedIn }) {
               >
                 <Link
                   className="navigation__link navigation__link_type_signin"
-                  to="#"
+                  to="/sign-in"
                 >
                   Войти
                 </Link>
@@ -270,6 +270,24 @@ export default function Navigation({ place, loggedIn }) {
               >
                 Telegram
               </a>
+            </li>
+          </ul>
+        </nav>
+      )}
+      {place === "entry" && (
+        <nav
+          className="navigation"
+        >
+          <ul
+            className="navigation__links navigation__links_type_entry"
+          >
+            <li className="navigation__list">
+              <Link
+                className="navigation__link navigation__link_type_main"
+                to="/"
+              >
+                Главная
+              </Link>
             </li>
           </ul>
         </nav>

@@ -89,6 +89,10 @@
   justify-content: unset;
 }
 
+.navigation__links_type_entry {
+  justify-content: unset;
+}
+
 @media (max-width: 400px) {
   .navigation__links_type_footer {
     flex-direction: column;

@@ -14,6 +14,8 @@ export default function SearchForm({ checkboxOn, handleMovieCheckbox, handlePrel
           className="search-form__input"
           type="text"
           placeholder="Фильм"
+          minLength="1"
+          required
         ></input>
         <button className="search-form__button-submit" type="submit">
           Найти

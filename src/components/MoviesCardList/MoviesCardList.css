@@ -1,5 +1,7 @@
 .movies-card-list {
   padding: 2px 70px 26px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 @media (max-width: 800px) {

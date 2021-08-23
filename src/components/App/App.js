@@ -12,12 +12,15 @@ import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
+import Register from "../Register/Register";
+import Login from "../Login/Login";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [shortMovieCheckbox, setShortMovieCheckbox] = useState(false);
   const [headerStyleMain, setHeaderStyleMain] = useState(true);
   const [cardMovieDelete, setCardMovieDelete] = useState(false);
+  const [entryLocation, setEntryLocation] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -31,6 +34,11 @@ function App() {
     } else {
       setCardMovieDelete(false);
     }
+    if (location.pathname === "/sign-up" || location.pathname === "/sign-in") {
+      setEntryLocation(true);
+    } else {
+      setEntryLocation(false);
+    }
   }, [location]);
 
   function handleMovieCheckbox() {
@@ -39,31 +47,37 @@ function App() {
 
   return (
     <div className="page page_align_center">
-      <Header headerStyleMain={headerStyleMain} loggedIn={loggedIn} />
+      <Header headerStyleMain={headerStyleMain} loggedIn={loggedIn} entryLocation={entryLocation}/>
       <main className="content">
         <Switch>
-        <Route exact path="/">
-        <Main/>
-        </Route>
-        <Route path="/movies">
-        <Movies
-          checkboxOn={shortMovieCheckbox}
-          handleMovieCheckbox={handleMovieCheckbox}
-        />
-        </Route>
-        <Route path="/saved-movies">
-        <SavedMovies
-          checkboxOn={shortMovieCheckbox}
-          handleMovieCheckbox={handleMovieCheckbox}
-          cardMovieDelete={cardMovieDelete}
-        />
-        </Route>
-        <Route path="/">
-              {loggedIn ? <Redirect to="/movies" /> : <Redirect to="/" />}
-            </Route>
+          <Route exact path="/">
+            <Main />
+          </Route>
+          <Route path="/sign-in">
+            <Login />
+          </Route>
+          <Route path="/sign-up">
+            <Register />
+          </Route>
+          <Route path="/movies">
+            <Movies
+              checkboxOn={shortMovieCheckbox}
+              handleMovieCheckbox={handleMovieCheckbox}
+            />
+          </Route>
+          <Route path="/saved-movies">
+            <SavedMovies
+              checkboxOn={shortMovieCheckbox}
+              handleMovieCheckbox={handleMovieCheckbox}
+              cardMovieDelete={cardMovieDelete}
+            />
+          </Route>
+          <Route path="/">
+            {loggedIn ? <Redirect to="/movies" /> : <Redirect to="/" />}
+          </Route>
         </Switch>
       </main>
-      <Footer />
+      <Footer entryLocation={entryLocation}/>
     </div>
   );
 }
