@@ -6,12 +6,29 @@
 .movies-card__wallpaper {
   width: 100%;
   object-fit: cover;
+  transition: all .7s;
+}
+
+.movies-card__wallpaper:hover {
+  opacity: .7;
+  transform: scale(1.030);
+  cursor: pointer;
 }
 
 @media (max-width: 1239px) {
   .movies-card__wallpaper {
     max-height: unset;
   }
+}
+
+.movies-card__description {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.movies-card__description:hover .movies-card__like_type_saved-movies{
+background-image: url(../../images/movies-card-delete-movie-card.svg);
 }
 
 .movies-card__title {
@@ -52,6 +69,10 @@
 
 .movies-card__like_active {
   background-image: url(../../images/movies-card-like-active.svg);
+}
+
+.movies-card__like_type_saved-movies {
+  background-image: unset;
 }
 
 .movies-card__duration {

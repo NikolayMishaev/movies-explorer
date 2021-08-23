@@ -20,6 +20,13 @@
   grid-gap: 20px;
   list-style-type: none;
   margin-top: 18px;
+  padding: 0;
+}
+
+@media (min-width: 1280px) {
+  .movies-card-list__container {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 270px));
+  }
 }
 
 @media (max-width: 800px) {

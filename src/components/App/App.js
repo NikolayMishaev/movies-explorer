@@ -11,19 +11,25 @@ import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
 import Movies from "../Movies/Movies";
+import SavedMovies from "../SavedMovies/SavedMovies";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(true);
   const [shortMovieCheckbox, setShortMovieCheckbox] = useState(false);
   const [headerStyleMain, setHeaderStyleMain] = useState(true);
+  const [cardMovieDelete, setCardMovieDelete] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname === "/") {
+    if (location.pathname !== "/") {
+      setHeaderStyleMain(false);
+    } else {
       setHeaderStyleMain(true);
     }
-    if (location.pathname === "/movie") {
-      setHeaderStyleMain(false);
+    if (location.pathname === "/saved-movies") {
+      setCardMovieDelete(true);
+    } else {
+      setCardMovieDelete(false);
     }
   }, [location]);
 
@@ -43,6 +49,13 @@ function App() {
         <Movies
           checkboxOn={shortMovieCheckbox}
           handleMovieCheckbox={handleMovieCheckbox}
+        />
+        </Route>
+        <Route path="/saved-movies">
+        <SavedMovies
+          checkboxOn={shortMovieCheckbox}
+          handleMovieCheckbox={handleMovieCheckbox}
+          cardMovieDelete={cardMovieDelete}
         />
         </Route>
         <Route path="/">

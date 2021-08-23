@@ -81,3 +81,19 @@ export const movieCards = [
     link: image_16,
   },
 ];
+
+
+export const movieCardsLike = [
+  {
+    title: "33 слова о дизайне",
+    link: image_01,
+  },
+  {
+    title: "Киноальманах «100 лет дизайна»",
+    link: image_02,
+  },
+  {
+    title: "В погоне за Бенкси",
+    link: image_03,
+  },
+];

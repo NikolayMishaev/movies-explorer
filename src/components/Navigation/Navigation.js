@@ -97,7 +97,7 @@ export default function Navigation({ place, loggedIn }) {
                   className={` navigation__link navigation__link_type_movie ${
                     mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
                   } `}
-                  to="#"
+                  to="/saved-movies"
                 >
                   Сохранённые фильмы
                 </Link>
