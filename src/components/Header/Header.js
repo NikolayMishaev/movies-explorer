@@ -2,10 +2,10 @@ import React from "react";
 import "./Header.css";
 import Navigation from "../Navigation/Navigation";
 
-export default function Header({ loggedIn }) {
+export default function Header({ headerStyleMain, loggedIn }) {
   return (
     <>
-      <header className={` header ${loggedIn ? "header_style_log-in" : ""} `}>
+      <header className={` header ${headerStyleMain ? "" : "header_style_movie"} `}>
         <Navigation loggedIn={loggedIn} place="header" />
       </header>
     </>

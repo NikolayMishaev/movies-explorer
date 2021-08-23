@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import "./Navigation.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 
 export default function Navigation({ place, loggedIn }) {
   const [mobileMenuOn, setMobileMenuOn] = useState(false);
   const [mobileMenuCloseOn, setMobileMenuCloseOn] = useState(false);
+  const history = useHistory();
 
   function handleButtonBurgerClick() {
     if (mobileMenuOn) {
@@ -43,7 +44,7 @@ export default function Navigation({ place, loggedIn }) {
                   className={` navigation__link navigation__link_type_main ${
                     mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
                   } `}
-                  to="#"
+                  to="/"
                 >
                   Главная
                 </Link>
@@ -82,7 +83,7 @@ export default function Navigation({ place, loggedIn }) {
                   className={` navigation__link navigation__link_type_movie ${
                     mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
                   } `}
-                  to="#"
+                  to="/movie"
                 >
                   Фильмы
                 </Link>

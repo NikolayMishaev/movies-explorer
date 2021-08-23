@@ -5,10 +5,12 @@ import { movieCards } from "../../utils/constants";
 
 export default function MoviesCardList() {
   return (
-    <ul className="movies-card-list">
+    <section className="movies-card-list">
+    <ul className="movies-card-list__container">
       {movieCards.map((card, i) => (
         <MoviesCard card={card} key={i} />
       ))}
     </ul>
+    </section>
   );
 }

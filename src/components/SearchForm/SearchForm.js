@@ -1,9 +1,14 @@
 import React from "react";
 import "./SearchForm.css";
 
-export default function SearchForm({ checkboxOn, handleMovieCheckbox }) {
+export default function SearchForm({ checkboxOn, handleMovieCheckbox, handlePreloader }) {
+  function handleSubmit(e) {
+    e.preventDefault();
+    handlePreloader();
+  }
   return (
-    <form className="search-form">
+    <section className="search">
+    <form className="search-form" onSubmit={handleSubmit}>
       <div className="search-form__search">
         <input
           className="search-form__input"
@@ -25,5 +30,6 @@ export default function SearchForm({ checkboxOn, handleMovieCheckbox }) {
         <p className="search-form__checkbox-name">Короткометражки</p>
       </div>
     </form>
+    </section>
   );
 }

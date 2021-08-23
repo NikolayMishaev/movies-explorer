@@ -1,8 +1,3 @@
-.movies {
-  display: flex;
-  flex-direction: column;
-}
-
 .movies__button-add-more-cards {
   width: 320px;
   min-height: 36px;
