@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Navigation.css";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 
 export default function Navigation({ place, loggedIn }) {
@@ -41,15 +41,16 @@ export default function Navigation({ place, loggedIn }) {
               } `}
             >
               <li className="navigation__list">
-                <Link
+                <NavLink
+                activeClassName={` ${mobileMenuOn? "navigation__link_active" : "" } `}
                   className={` navigation__link navigation__link_type_main ${
                     mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
                   } `}
-                  to="/"
+                  exact to="/"
                   onClick={handleButtonBurgerClick}
                 >
                   Главная
-                </Link>
+                </NavLink>
               </li>
               <li
                 className={`navigation__list navigation__list_type_signup ${
@@ -81,22 +82,24 @@ export default function Navigation({ place, loggedIn }) {
                 } ${mobileMenuOn ? "navigation__list_type_mobile-menu" : ""}
               }`}
               >
-                <Link
+                <NavLink
+                activeClassName="navigation__link_active"
                   className={` navigation__link navigation__link_type_movie ${
                     mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
                   } `}
-                  to="/movie"
+                  to="/movies"
                   onClick={handleButtonBurgerClick}
                 >
                   Фильмы
-                </Link>
+                </NavLink>
               </li>
               <li
                 className={` navigation__list ${
                   loggedIn ? "" : "display-none"
                 }`}
               >
-                <Link
+                <NavLink
+                activeClassName="navigation__link_active"
                   className={` navigation__link navigation__link_type_movie ${
                     mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
                   } `}
@@ -104,7 +107,7 @@ export default function Navigation({ place, loggedIn }) {
                   onClick={handleButtonBurgerClick}
                 >
                   Сохранённые фильмы
-                </Link>
+                </NavLink>
               </li>
               <li
                 className={` navigation__list navigation__list_type_account ${
@@ -117,7 +120,8 @@ export default function Navigation({ place, loggedIn }) {
                 }
                 `}
               >
-                <Link
+                <NavLink
+                activeClassName={` ${mobileMenuOn? "" : "navigation__link_active" } `}
                   className={` navigation__link navigation__link_type_account ${
                     mobileMenuOn
                       ? "navigation__link_type_mobile-menu-account"
@@ -127,7 +131,7 @@ export default function Navigation({ place, loggedIn }) {
                   onClick={handleButtonBurgerClick}
                 >
                   Аккаунт
-                </Link>
+                </NavLink>
               </li>
               <li
                 className={` navigation__list ${

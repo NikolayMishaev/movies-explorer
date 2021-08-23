@@ -13,9 +13,9 @@ export default function SearchForm({ checkboxOn, handleMovieCheckbox, handlePrel
         <input
           className="search-form__input"
           type="text"
-          placeholder="Фильм"
-          minLength="1"
-          required
+          placeholder="Прелоадер появится при клике на кнопку 'Найти'"
+          minLength="1"   
+          // required   // временно отключено, для демонстрации работы прелоудера без ввода данных в поле
         ></input>
         <button className="search-form__button-submit" type="submit">
           Найти

@@ -297,6 +297,7 @@
   display: inline-block;
   transition: opacity 0.5s, transform 0.5s;
   margin-left: 3px;
+  color: #000;
 }
 
 .entry__link:hover {

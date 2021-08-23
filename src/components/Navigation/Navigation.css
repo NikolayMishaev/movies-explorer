@@ -204,7 +204,7 @@
   text-decoration: none;
   display: block;
   font-style: normal;
-  font-weight: 500;
+  font-weight: normal;
   font-size: 12px;
   line-height: 16px;
   color: #000;
@@ -220,6 +220,23 @@
 @media (max-width: 400px) {
   .navigation__link {
     font-size: 10px;
+  }
+}
+
+.navigation__link_active {
+  font-weight: 500;
+  position: relative;
+}
+
+@media (max-width: 800px) {
+  .navigation__link_active::after {
+    content: "";
+    border-bottom: 2px solid black;
+    display: block;
+    width: 100%;
+    position: absolute;
+    top: 53px;
+    left: 0;
   }
 }
 
@@ -272,6 +289,14 @@
 
 .navigation__link_type_signin {
   color: #fff;
+  position: relative;
+}
+
+.navigation__link_type_signin::after {
+  content:"Для удобства, можно псевдоавторизоваться через кнопку 'Войти' ";
+  position: absolute;
+  top: 34px;
+  left: -110px;
 }
 
 .navigation__link_type_menu {
