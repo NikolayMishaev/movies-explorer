@@ -10,6 +10,7 @@ import Register from "../Register/Register";
 import Login from "../Login/Login";
 import Profile from "../Profile/Profile";
 import NotFound from "../NotFound/NotFound";
+import ErrorMessagePopup from "../ErrorMessagePopup/ErrorMessagePopup";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false); // стейт для авторизации пользователя
@@ -17,6 +18,9 @@ function App() {
   const [headerStyleMain, setHeaderStyleMain] = useState(true); // стейт для изменения фона компонента Header
   const [cardMovieDelete, setCardMovieDelete] = useState(false); // стейт кнопки лайка карточки фильма
   const [entryLocation, setEntryLocation] = useState(false); // стейт отображения компонентов Header и Footer
+  const [errorMessagePopupVisible, setErrorMessagePopupVisible] =
+    useState(true); // стейт отображения модального окна с ошибкой
+
   const location = useLocation();
 
   useEffect(() => {
@@ -60,6 +64,10 @@ function App() {
     setShortMovieCheckbox(!shortMovieCheckbox);
   }
 
+  function handleCloseErrorMessagePopup() {
+    setErrorMessagePopupVisible(false);
+  }
+
   return (
     <div className="page page_align_center">
       <Header
@@ -100,6 +108,11 @@ function App() {
         </Switch>
       </main>
       <Footer entryLocation={entryLocation} />
+      <ErrorMessagePopup
+        errorMessage="демонстрация наличия компонента модального окна с текстом будущей ошибкой"
+        isOpen={errorMessagePopupVisible}
+        onClose={handleCloseErrorMessagePopup}
+      />
     </div>
   );
 }
