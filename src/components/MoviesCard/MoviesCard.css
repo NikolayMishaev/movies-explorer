@@ -4,15 +4,22 @@
 }
 
 /*  временной решение для совпадения макету на данном разрешении */
-@media (max-width: 800px) {     
+@media (max-width: 800px) {
   .movies-card:nth-child(n + 9) {
     display: none;
   }
 }
 
 /*  временной решение для совпадения макету на данном разрешении */
-@media (max-width: 400px) {     
+@media (max-width: 400px) {
   .movies-card:nth-child(n + 6) {
+    display: none;
+  }
+}
+
+/*  временной решение для совпадения макету на данном разрешении */
+@media (max-width: 400px) {
+  .movies-card_place_saved-movies:nth-child(n + 3) {
     display: none;
   }
 }

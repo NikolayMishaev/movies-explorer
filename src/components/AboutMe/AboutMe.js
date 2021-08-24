@@ -7,7 +7,7 @@ export default function AboutMe() {
   return (
     <section className="about-me" id="about-me">
       <h2 className="section-title section-title_type_about-me">Студент</h2>
-      <div className="about-me__wrapper">
+      <article className="about-me__wrapper">
         <h3 className="about-me__title">Николай</h3>
         <p className="about-me__subtitle">Фронтенд-разработчик, 35 лет</p>
         <p className="about-me__text">
@@ -21,7 +21,7 @@ export default function AboutMe() {
           верстка боевого проекта, вошедшая в тройку лучших версий для релиза.
         </p>
         <Navigation place="about-me" />
-      </div>
+      </article>
       <img
         className="about-me__photo"
         src={photo}

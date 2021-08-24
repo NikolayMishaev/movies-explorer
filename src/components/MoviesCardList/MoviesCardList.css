@@ -10,11 +10,27 @@
   }
 }
 
-  @media (max-width: 400px) {
-    .movies-card-list {
-      padding: 2px 10px 50px;
-    }
+@media (max-width: 400px) {
+  .movies-card-list {
+    padding: 2px 10px 50px;
   }
+}
+
+.movies-card-list_place_saved-movies {
+  padding-bottom: 192px;
+}
+
+@media (max-width: 800px) {
+  .movies-card-list_place_saved-movies {
+    padding-bottom: 141px;
+  }
+}
+
+@media (max-width: 400px) {
+  .movies-card-list_place_saved-movies {
+    padding-bottom: 137px;
+  }
+}
 
 .movies-card-list__container {
   display: grid;

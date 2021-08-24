@@ -8,7 +8,11 @@ export default function MoviesCardList({
   openPopupError,
 }) {
   return (
-    <section className="movies-card-list">
+    <section
+      className={` movies-card-list ${
+        cardMovieDelete ? "movies-card-list_place_saved-movies" : ""
+      } `}
+    >
       <ul className="movies-card-list__container">
         {movieCards.map((card, i) => (
           <MoviesCard

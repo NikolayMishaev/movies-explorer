@@ -16,7 +16,7 @@ export default function MoviesCard({ card, cardMovieDelete, openPopupError }) {
 
   return (
     <>
-      <li className="movies-card">
+      <li className={` movies-card ${cardMovieDelete && "movies-card_place_saved-movies"}`}>
         <img
           className="movies-card__wallpaper"
           src={card.link}
@@ -27,8 +27,8 @@ export default function MoviesCard({ card, cardMovieDelete, openPopupError }) {
           <h2 className="movies-card__title">{card.title}</h2>
           <button
             className={`movies-card__like ${
-              isLiked ? "movies-card__like_active" : ""
-            } ${cardMovieDelete ? "movies-card__like_type_saved-movies" : ""}`}
+              isLiked && "movies-card__like_active"
+            } ${cardMovieDelete && "movies-card__like_type_saved-movies"}`}
             type="button"
             onClick={cardMovieDelete ? handleDeleteCard : handleLikeClick}
           ></button>
