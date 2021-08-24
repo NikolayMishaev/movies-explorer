@@ -19,7 +19,8 @@ function App() {
   const [cardMovieDelete, setCardMovieDelete] = useState(false); // стейт кнопки лайка карточки фильма
   const [entryLocation, setEntryLocation] = useState(false); // стейт отображения компонентов Header и Footer
   const [errorMessagePopupVisible, setErrorMessagePopupVisible] =
-    useState(true); // стейт отображения модального окна с ошибкой
+    useState(false); // стейт отображения модального окна с ошибкой
+  const [errorMessagePopupText, setErrorMessagePopupText] = useState(""); // стейт отображения сообщения ошибки модального окна
 
   const location = useLocation();
 
@@ -53,18 +54,28 @@ function App() {
   }, [location]);
 
   function onLogin() {
+    // смена состояния авторизации (псевдоавторизация)
     setLoggedIn(true);
   }
 
   function signOut() {
+    // смена состояния авторизации (псевдоавторизация)
     setLoggedIn(false);
   }
 
   function handleMovieCheckbox() {
+    // смена состояния чекбокса короткометражными фильмами
     setShortMovieCheckbox(!shortMovieCheckbox);
   }
 
+  function handleOpenErrorMessagePopup(text) {
+    // обработчик открытия модального окна с ошибкой
+    setErrorMessagePopupVisible(true);
+    setErrorMessagePopupText(text);
+  }
+
   function handleCloseErrorMessagePopup() {
+    // обработчик закрытия модального окна с ошибкой
     setErrorMessagePopupVisible(false);
   }
 
@@ -81,7 +92,10 @@ function App() {
             <Main />
           </Route>
           <Route path="/profile">
-            <Profile signOut={signOut} />
+            <Profile
+              signOut={signOut}
+              openPopupError={handleOpenErrorMessagePopup}
+            />
           </Route>
           <Route path="/sign-in">
             <Login onLogin={onLogin} />
@@ -93,6 +107,7 @@ function App() {
             <Movies
               checkboxOn={shortMovieCheckbox}
               handleMovieCheckbox={handleMovieCheckbox}
+              openPopupError={handleOpenErrorMessagePopup}
             />
           </Route>
           <Route path="/saved-movies">
@@ -100,6 +115,7 @@ function App() {
               checkboxOn={shortMovieCheckbox}
               handleMovieCheckbox={handleMovieCheckbox}
               cardMovieDelete={cardMovieDelete}
+              openPopupError={handleOpenErrorMessagePopup}
             />
           </Route>
           <Route path="/">
@@ -109,7 +125,7 @@ function App() {
       </main>
       <Footer entryLocation={entryLocation} />
       <ErrorMessagePopup
-        errorMessage="демонстрация наличия компонента модального окна с текстом будущей ошибкой"
+        errorMessage={errorMessagePopupText}
         isOpen={errorMessagePopupVisible}
         onClose={handleCloseErrorMessagePopup}
       />

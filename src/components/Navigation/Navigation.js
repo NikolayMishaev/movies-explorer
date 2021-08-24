@@ -4,10 +4,11 @@ import { Link, NavLink } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 
 export default function Navigation({ place, loggedIn }) {
-  const [mobileMenuOn, setMobileMenuOn] = useState(false);
-  const [mobileMenuCloseOn, setMobileMenuCloseOn] = useState(false);
+  const [mobileMenuOn, setMobileMenuOn] = useState(false); // стейт мобильного меню
+  const [mobileMenuCloseOn, setMobileMenuCloseOn] = useState(false); // стейт закрытия мобильного меню
 
   function handleButtonBurgerClick(e) {
+    // т.к. при display-block не-возможно сделать плавное появление/исчезновение мобильного меню, применяется дополнительный стейт с задержкой. Это связано с тем, что используются одни и те же ссылки навигации и кнопки.
     if (mobileMenuOn) {
       setMobileMenuCloseOn(true);
       setTimeout(() => {
@@ -42,11 +43,14 @@ export default function Navigation({ place, loggedIn }) {
             >
               <li className="navigation__list">
                 <NavLink
-                activeClassName={` ${mobileMenuOn? "navigation__link_active" : "" } `}
+                  activeClassName={` ${
+                    mobileMenuOn ? "navigation__link_active" : ""
+                  } `}
                   className={` navigation__link navigation__link_type_main ${
                     mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
                   } `}
-                  exact to="/"
+                  exact
+                  to="/"
                   onClick={handleButtonBurgerClick}
                 >
                   Главная
@@ -83,7 +87,7 @@ export default function Navigation({ place, loggedIn }) {
               }`}
               >
                 <NavLink
-                activeClassName="navigation__link_active"
+                  activeClassName="navigation__link_active"
                   className={` navigation__link navigation__link_type_movie ${
                     mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
                   } `}
@@ -99,7 +103,7 @@ export default function Navigation({ place, loggedIn }) {
                 }`}
               >
                 <NavLink
-                activeClassName="navigation__link_active"
+                  activeClassName="navigation__link_active"
                   className={` navigation__link navigation__link_type_movie ${
                     mobileMenuOn ? "navigation__link_type_mobile-menu" : ""
                   } `}
@@ -121,7 +125,9 @@ export default function Navigation({ place, loggedIn }) {
                 `}
               >
                 <NavLink
-                activeClassName={` ${mobileMenuOn? "" : "navigation__link_active" } `}
+                  activeClassName={` ${
+                    mobileMenuOn ? "" : "navigation__link_active"
+                  } `}
                   className={` navigation__link navigation__link_type_account ${
                     mobileMenuOn
                       ? "navigation__link_type_mobile-menu-account"
@@ -154,24 +160,19 @@ export default function Navigation({ place, loggedIn }) {
               </li>
             </ul>
           </nav>
-          <nav
+          <nav // декоративные элементы. т.к. в навигации и в версии мобильного меню используются одни и те же ссылки и кнопки. Созданы, т.к. отображаются в макете на заднем фоне.
             className={` navigation navigation_type_visible_only-mobile ${
               mobileMenuOn ? "" : "display-none"
             } `}
           >
             <ul className={` navigation__links navigation__links_type_header`}>
               <li className="navigation__list">
-                <Link
+                <div
                   className={` navigation__link navigation__link_type_main `}
-                  to="#"
-                ></Link>
+                ></div>
               </li>
               <li className={` navigation__list `}>
-                <button
-                  className={` navigation__button-burger-menu `}
-                  type="button"
-                  onClick={handleButtonBurgerClick}
-                ></button>
+                <div className={` navigation__button-burger-menu `}></div>
               </li>
             </ul>
           </nav>

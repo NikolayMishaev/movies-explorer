@@ -2,7 +2,7 @@ import React from "react";
 import "./Profile.css";
 import { Link } from "react-router-dom";
 
-export default function Profile({ signOut }) {
+export default function Profile({ signOut, openPopupError }) {
   function handleSubmit(e) {
     e.preventDefault();
   }
@@ -45,6 +45,11 @@ export default function Profile({ signOut }) {
             aria-label="submit form"
             className={` entry__button-submit entry__button-submit_type_profile `}
             type="submit"
+            onClick={() =>
+              openPopupError(
+                "Данный функционал еще не реализован. Демонстрация работы попапа для отображения ошибок при работе с API."
+              )
+            }
           >
             Редактировать
           </button>
