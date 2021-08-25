@@ -18,9 +18,9 @@ export default function SearchForm({
           <input
             className="search-form__input"
             type="text"
-            placeholder="Прелоадер появится при клике на кнопку 'Найти'"
+            placeholder="Фильм"
             minLength="1"
-            // required   // временно отключено, для демонстрации работы прелоудера без ввода данных в поле
+            required
           ></input>
           <button className="search-form__button-submit" type="submit">
             Найти
