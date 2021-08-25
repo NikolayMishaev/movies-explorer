@@ -7,19 +7,19 @@
   min-height: 320px;
   background: url(../../images/promo-logo.svg) no-repeat center center/contain;
   display: flex;
-  margin: 82px 0 122px;
+  margin: 82px 20px 122px;
 }
 
 @media (max-width: 800px) {
   .promo__logo {
-    margin: 224px 0 240px;
+    margin: 224px 20px 240px;
   }
 }
 
 @media (max-width: 400px) {
   .promo__logo {
     min-height: 248px;
-    margin: 141px 0 181px;
+    margin: 141px 10px 181px;
   }
 }
 
