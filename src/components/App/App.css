@@ -33,6 +33,15 @@
   letter-spacing: -0.04em;
   color: #000;
   margin: 0;
+  padding-bottom: 70px;
+}
+
+@media (max-width: 400px) {
+  .section-title {
+    font-size: 18px;
+    line-height: 22px;
+    padding-bottom: 60px;
+  }
 }
 
 .section-title::after {
@@ -40,24 +49,19 @@
   border-bottom: 1px solid #000;
   display: block;
   width: 100%;
-  margin: 23px 0 70px;
-}
-
-.section-title_type_about-me::after {
-  margin-bottom: 66px;
+  padding-top: 23px;
 }
 
 @media (max-width: 400px) {
-  .section-title {
-    font-size: 18px;
-    line-height: 22px;
+  .section-title::after {
+    padding-top: 28px;
   }
 }
 
-@media (max-width: 400px) {
-  .section-title:after {
-    margin: 28px 0 60px;
-  }
+@media (min-width: 401px) {
+.section-title_type_about-me {
+  padding-bottom: 66px;
+}
 }
 
 .display-none {
