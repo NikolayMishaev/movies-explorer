@@ -45,7 +45,7 @@ export default function Login({ onLogin }) {
         </label>
         <button
           aria-label="submit form"
-          className={` entry__button-submit entry__button-submit_type_signIn `}
+          className={` entry__button-submit entry__button-submit_type_sign-in `}
           type="submit"
         >
           Войти

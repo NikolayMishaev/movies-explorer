@@ -263,12 +263,12 @@
   }
 }
 
-.entry__button-submit_type_signIn {
+.entry__button-submit_type_sign-in {
   margin-top: 159px;
 }
 
 @media (max-width: 400px) {
-  .entry__button-submit_type_signIn {
+  .entry__button-submit_type_sign-in {
     margin-top: 247px;
   }
 }
