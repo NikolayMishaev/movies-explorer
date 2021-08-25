@@ -16,17 +16,27 @@
   }
 }
 
+.search-form {
+  padding-bottom: 20px;
+}
+
+@media (max-width: 400px) {
+  .search-form {
+    padding-bottom: 30px;
+  }
+}
+
 .search-form::after {
   content: "";
   border-bottom: 1px solid #e8e8e8;
   display: block;
   width: 100%;
-  margin: 28px 0 20px;
+  padding-top: 28px;
 }
 
 @media (max-width: 400px) {
   .search-form::after {
-    margin: 33px 0 30px;
+    padding-top: 33px;
   }
 }
 
