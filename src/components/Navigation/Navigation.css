@@ -67,6 +67,7 @@
     height: 100%;
     justify-content: unset;
     transition: all 1s;
+    min-height: 500px;
   }
 }
 
@@ -190,13 +191,13 @@
 
 @media (max-width: 800px) {
   .navigation__list_type_mobile-menu-account {
-    margin: 623px 0 0;
+    margin: auto 0 92px;
   }
 }
 
 @media (max-width: 400px) {
   .navigation__list_type_mobile-menu-account {
-    margin-top: 446px;
+    margin-bottom: 48px;
   }
 }
 
