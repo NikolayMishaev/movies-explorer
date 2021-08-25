@@ -1,0 +1,41 @@
+.footer {
+  padding: 79px 70px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 800px) {
+  .footer {
+    padding: 66px 30px 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  .footer {
+    padding: 69px 10px 10px;
+  }
+}
+
+.footer__description {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  color: #a0a0a0;
+}
+
+@media (max-width: 400px) {
+  .footer__description {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}
+
+.footer__description::after {
+  content: "";
+  border-bottom: 1px solid #e8e8e8;
+  display: block;
+  width: 100%;
+  margin: 20px 0;
+}

@@ -1,0 +1,25 @@
+.header {
+  width: 100%;
+  background-color: #f3c1f8;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 70px;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+.header_style_movie {
+  background-color: #fff;
+}
+
+@media (max-width: 800px) {
+  .header {
+    padding: 18px 30px;
+  }
+}
+
+@media (max-width: 400px) {
+  .header {
+    padding: 18px 10px;
+  }
+}

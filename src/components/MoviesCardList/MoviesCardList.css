@@ -1,0 +1,93 @@
+.movies-card-list {
+  padding: 2px 70px 26px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 800px) {
+  .movies-card-list {
+    padding: 2px 30px 50px;
+  }
+}
+
+@media (max-width: 400px) {
+  .movies-card-list {
+    padding: 2px 10px 50px;
+  }
+}
+
+.movies-card-list_place_saved-movies {
+  padding-bottom: 192px;
+}
+
+@media (max-width: 800px) {
+  .movies-card-list_place_saved-movies {
+    padding-bottom: 141px;
+  }
+}
+
+@media (max-width: 400px) {
+  .movies-card-list_place_saved-movies {
+    padding-bottom: 137px;
+  }
+}
+
+.movies-card-list__container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-gap: 20px;
+  list-style-type: none;
+  margin-top: 18px;
+  padding: 0;
+}
+
+/* временный модификатор, для совпадения макету т.к. реализован адаптив карточкек, балгодаря которому они тянутся, сохраняя пропорции, если их всего 3шт в контейнере */
+@media (min-width: 1280px) {     
+  .movies-card-list__container_place_saved-movies {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 270px));
+  }
+}
+
+@media (max-width: 800px) {
+  .movies-card-list__container {
+    grid-gap: 30px;
+    margin-bottom: 8px;
+  }
+}
+
+.movies-card-list__button-add-more-cards {
+  width: 320px;
+  min-height: 36px;
+  margin: 26px auto 41px;
+  border: 1px solid #e8e8e8;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: center;
+  background-color: #fff;
+  border-radius: 10px;
+  transition: opacity.5s, transform 0.5s, background-color 0.5s;
+}
+
+.movies-card-list__button-add-more-cards:hover {
+  cursor: pointer;
+  opacity: 0.7;
+  transform: scale(1.075);
+  background-color: rgb(238, 238, 238);
+}
+
+@media (max-width: 800px) {
+  .movies-card-list__button-add-more-cards {
+    margin: 50px auto 30px;
+  }
+}
+
+@media (max-width: 400px) {
+  .movies-card-list__button-add-more-cards {
+    width: 240px;
+    margin-bottom: 28px;
+  }
+}
