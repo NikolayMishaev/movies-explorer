@@ -43,8 +43,9 @@
   padding: 0;
 }
 
-@media (min-width: 1280px) {
-  .movies-card-list__container {
+/* временный модификатор, для совпадения макету т.к. реализован адаптив карточкек, балгодаря которому они тянутся, сохраняя пропорции, если их всего 3шт в контейнере */
+@media (min-width: 1280px) {     
+  .movies-card-list__container_place_saved-movies {
     grid-template-columns: repeat(auto-fit, minmax(260px, 270px));
   }
 }

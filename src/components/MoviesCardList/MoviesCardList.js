@@ -13,7 +13,7 @@ export default function MoviesCardList({
         cardMovieDelete ? "movies-card-list_place_saved-movies" : ""
       } `}
     >
-      <ul className="movies-card-list__container">
+      <ul className={` movies-card-list__container ${cardMovieDelete && "movies-card-list__container_place_saved-movies"} `}>
         {movieCards.map((card, i) => (
           <MoviesCard
             card={card}
