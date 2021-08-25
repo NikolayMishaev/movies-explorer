@@ -11,7 +11,9 @@ export default function Main() {
   return (
     <>
       <Promo />
-      <Navigation place="menu" />
+      <section className="menu">
+        <Navigation place="menu" />
+      </section>
       <AboutProject />
       <Technology />
       <AboutMe />
