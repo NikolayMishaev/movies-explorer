@@ -35,7 +35,7 @@
 }
 
 @media (min-width: 801px) {
-  .navigation_type_visible_only-mobile {
+  .navigation_type_visible-only-mobile {
     display: none;
   }
 }

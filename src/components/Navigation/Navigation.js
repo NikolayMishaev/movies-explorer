@@ -161,7 +161,7 @@ export default function Navigation({ place, loggedIn }) {
             </ul>
           </nav>
           <nav // декоративные элементы. т.к. в навигации и в версии мобильного меню используются одни и те же ссылки и кнопки. Созданы, т.к. отображаются в макете на заднем фоне.
-            className={` navigation navigation_type_visible_only-mobile ${
+            className={` navigation navigation_type_visible-only-mobile ${
               mobileMenuOn ? "" : "display-none"
             } `}
           >
