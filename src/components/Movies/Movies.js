@@ -32,19 +32,6 @@ export default function Movies({
           openPopupError={openPopupError}
         />
       )}
-      <button
-        className={` ${
-          showPreloader ? "display-none" : "movies__button-add-more-cards"
-        } `}
-        type="button"
-        onClick={() =>
-          openPopupError(
-            "Данный функционал еще не реализован. Демонстрация работы попапа для отображения ошибок при работе с API."
-          )
-        }
-      >
-        Ещё
-      </button>
     </>
   );
 }
