@@ -16,7 +16,6 @@ export default function Profile({ signOut, onEditProfile }) {
         name: currentUser.name,
         email: currentUser.email,
       });
-      currentFormValidator.setIsValid(true);
     }
   }, [currentUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -28,11 +27,22 @@ export default function Profile({ signOut, onEditProfile }) {
     );
   }
 
+  // если имя или email пользователя не меняются после ввода в поля формы, то кнопка "Редактировать" выключена
+  function handleChangeInput(e) {
+    currentFormValidator.handleChange(e);
+    if (
+      e.target.value === currentUser.name ||
+      e.target.value === currentUser.email
+    ) {
+      currentFormValidator.setIsValid(false);
+    }
+  }
+
   return (
     <>
       <section className="entry entry_type_profile">
         <h2 className="entry__title entry__title_type_profile">
-          Привет, Виталий!
+          Привет, {currentUser.name}!
         </h2>
         <form className="entry__form" onSubmit={handleSubmit}>
           <label className="entry__field entry__field_type_profile">
@@ -43,6 +53,7 @@ export default function Profile({ signOut, onEditProfile }) {
               name="name"
               minLength="5"
               maxLength="40"
+              pattern="[a-zA-Zа-яА-Я -]*"
               className={` entry__input entry__input_type_profile ${
                 currentFormValidator.errors.name
                   ? "entry__input_type_error"
@@ -50,7 +61,7 @@ export default function Profile({ signOut, onEditProfile }) {
               }`}
               type="text"
               value={currentFormValidator.values.name || ""}
-              onChange={currentFormValidator.handleChange}
+              onChange={handleChangeInput}
             />
             <span className="entry__input-error entry__input-error_type_profile entry-input-name-error">
               {currentFormValidator.errors.name}
@@ -71,7 +82,7 @@ export default function Profile({ signOut, onEditProfile }) {
               }`}
               type="email"
               value={currentFormValidator.values.email || ""}
-              onChange={currentFormValidator.handleChange}
+              onChange={handleChangeInput}
             />
             <span className="entry__input-error entry__input-error_type_profile entry-input-email-error">
               {currentFormValidator.errors.email}

@@ -14,6 +14,7 @@ import ErrorMessagePopup from "../ErrorMessagePopup/ErrorMessagePopup";
 import { register, login, getContent, editProfile } from "../../utils/MainApi";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import { api } from "../../utils/MoviesApi";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false); // стейт для авторизации пользователя
@@ -61,7 +62,6 @@ function App() {
           if (res) {
             setCurrentUser(res);
             setLoggedIn(true);
-            history.push("/movies");
           }
         })
         .catch((err) => {
@@ -69,7 +69,18 @@ function App() {
           setErrorMessagePopupVisible(true);
         });
     }
-  }, [loggedIn, history]);
+  }, [loggedIn]);
+
+  // useEffect(() => {
+  //   api.getMovieCards()
+  //     .then((data) => {
+  //       console.log(data);
+  //     })
+  //     .catch((err) => {
+  //       setErrorMessagePopupText(err);
+  //       setErrorMessagePopupVisible(true);
+  //     });
+  // }, []); // ПЕРЕДЕЛАТЬ запрос к API при клике по кнопки сабмит на странице movies
 
   function handleMovieCheckbox() {
     // смена состояния чекбокса короткометражными фильмами
@@ -109,7 +120,7 @@ function App() {
         }
         if (data.token) {
           localStorage.setItem("jwt", data.token);
-          setLoggedIn(true);
+          setLoggedIn(true); // после обновления стейт-переменной авторизации, сработает хук проверки jwt и сохранения данных о пользователе в стейт-переменную currentUser
           history.push("/movies");
         }
       })
@@ -124,7 +135,7 @@ function App() {
     editProfile(name, email, jwt)
       .then((data) => {
         setCurrentUser(data);
-        setErrorMessagePopupText("Данные обновлены");
+        setErrorMessagePopupText("Данные обновлены"); // ПЕРЕДЕЛАТЬ показывать не через попап ошибки, а в форме над кнопкой сабмит
         setErrorMessagePopupVisible(true);
       })
       .catch((err) => {
