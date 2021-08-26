@@ -11,7 +11,8 @@ import Login from "../Login/Login";
 import Profile from "../Profile/Profile";
 import NotFound from "../NotFound/NotFound";
 import ErrorMessagePopup from "../ErrorMessagePopup/ErrorMessagePopup";
-import { register, login, getContent } from "../../utils/MainApi";
+import { register, login, getContent, editProfile } from "../../utils/MainApi";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false); // стейт для авторизации пользователя
@@ -22,6 +23,7 @@ function App() {
   const [errorMessagePopupVisible, setErrorMessagePopupVisible] =
     useState(false); // стейт отображения модального окна с ошибкой
   const [errorMessagePopupText, setErrorMessagePopupText] = useState(""); // стейт отображения сообщения ошибки модального окна
+  const [currentUser, setCurrentUser] = useState({});
 
   const location = useLocation();
   const history = useHistory();
@@ -56,6 +58,7 @@ function App() {
       getContent(jwt)
         .then((res) => {
           if (res) {
+            setCurrentUser(res);
             setLoggedIn(true);
             history.push("/movies");
           }
@@ -115,9 +118,19 @@ function App() {
       });
   }
 
-function editProfile() {
-
-}
+  function onEditProfile(name, email) {
+    const jwt = localStorage.getItem("jwt");
+    editProfile(name, email, jwt)
+      .then((data) => {
+        setCurrentUser(data);
+        setErrorMessagePopupText("Данные обновлены");
+        setErrorMessagePopupVisible(true);
+      })
+      .catch((err) => {
+        setErrorMessagePopupText(err);
+        setErrorMessagePopupVisible(true);
+      });
+  }
 
   function onSignOut() {
     localStorage.removeItem("jwt");
@@ -126,56 +139,55 @@ function editProfile() {
   }
 
   return (
-    <div className="page page_align_center">
-      <Header
-        headerStyleMain={headerStyleMain}
-        loggedIn={loggedIn}
-        entryLocation={entryLocation}
-      />
-      <main className="content">
-        <Switch>
-          <Route exact path="/">
-            <Main />
-          </Route>
-          <Route path="/profile">
-            <Profile
-              signOut={onSignOut}
-              editProfile={editProfile}
-            />
-          </Route>
-          <Route path="/sign-in">
-            <Login onLogin={onLogin} />
-          </Route>
-          <Route path="/sign-up">
-            <Register onRegister={onRegister} />
-          </Route>
-          <Route path="/movies">
-            <Movies
-              checkboxOn={shortMovieCheckbox}
-              handleMovieCheckbox={handleMovieCheckbox}
-              openPopupError={handleOpenErrorMessagePopup}
-            />
-          </Route>
-          <Route path="/saved-movies">
-            <SavedMovies
-              checkboxOn={shortMovieCheckbox}
-              handleMovieCheckbox={handleMovieCheckbox}
-              cardMovieDelete={cardMovieDelete}
-              openPopupError={handleOpenErrorMessagePopup}
-            />
-          </Route>
-          <Route path="/">
-            <NotFound />
-          </Route>
-        </Switch>
-      </main>
-      <Footer entryLocation={entryLocation} />
-      <ErrorMessagePopup
-        errorMessage={errorMessagePopupText}
-        isOpen={errorMessagePopupVisible}
-        onClose={handleCloseErrorMessagePopup}
-      />
-    </div>
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="page page_align_center">
+        <Header
+          headerStyleMain={headerStyleMain}
+          loggedIn={loggedIn}
+          entryLocation={entryLocation}
+        />
+        <main className="content">
+          <Switch>
+            <Route exact path="/">
+              <Main />
+            </Route>
+            <Route path="/profile">
+              <Profile signOut={onSignOut} onEditProfile={onEditProfile} />
+            </Route>
+            <Route path="/sign-in">
+              <Login onLogin={onLogin} />
+            </Route>
+            <Route path="/sign-up">
+              <Register onRegister={onRegister} />
+            </Route>
+            <Route path="/movies">
+              <Movies
+                checkboxOn={shortMovieCheckbox}
+                handleMovieCheckbox={handleMovieCheckbox}
+                openPopupError={handleOpenErrorMessagePopup}
+              />
+            </Route>
+            <Route path="/saved-movies">
+              <SavedMovies
+                checkboxOn={shortMovieCheckbox}
+                handleMovieCheckbox={handleMovieCheckbox}
+                cardMovieDelete={cardMovieDelete}
+                openPopupError={handleOpenErrorMessagePopup}
+              />
+            </Route>
+            <Route path="/">
+              <NotFound />
+            </Route>
+          </Switch>
+        </main>
+        <Footer entryLocation={entryLocation} />
+        <ErrorMessagePopup
+          errorMessage={errorMessagePopupText}
+          isOpen={errorMessagePopupVisible}
+          onClose={handleCloseErrorMessagePopup}
+        />
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 

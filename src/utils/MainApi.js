@@ -42,3 +42,16 @@ export const getContent = (token) => {
     return checkStatus(res);
   });
 };
+
+export const editProfile = (name, email, jwt) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: "PATCH",
+    headers: {
+      ...headers,
+      Authorization: `Bearer ${jwt}`,
+    },
+    body: JSON.stringify({ name, email }),
+  }).then((res) => {
+    return checkStatus(res);
+  });
+};

@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import "./Profile.css";
 import { Link } from "react-router-dom";
 import useFormValidator from "../../hooks/useFormValidator";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
-export default function Profile({ signOut, editProfile }) {
+export default function Profile({ signOut, onEditProfile }) {
   const currentFormValidator = useFormValidator();
+  const currentUser = useContext(CurrentUserContext);
+
+  useEffect(() => {
+    if (currentUser.name) {
+      currentFormValidator.resetForm();
+      currentFormValidator.setValues({
+        ...currentFormValidator.values,
+        name: currentUser.name,
+        email: currentUser.email,
+      });
+      currentFormValidator.setIsValid(true);
+    }
+  }, [currentUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleSubmit(e) {
     e.preventDefault();
-    editProfile(
+    onEditProfile(
       currentFormValidator.values.name,
       currentFormValidator.values.email
     );
@@ -66,7 +80,9 @@ export default function Profile({ signOut, editProfile }) {
           <button
             aria-label="submit form"
             className={` entry__button-submit entry__button-submit_type_profile ${
-              !currentFormValidator.isValid ? "entry__button-submit_disabled" : ""
+              !currentFormValidator.isValid
+                ? "entry__button-submit_disabled"
+                : ""
             } `}
             type="submit"
             disabled={!currentFormValidator.isValid}
