@@ -50,9 +50,22 @@ function App() {
     }
   }, [location]);
 
-  function signOut() {
-    setLoggedIn(false);
-  }
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      getContent(jwt)
+        .then((res) => {
+          if (res) {
+            setLoggedIn(true);
+            history.push("/movies");
+          }
+        })
+        .catch((err) => {
+          setErrorMessagePopupText(err);
+          setErrorMessagePopupVisible(true);
+        });
+    }
+  }, [loggedIn, history]);
 
   function handleMovieCheckbox() {
     // смена состояния чекбокса короткометражными фильмами
@@ -73,7 +86,7 @@ function App() {
 
   function onRegister(name, email, password) {
     register(name, email, password)
-      .then((res) => {
+      .then(() => {
         onLogin(email, password);
       })
       .catch((err) => {
@@ -102,6 +115,12 @@ function App() {
       });
   }
 
+  function onSignOut() {
+    localStorage.removeItem("jwt");
+    setLoggedIn(false);
+    history.push("/");
+  }
+
   return (
     <div className="page page_align_center">
       <Header
@@ -116,7 +135,7 @@ function App() {
           </Route>
           <Route path="/profile">
             <Profile
-              signOut={signOut}
+              signOut={onSignOut}
               openPopupError={handleOpenErrorMessagePopup}
             />
           </Route>

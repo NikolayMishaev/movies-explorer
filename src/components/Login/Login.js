@@ -35,7 +35,9 @@ export default function Login({ onLogin }) {
             value={currentFormValidator.values.email || ""}
             onChange={currentFormValidator.handleChange}
           />
-          <span className="entry__input-error entry-input-email-error">{currentFormValidator.errors.email}</span>
+          <span className="entry__input-error entry-input-email-error">
+            {currentFormValidator.errors.email}
+          </span>
         </label>
         <label className="entry__field">
           Пароль
@@ -54,12 +56,17 @@ export default function Login({ onLogin }) {
             value={currentFormValidator.values.password || ""}
             onChange={currentFormValidator.handleChange}
           />
-          <span className="entry__input-error entry-input-password-error">{currentFormValidator.errors.password}</span>
+          <span className="entry__input-error entry-input-password-error">
+            {currentFormValidator.errors.password}
+          </span>
         </label>
         <button
           aria-label="submit form"
-          className={` entry__button-submit entry__button-submit_type_sign-in `}
+          className={` entry__button-submit ${
+            !currentFormValidator.isValid ? "entry__button-submit_disabled" : ""
+          } `}
           type="submit"
+          disabled={!currentFormValidator.isValid}
         >
           Войти
         </button>
