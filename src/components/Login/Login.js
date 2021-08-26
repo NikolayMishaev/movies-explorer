@@ -25,7 +25,6 @@ export default function Login({ onLogin }) {
             maxLength="40"
             className={` entry__input `}
             type="email"
-            defaultValue="pochta@yandex.ru"
           />
           <span className="entry__input-error entry-input-email-error"></span>
         </label>
@@ -39,7 +38,6 @@ export default function Login({ onLogin }) {
             maxLength="40"
             className={` entry__input`}
             type="password"
-            defaultValue="11111111111111"
           />
           <span className="entry__input-error entry-input-password-error"></span>
         </label>

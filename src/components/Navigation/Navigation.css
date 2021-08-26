@@ -290,14 +290,6 @@
 
 .navigation__link_type_signin {
   color: #fff;
-  position: relative;
-}
-
-.navigation__link_type_signin::after {
-  content:"Для удобства, можно псевдоавторизоваться через кнопку 'Войти' ";
-  position: absolute;
-  top: 34px;
-  left: -110px;
 }
 
 .navigation__link_type_menu {

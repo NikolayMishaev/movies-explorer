@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { Route, Switch, useLocation } from "react-router-dom";
+import { Route, Switch, useLocation, useHistory } from "react-router-dom";
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
@@ -11,6 +11,7 @@ import Login from "../Login/Login";
 import Profile from "../Profile/Profile";
 import NotFound from "../NotFound/NotFound";
 import ErrorMessagePopup from "../ErrorMessagePopup/ErrorMessagePopup";
+import { register, login, getContent } from "../../utils/MainApi";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false); // стейт для авторизации пользователя
@@ -23,6 +24,7 @@ function App() {
   const [errorMessagePopupText, setErrorMessagePopupText] = useState(""); // стейт отображения сообщения ошибки модального окна
 
   const location = useLocation();
+  const history = useHistory();
 
   useEffect(() => {
     if (location.pathname !== "/") {
@@ -34,7 +36,6 @@ function App() {
     if (location.pathname === "/saved-movies") {
       // при переходе на роут изменить икнони лайка с сердца на крестик при наведении
       setCardMovieDelete(true);
-      onLogin(); //  регистрация пользователя, если прописать роут в адресной строке (временно)
     } else {
       setCardMovieDelete(false);
     }
@@ -47,19 +48,9 @@ function App() {
     } else {
       setEntryLocation(true);
     }
-    if (location.pathname === "/movies") {
-      //  регистрация пользователя, если прописать роут в адресной строке (временно)
-      onLogin();
-    }
   }, [location]);
 
-  function onLogin() {
-    // смена состояния авторизации (псевдоавторизация)
-    setLoggedIn(true);
-  }
-
   function signOut() {
-    // смена состояния авторизации (псевдоавторизация)
     setLoggedIn(false);
   }
 
@@ -77,6 +68,18 @@ function App() {
   function handleCloseErrorMessagePopup() {
     // обработчик закрытия модального окна с ошибкой
     setErrorMessagePopupVisible(false);
+    setErrorMessagePopupText("");
+  }
+
+  function onRegister(name, email, password) {
+    register(name, email, password)
+      .then((res) => {
+
+      })
+      .catch((err) => {
+        setErrorMessagePopupText(err);
+        setErrorMessagePopupVisible(true);
+      });
   }
 
   return (
@@ -98,10 +101,10 @@ function App() {
             />
           </Route>
           <Route path="/sign-in">
-            <Login onLogin={onLogin} />
+            <Login />
           </Route>
           <Route path="/sign-up">
-            <Register onLogin={onLogin} />
+            <Register onRegister={onRegister} />
           </Route>
           <Route path="/movies">
             <Movies

@@ -193,6 +193,7 @@
 .entry__input-error {
   position: absolute;
   top: 78px;
+  left: 50px;
   font-style: normal;
   font-weight: normal;
   font-size: 10px;
