@@ -115,6 +115,10 @@ function App() {
       });
   }
 
+function editProfile() {
+
+}
+
   function onSignOut() {
     localStorage.removeItem("jwt");
     setLoggedIn(false);
@@ -136,7 +140,7 @@ function App() {
           <Route path="/profile">
             <Profile
               signOut={onSignOut}
-              openPopupError={handleOpenErrorMessagePopup}
+              editProfile={editProfile}
             />
           </Route>
           <Route path="/sign-in">

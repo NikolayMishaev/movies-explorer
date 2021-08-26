@@ -59,9 +59,9 @@
 }
 
 @media (min-width: 401px) {
-.section-title_type_about-me {
-  padding-bottom: 66px;
-}
+  .section-title_type_about-me {
+    padding-bottom: 66px;
+  }
 }
 
 .display-none {
@@ -199,6 +199,11 @@
   font-size: 10px;
   line-height: 12px;
   color: #ff4062;
+}
+
+.entry__input-error_type_profile {
+  top: 32px;
+  left: 0;
 }
 
 .entry__button-submit {

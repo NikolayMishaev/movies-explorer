@@ -29,6 +29,7 @@ export default function Register({ onRegister }) {
             name="name"
             minLength="5"
             maxLength="40"
+            pattern="[a-zA-Zа-яА-Я -]*"
             className={` entry__input ${
               currentFormValidator.errors.name ? "entry__input_type_error" : ""
             }`}

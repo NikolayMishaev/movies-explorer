@@ -1,11 +1,19 @@
 import React from "react";
 import "./Profile.css";
 import { Link } from "react-router-dom";
+import useFormValidator from "../../hooks/useFormValidator";
 
-export default function Profile({ signOut, openPopupError }) {
+export default function Profile({ signOut, editProfile }) {
+  const currentFormValidator = useFormValidator();
+
   function handleSubmit(e) {
     e.preventDefault();
+    editProfile(
+      currentFormValidator.values.name,
+      currentFormValidator.values.email
+    );
   }
+
   return (
     <>
       <section className="entry entry_type_profile">
@@ -21,11 +29,18 @@ export default function Profile({ signOut, openPopupError }) {
               name="name"
               minLength="5"
               maxLength="40"
-              className={` entry__input entry__input_type_profile `}
+              className={` entry__input entry__input_type_profile ${
+                currentFormValidator.errors.name
+                  ? "entry__input_type_error"
+                  : ""
+              }`}
               type="text"
-              defaultValue="Виталий"
+              value={currentFormValidator.values.name || ""}
+              onChange={currentFormValidator.handleChange}
             />
-            <span className="entry__input-error entry-input-name-error"></span>
+            <span className="entry__input-error entry__input-error_type_profile entry-input-name-error">
+              {currentFormValidator.errors.name}
+            </span>
           </label>
           <label className="entry__field entry__field_type_profile">
             E-mail
@@ -35,21 +50,26 @@ export default function Profile({ signOut, openPopupError }) {
               name="email"
               minLength="5"
               maxLength="40"
-              className={` entry__input entry__input_type_profile`}
+              className={` entry__input entry__input_type_profile ${
+                currentFormValidator.errors.email
+                  ? "entry__input_type_error"
+                  : ""
+              }`}
               type="email"
-              defaultValue="pochta@yandex.ru"
+              value={currentFormValidator.values.email || ""}
+              onChange={currentFormValidator.handleChange}
             />
-            <span className="entry__input-error entry-input-email-error"></span>
+            <span className="entry__input-error entry__input-error_type_profile entry-input-email-error">
+              {currentFormValidator.errors.email}
+            </span>
           </label>
           <button
             aria-label="submit form"
-            className={` entry__button-submit entry__button-submit_type_profile `}
+            className={` entry__button-submit entry__button-submit_type_profile ${
+              !currentFormValidator.isValid ? "entry__button-submit_disabled" : ""
+            } `}
             type="submit"
-            onClick={() =>
-              openPopupError(
-                "Данный функционал еще не реализован. Демонстрация работы попапа для отображения ошибок при работе с API."
-              )
-            }
+            disabled={!currentFormValidator.isValid}
           >
             Редактировать
           </button>
