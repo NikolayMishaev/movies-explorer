@@ -13,6 +13,7 @@ import NotFound from "../NotFound/NotFound";
 import ErrorMessagePopup from "../ErrorMessagePopup/ErrorMessagePopup";
 import { register, login, getContent, editProfile } from "../../utils/MainApi";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false); // стейт для авторизации пользователя
@@ -151,30 +152,36 @@ function App() {
             <Route exact path="/">
               <Main />
             </Route>
-            <Route path="/profile">
-              <Profile signOut={onSignOut} onEditProfile={onEditProfile} />
-            </Route>
+            <ProtectedRoute
+              path="/profile"
+              component={Profile}
+              signOut={onSignOut}
+              onEditProfile={onEditProfile}
+              loggedIn={loggedIn}
+            />
             <Route path="/sign-in">
               <Login onLogin={onLogin} />
             </Route>
             <Route path="/sign-up">
               <Register onRegister={onRegister} />
             </Route>
-            <Route path="/movies">
-              <Movies
-                checkboxOn={shortMovieCheckbox}
-                handleMovieCheckbox={handleMovieCheckbox}
-                openPopupError={handleOpenErrorMessagePopup}
-              />
-            </Route>
-            <Route path="/saved-movies">
-              <SavedMovies
-                checkboxOn={shortMovieCheckbox}
-                handleMovieCheckbox={handleMovieCheckbox}
-                cardMovieDelete={cardMovieDelete}
-                openPopupError={handleOpenErrorMessagePopup}
-              />
-            </Route>
+            <ProtectedRoute
+              path="/movies"
+              component={Movies}
+              checkboxOn={shortMovieCheckbox}
+              handleMovieCheckbox={handleMovieCheckbox}
+              openPopupError={handleOpenErrorMessagePopup}
+              loggedIn={loggedIn}
+            />
+            <ProtectedRoute
+              path="/saved-movies"
+              component={SavedMovies}
+              checkboxOn={shortMovieCheckbox}
+              handleMovieCheckbox={handleMovieCheckbox}
+              cardMovieDelete={cardMovieDelete}
+              openPopupError={handleOpenErrorMessagePopup}
+              loggedIn={loggedIn}
+            />
             <Route path="/">
               <NotFound />
             </Route>
