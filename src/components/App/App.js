@@ -74,7 +74,27 @@ function App() {
   function onRegister(name, email, password) {
     register(name, email, password)
       .then((res) => {
+        onLogin(email, password);
+      })
+      .catch((err) => {
+        setErrorMessagePopupText(err);
+        setErrorMessagePopupVisible(true);
+      });
+  }
 
+  function onLogin(email, password) {
+    login(email, password)
+      .then((data) => {
+        if (!data) {
+          setErrorMessagePopupText("Что-то пошло не так...");
+          setErrorMessagePopupVisible(true);
+          return;
+        }
+        if (data.token) {
+          localStorage.setItem("jwt", data.token);
+          setLoggedIn(true);
+          history.push("/movies");
+        }
       })
       .catch((err) => {
         setErrorMessagePopupText(err);
@@ -101,7 +121,7 @@ function App() {
             />
           </Route>
           <Route path="/sign-in">
-            <Login />
+            <Login onLogin={onLogin} />
           </Route>
           <Route path="/sign-up">
             <Register onRegister={onRegister} />

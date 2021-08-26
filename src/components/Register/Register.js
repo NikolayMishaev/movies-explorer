@@ -15,6 +15,7 @@ export default function Register({ onRegister }) {
       currentFormValidator.values.password
     );
   }
+
   return (
     <section className="entry">
       <Navigation place="entry" />

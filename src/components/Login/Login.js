@@ -1,15 +1,20 @@
 import React from "react";
 import "./Login.css";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
+import useFormValidator from "../../hooks/useFormValidator";
 
 export default function Login({ onLogin }) {
-  const history = useHistory();
+  const currentFormValidator = useFormValidator();
+
   function handleSubmit(e) {
     e.preventDefault();
-    onLogin();
-    history.push("/");
+    onLogin(
+      currentFormValidator.values.email,
+      currentFormValidator.values.password
+    );
   }
+
   return (
     <section className="entry">
       <Navigation place="entry" />
@@ -23,10 +28,14 @@ export default function Login({ onLogin }) {
             name="email"
             minLength="5"
             maxLength="40"
-            className={` entry__input `}
+            className={` entry__input ${
+              currentFormValidator.errors.email ? "entry__input_type_error" : ""
+            }`}
             type="email"
+            value={currentFormValidator.values.email || ""}
+            onChange={currentFormValidator.handleChange}
           />
-          <span className="entry__input-error entry-input-email-error"></span>
+          <span className="entry__input-error entry-input-email-error">{currentFormValidator.errors.email}</span>
         </label>
         <label className="entry__field">
           Пароль
@@ -36,10 +45,16 @@ export default function Login({ onLogin }) {
             name="password"
             minLength="5"
             maxLength="40"
-            className={` entry__input`}
+            className={` entry__input ${
+              currentFormValidator.errors.password
+                ? "entry__input_type_error"
+                : ""
+            }`}
             type="password"
+            value={currentFormValidator.values.password || ""}
+            onChange={currentFormValidator.handleChange}
           />
-          <span className="entry__input-error entry-input-password-error"></span>
+          <span className="entry__input-error entry-input-password-error">{currentFormValidator.errors.password}</span>
         </label>
         <button
           aria-label="submit form"
