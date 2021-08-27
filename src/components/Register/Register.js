@@ -4,7 +4,11 @@ import { Link } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
 import useFormValidator from "../../hooks/useFormValidator";
 
-export default function Register({ onRegister }) {
+export default function Register({
+  onRegister,
+  formSubmitSendingStatus,
+  formSubmitStatus,
+}) {
   const currentFormValidator = useFormValidator();
 
   function handleSubmit(e) {
@@ -24,12 +28,15 @@ export default function Register({ onRegister }) {
         <label className="entry__field">
           Имя
           <input
+            disabled={formSubmitSendingStatus}
+            // выключить поле, если отправляется запрос.
             id="entry-input-name"
             required
             name="name"
             minLength="5"
             maxLength="40"
             pattern="[a-zA-Zа-яА-Я -]*"
+            title="Имя должно содержать только латиницу, кириллицу, пробел или дефис"
             className={` entry__input ${
               currentFormValidator.errors.name ? "entry__input_type_error" : ""
             }`}
@@ -44,11 +51,14 @@ export default function Register({ onRegister }) {
         <label className="entry__field">
           E-mail
           <input
+            disabled={formSubmitSendingStatus}
+            // выключить поле, если отправляется запрос.
             id="entry-input-email"
             required
             name="email"
             minLength="5"
-            maxLength="40"
+            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.+.[a-zA-Z]{2,4}"
+            title="введен некорректный адрес электронной почты"
             className={` entry__input ${
               currentFormValidator.errors.email ? "entry__input_type_error" : ""
             }`}
@@ -63,10 +73,12 @@ export default function Register({ onRegister }) {
         <label className="entry__field">
           Пароль
           <input
+            disabled={formSubmitSendingStatus}
+            // выключить поле, если отправляется запрос.
             id="entry-input-password"
             required
             name="password"
-            minLength="5"
+            minLength="8"
             maxLength="40"
             className={` entry__input ${
               currentFormValidator.errors.password
@@ -81,15 +93,23 @@ export default function Register({ onRegister }) {
             {currentFormValidator.errors.password}
           </span>
         </label>
+        <span
+          className={` entry__submit-message ${
+            formSubmitStatus ? "entry__submit-message_active" : ""
+          } `}
+        >
+          {formSubmitStatus}
+        </span>
         <button
           aria-label="submit form"
           className={` entry__button-submit ${
             !currentFormValidator.isValid ? "entry__button-submit_disabled" : ""
           } `}
           type="submit"
-          disabled={!currentFormValidator.isValid}
+          disabled={formSubmitSendingStatus || !currentFormValidator.isValid}
+          // выключить кнопку, если отправляется запрос или введенные данные невалидны.
         >
-          Зарегистрироваться
+          {formSubmitSendingStatus || "Зарегистрироваться"}
         </button>
         <p className="entry__text">
           Уже зарегистрированы?{" "}

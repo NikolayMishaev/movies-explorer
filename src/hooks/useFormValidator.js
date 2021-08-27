@@ -6,9 +6,13 @@ export default function useFormValidator() {
   const [isValid, setIsValid] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, title, validity } = e.target;
     setValues({ ...values, [name]: value });
-    setErrors({ ...errors, [name]: e.target.validationMessage });
+    setErrors({
+      ...errors,
+      [name]: validity.patternMismatch ? title : e.target.validationMessage,
+      // если для валидации поля input используется атрибут pattern, то вывести подробное сообщение об ошибке из значения атрибута title.
+    });
     setIsValid(e.target.closest("form").checkValidity());
   };
 

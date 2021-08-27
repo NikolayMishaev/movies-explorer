@@ -7,7 +7,7 @@ class Api {
       if (res.ok) {
         return res.json();
       }
-      return Promise.reject(`Ошибка: ${res.status} ${res.statusText}`);
+      return Promise.reject(`Произошла ошибка при запросе к API. ${res.status} ${res.statusText}`);
     }
   
     getMovieCards() {

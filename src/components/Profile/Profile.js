@@ -1,10 +1,14 @@
 import React, { useEffect, useContext } from "react";
 import "./Profile.css";
-import { Link } from "react-router-dom";
 import useFormValidator from "../../hooks/useFormValidator";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
-export default function Profile({ signOut, onEditProfile }) {
+export default function Profile({
+  signOut,
+  onEditProfile,
+  formSubmitSendingStatus,
+  formSubmitStatus,
+}) {
   const currentFormValidator = useFormValidator();
   const currentUser = useContext(CurrentUserContext);
 
@@ -33,6 +37,7 @@ export default function Profile({ signOut, onEditProfile }) {
     if (
       e.target.value === currentUser.name ||
       e.target.value === currentUser.email
+      // выключить кнопку сабмита формы, если введенные данные равны данным текущего пользователя.
     ) {
       currentFormValidator.setIsValid(false);
     }
@@ -48,12 +53,15 @@ export default function Profile({ signOut, onEditProfile }) {
           <label className="entry__field entry__field_type_profile">
             Имя
             <input
+              disabled={formSubmitSendingStatus}
+              // выключить поле, если отправляется запрос.
               id="entry-input-name"
               required
               name="name"
               minLength="5"
               maxLength="40"
               pattern="[a-zA-Zа-яА-Я -]*"
+              title="Имя должно содержать только латиницу, кириллицу, пробел или дефис"
               className={` entry__input entry__input_type_profile ${
                 currentFormValidator.errors.name
                   ? "entry__input_type_error"
@@ -70,11 +78,14 @@ export default function Profile({ signOut, onEditProfile }) {
           <label className="entry__field entry__field_type_profile">
             E-mail
             <input
+              disabled={formSubmitSendingStatus}
+              // выключить поле, если отправляется запрос.
               id="entry-input-email"
               required
               name="email"
               minLength="5"
-              maxLength="40"
+              pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.+.[a-zA-Z]{2,4}"
+              title="введен некорректный адрес электронной почты"
               className={` entry__input entry__input_type_profile ${
                 currentFormValidator.errors.email
                   ? "entry__input_type_error"
@@ -88,25 +99,35 @@ export default function Profile({ signOut, onEditProfile }) {
               {currentFormValidator.errors.email}
             </span>
           </label>
+          <span
+            className={` entry__submit-message ${
+              formSubmitStatus ? "entry__submit-message_active" : ""
+            } `}
+          >
+            {formSubmitStatus}
+          </span>
           <button
             aria-label="submit form"
             className={` entry__button-submit entry__button-submit_type_profile ${
               !currentFormValidator.isValid
                 ? "entry__button-submit_disabled"
                 : ""
-            } `}
+            }`}
             type="submit"
-            disabled={!currentFormValidator.isValid}
+            disabled={formSubmitSendingStatus || !currentFormValidator.isValid}
+            // выключить кнопку, если отправляется запрос или введенные данные невалидны.
           >
-            Редактировать
+            {formSubmitSendingStatus || "Редактировать"}
           </button>
-          <Link
-            className="entry__link entry__link_type_profile"
-            to="/"
+          <button
+            disabled={formSubmitSendingStatus}
+            // выключить кнопку, если отправляется запрос.
+            aria-label="sign out page"
+            className="entry__button-sign-out"
             onClick={signOut}
           >
             Выйти из аккаунта
-          </Link>
+          </button>
         </form>
       </section>
     </>

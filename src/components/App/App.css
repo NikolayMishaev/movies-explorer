@@ -75,20 +75,32 @@
   max-width: 396px;
 }
 
+@media (max-width: 400px) {
+  .entry {
+    padding: 56px 30px;
+    justify-content: center;
+  }
+}
+
 .entry_type_profile {
   max-width: 410px;
 }
 
 @media (max-width: 800px) {
-  .entry {
-    padding-top: 232px;
+  .entry_type_profile {
+    margin: 30px;
   }
 }
 
 @media (max-width: 400px) {
+  .entry_type_profile {
+    margin: unset;
+  }
+}
+
+@media (max-width: 800px) {
   .entry {
-    padding: 56px 30px;
-    justify-content: center;
+    padding-top: 232px;
   }
 }
 
@@ -127,6 +139,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .entry__field {
@@ -199,10 +212,12 @@
   font-size: 10px;
   line-height: 12px;
   color: #ff4062;
+  z-index: 1;
 }
 
 .entry__input-error_type_profile {
   top: 32px;
+  left: 65px;
 }
 
 .entry__button-submit {
@@ -236,7 +251,6 @@
 
 .entry__button-submit_disabled {
   background: rgb(219, 218, 218);
-  border: 1px solid #fff;
   color: #b8b8b8;
   opacity: 0.4;
 }
@@ -315,23 +329,52 @@
   transform: scale(1.05);
 }
 
-.entry__link_type_sign-out {
+.entry__button-sign-out {
   font-size: 13px;
   line-height: 16px;
   color: #ff4062;
   margin: 0 auto;
-}
-
-.entry__link_type_profile {
-  font-size: 13px;
-  line-height: 16px;
-  color: #ff4062;
-  margin: 0 auto;
+  border: none;
+  background: transparent;
+  transition: opacity 0.5s, transform 0.5s;
 }
 
 @media (max-width: 400px) {
-  .entry__link_type_profile {
+  .entry__button-sign-out {
     font-size: 12px;
     line-height: 15px;
   }
+}
+
+.entry__button-sign-out:hover {
+  cursor: pointer;
+  opacity: 0.7;
+  transform: scale(1.05);
+}
+
+.entry__submit-message {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+}
+
+@media (max-width: 400px) {
+  .entry__submit-message {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}
+
+.entry__submit-message_active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 1s;
 }
