@@ -34,10 +34,12 @@ function App() {
   const [currentUser, setCurrentUser] = useState({}); // стейт с данными текущего авторизованного пользователя.
   const [formSubmitSendingStatus, setFormSubmitSendingStatus] = useState(""); // стейт состояние обработки сабмита формы.
   const [formSubmitStatus, setFormSubmitStatus] = useState(""); // стейт с результатом сабмита формы.
+  const [preloaderVisible, setPreloaderVisible] = useState(false); // стейт состояния отображения прелоадера.
+  const [moviesCards, setMoviesCards] = useState([]); // стейт с данными карточек фильмов полученных из API.
 
   const location = useLocation();
   const history = useHistory();
-
+console.log(moviesCards)
   useEffect(() => {
     if (location.pathname !== "/") {
       // на всех маршрутах, кроме этого, установить белый фон для компонента Header.
@@ -70,15 +72,22 @@ function App() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function getMoviesCards() {
+    setPreloaderVisible(true);
+    // if(!localStorage.getItem("movies")) {
     api
       .getMovieCards()
       .then((data) => {
-        console.log(data);
+        setMoviesCards(data);
+        localStorage.setItem("movies", JSON.stringify(data));
       })
       .catch((err) => {
         setErrorMessagePopupText(err);
         setErrorMessagePopupVisible(true);
-      });
+      })
+      .finally(() => setPreloaderVisible(false));
+    // } else {
+    //   setPreloaderVisible(false);
+    // }
   }
 
   function handleMovieCheckbox() {
@@ -241,6 +250,9 @@ function App() {
               handleMovieCheckbox={handleMovieCheckbox}
               openPopupError={handleOpenErrorMessagePopup}
               loggedIn={loggedIn}
+              preloaderVisible={preloaderVisible}
+              getMoviesCards={getMoviesCards}
+              moviesCards={moviesCards}
             />
             <ProtectedRoute
               path="/saved-movies"

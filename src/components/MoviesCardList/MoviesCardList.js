@@ -1,11 +1,12 @@
 import React from "react";
 import "./MoviesCardList.css";
-import MoviesCard from "../MoviesCard/MoviesCard"; // временные захардкоженные карточки
+import MoviesCard from "../MoviesCard/MoviesCard";
 
 export default function MoviesCardList({
   movieCards,
   cardMovieDelete,
   openPopupError,
+  moviesCards,
 }) {
   return (
     <section
@@ -14,10 +15,10 @@ export default function MoviesCardList({
       } `}
     >
       <ul className={` movies-card-list__container ${cardMovieDelete && "movies-card-list__container_place_saved-movies"} `}>
-        {movieCards.map((card, i) => (
+        {moviesCards.map((card) => (
           <MoviesCard
             card={card}
-            key={i}
+            key={card.id}
             cardMovieDelete={cardMovieDelete}
             openPopupError={openPopupError}
           />

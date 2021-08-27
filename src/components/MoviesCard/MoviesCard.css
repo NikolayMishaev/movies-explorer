@@ -1,6 +1,6 @@
 .movies-card {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 
 /*  временной решение для совпадения макету на данном разрешении */
@@ -28,6 +28,7 @@
   width: 100%;
   object-fit: cover;
   transition: all 0.7s;
+  flex: 1;
 }
 
 .movies-card__wallpaper:hover {

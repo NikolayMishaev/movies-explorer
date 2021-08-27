@@ -78,7 +78,7 @@ export default function Login({
         </span>
         <button
           aria-label="submit form"
-          className={` entry__button-submit ${
+          className={` entry__button-submit entry__button-submit_type_sign-in ${
             !currentFormValidator.isValid ? "entry__button-submit_disabled" : ""
           } `}
           type="submit"

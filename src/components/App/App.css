@@ -339,6 +339,16 @@
   transition: opacity 0.5s, transform 0.5s;
 }
 
+.entry__button-sign-out:disabled {
+  color: #b8b8b8;
+}
+
+.entry__button-sign-out:disabled:hover {
+  cursor: auto;
+  opacity: 1;
+  transform: unset;
+}
+
 @media (max-width: 400px) {
   .entry__button-sign-out {
     font-size: 12px;

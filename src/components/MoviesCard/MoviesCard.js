@@ -16,15 +16,19 @@ export default function MoviesCard({ card, cardMovieDelete, openPopupError }) {
 
   return (
     <>
-      <li className={` movies-card ${cardMovieDelete && "movies-card_place_saved-movies"}`}>
+      <li
+        className={` movies-card ${
+          cardMovieDelete && "movies-card_place_saved-movies"
+        }`}
+      >
         <img
           className="movies-card__wallpaper"
-          src={card.link}
-          alt={card.title}
+          src={`https://api.nomoreparties.co${card.image.url}`}
+          alt={card.nameRU}
           onClick={handleDeleteCard}
         />
         <div className="movies-card__description">
-          <h2 className="movies-card__title">{card.title}</h2>
+          <h2 className="movies-card__title">{card.nameRU}</h2>
           <button
             className={`movies-card__like ${
               isLiked && "movies-card__like_active"
@@ -32,7 +36,9 @@ export default function MoviesCard({ card, cardMovieDelete, openPopupError }) {
             type="button"
             onClick={cardMovieDelete ? handleDeleteCard : handleLikeClick}
           ></button>
-          <p className="movies-card__duration">1ч 42м</p>
+          <p className="movies-card__duration">{`${(
+            card.duration / 60
+          ).toFixed()}ч ${card.duration % 60}м`}</p>
         </div>
       </li>
     </>
