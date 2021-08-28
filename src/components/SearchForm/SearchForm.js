@@ -6,12 +6,12 @@ import useFormValidator from "../../hooks/useFormValidator";
 export default function SearchForm({
   checkboxOn,
   handleMovieCheckbox,
-  getMoviesCards,
+  showMoviesCards,
 }) {
   const currentFormValidator = useFormValidator();
   function handleSubmit(e) {
     e.preventDefault();
-    getMoviesCards();
+    showMoviesCards();
   }
   return (
     <section className="search">
@@ -28,9 +28,9 @@ export default function SearchForm({
           ></input>
           <span
             className={` ${
+              // если после события onChange поля инпута есть ошибка валидации, отобразить блок с кастомной ошибкой.
               currentFormValidator.errors.movie
-                ? // если после события onChange поля инпута есть ошибка валидации, отобразить блок с кастомной ошибкой.
-                  "search-form__input-error"
+                ? "search-form__input-error"
                 : "display-none"
             } `}
           >
@@ -39,8 +39,8 @@ export default function SearchForm({
           <button
             className="search-form__button-submit"
             type="submit"
-            disabled={!currentFormValidator.isValid}
             // выключить кнопку, если введенные данные невалидны.
+            disabled={!currentFormValidator.isValid}
           >
             Найти
           </button>

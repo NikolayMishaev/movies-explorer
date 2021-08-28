@@ -28,8 +28,8 @@ export default function Register({
         <label className="entry__field">
           Имя
           <input
-            disabled={formSubmitSendingStatus}
             // выключить поле, если отправляется запрос.
+            disabled={formSubmitSendingStatus}
             id="entry-input-name"
             required
             name="name"
@@ -51,8 +51,8 @@ export default function Register({
         <label className="entry__field">
           E-mail
           <input
-            disabled={formSubmitSendingStatus}
             // выключить поле, если отправляется запрос.
+            disabled={formSubmitSendingStatus}
             id="entry-input-email"
             required
             name="email"
@@ -73,8 +73,8 @@ export default function Register({
         <label className="entry__field">
           Пароль
           <input
-            disabled={formSubmitSendingStatus}
             // выключить поле, если отправляется запрос.
+            disabled={formSubmitSendingStatus}
             id="entry-input-password"
             required
             name="password"
@@ -106,13 +106,13 @@ export default function Register({
             !currentFormValidator.isValid ? "entry__button-submit_disabled" : ""
           } `}
           type="submit"
-          disabled={formSubmitSendingStatus || !currentFormValidator.isValid}
           // выключить кнопку, если отправляется запрос или введенные данные невалидны.
+          disabled={formSubmitSendingStatus || !currentFormValidator.isValid}
         >
           {formSubmitSendingStatus || "Зарегистрироваться"}
         </button>
         <p className="entry__text">
-          Уже зарегистрированы?{" "}
+          Уже зарегистрированы?
           <Link className="entry__link" to="/sign-in">
             Войти
           </Link>

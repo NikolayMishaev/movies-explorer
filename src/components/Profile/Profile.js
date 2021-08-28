@@ -21,7 +21,8 @@ export default function Profile({
         email: currentUser.email,
       });
     }
-  }, [currentUser]); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -31,13 +32,12 @@ export default function Profile({
     );
   }
 
-  // если имя или email пользователя не меняются после ввода в поля формы, то кнопка "Редактировать" выключена
   function handleChangeInput(e) {
     currentFormValidator.handleChange(e);
     if (
+      // если введенные данные в поля формы равны данным текущего пользователя, выключить кнопку сабмита формы,
       e.target.value === currentUser.name ||
       e.target.value === currentUser.email
-      // выключить кнопку сабмита формы, если введенные данные равны данным текущего пользователя.
     ) {
       currentFormValidator.setIsValid(false);
     }
@@ -53,8 +53,8 @@ export default function Profile({
           <label className="entry__field entry__field_type_profile">
             Имя
             <input
-              disabled={formSubmitSendingStatus}
               // выключить поле, если отправляется запрос.
+              disabled={formSubmitSendingStatus}
               id="entry-input-name"
               required
               name="name"
@@ -78,8 +78,8 @@ export default function Profile({
           <label className="entry__field entry__field_type_profile">
             E-mail
             <input
-              disabled={formSubmitSendingStatus}
               // выключить поле, если отправляется запрос.
+              disabled={formSubmitSendingStatus}
               id="entry-input-email"
               required
               name="email"
@@ -114,14 +114,14 @@ export default function Profile({
                 : ""
             }`}
             type="submit"
-            disabled={formSubmitSendingStatus || !currentFormValidator.isValid}
             // выключить кнопку, если отправляется запрос или введенные данные невалидны.
+            disabled={formSubmitSendingStatus || !currentFormValidator.isValid}
           >
             {formSubmitSendingStatus || "Редактировать"}
           </button>
           <button
-            disabled={formSubmitSendingStatus}
             // выключить кнопку, если отправляется запрос.
+            disabled={formSubmitSendingStatus}
             aria-label="sign out page"
             className="entry__button-sign-out"
             onClick={signOut}

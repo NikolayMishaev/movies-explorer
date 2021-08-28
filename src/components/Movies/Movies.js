@@ -1,4 +1,4 @@
-import React, { } from "react";
+import React from "react";
 import "./Movies.css";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
@@ -9,13 +9,13 @@ export default function Movies({
   handleMovieCheckbox,
   openPopupError,
   preloaderVisible,
-  getMoviesCards,
+  showMoviesCards,
   moviesCards,
 }) {
   return (
     <>
       <SearchForm
-        getMoviesCards={getMoviesCards}
+        showMoviesCards={showMoviesCards}
         checkboxOn={checkboxOn}
         handleMovieCheckbox={handleMovieCheckbox}
       />
@@ -23,7 +23,7 @@ export default function Movies({
         <Preloader />
       ) : (
         <MoviesCardList
-        moviesCards={moviesCards}
+          moviesCards={moviesCards}
           openPopupError={openPopupError}
         />
       )}

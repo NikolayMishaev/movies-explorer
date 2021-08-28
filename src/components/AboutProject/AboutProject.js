@@ -31,7 +31,9 @@ export default function AboutProject() {
           <p className="about-project__direction">Back-end</p>
         </li>
         <li className="about-project__direction-item about-project__direction-item_style_front-end">
-          <p className="about-project__time about-project__time_style_front-end">4 недели</p>
+          <p className="about-project__time about-project__time_style_front-end">
+            4 недели
+          </p>
           <p className="about-project__direction">Front-end</p>
         </li>
       </ul>

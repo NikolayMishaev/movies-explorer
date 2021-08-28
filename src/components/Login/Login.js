@@ -27,8 +27,8 @@ export default function Login({
         <label className="entry__field">
           E-mail
           <input
-            disabled={formSubmitSendingStatus}
             // выключить поле, если отправляется запрос.
+            disabled={formSubmitSendingStatus}
             id="entry-input-email"
             required
             name="email"
@@ -49,8 +49,8 @@ export default function Login({
         <label className="entry__field">
           Пароль
           <input
-            disabled={formSubmitSendingStatus}
             // выключить поле, если отправляется запрос.
+            disabled={formSubmitSendingStatus}
             id="entry-input-password"
             required
             name="password"
@@ -82,13 +82,13 @@ export default function Login({
             !currentFormValidator.isValid ? "entry__button-submit_disabled" : ""
           } `}
           type="submit"
-          disabled={formSubmitSendingStatus || !currentFormValidator.isValid}
           // выключить кнопку, если отправляется запрос или введенные данные невалидны.
+          disabled={formSubmitSendingStatus || !currentFormValidator.isValid}
         >
           {formSubmitSendingStatus || "Войти"}
         </button>
         <p className="entry__text">
-          Ещё не зарегистрированы?{" "}
+          Ещё не зарегистрированы?
           <Link className="entry__link" to="/sign-up">
             Регистрация
           </Link>

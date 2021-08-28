@@ -4,12 +4,17 @@ import { Link, NavLink } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 
 export default function Navigation({ place, loggedIn }) {
-  const [mobileMenuOn, setMobileMenuOn] = useState(false); // стейт мобильного меню
-  const [mobileMenuCloseOn, setMobileMenuCloseOn] = useState(false); // стейт закрытия мобильного меню
+  // стейт мобильного меню
+  const [mobileMenuOn, setMobileMenuOn] = useState(false);
+  // стейт закрытия мобильного меню
+  // использется для плавной анимации, т.к. при display-block не-возможно сделать плавное появление/исчезновение мобильного меню.
+  // это связано с тем, что в навигации используются одни и те же ссылки и кнопки для обычного и мобильного меню.
+  const [mobileMenuCloseOn, setMobileMenuCloseOn] = useState(false);
 
+  // обработчик нажатия кнопки мобильного меню
   function handleButtonBurgerClick(e) {
-    // т.к. при display-block не-возможно сделать плавное появление/исчезновение мобильного меню, применяется дополнительный стейт с задержкой. Это связано с тем, что используются одни и те же ссылки навигации и кнопки.
     if (mobileMenuOn) {
+      // если мобильное меню активно, изменить стейт для плавного исчезновения мобильного меню.
       setMobileMenuCloseOn(true);
       setTimeout(() => {
         setMobileMenuCloseOn(false);
@@ -160,7 +165,9 @@ export default function Navigation({ place, loggedIn }) {
               </li>
             </ul>
           </nav>
-          <nav // декоративные элементы. т.к. в навигации и в версии мобильного меню используются одни и те же ссылки и кнопки. Созданы, т.к. отображаются в макете на заднем фоне.
+          {/* т.к. в навигации используются одни и те же ссылки и кнопки для обычного и мобильного меню,
+          создан этот блок с декоративными элементами, которые отображаются на заднем фоне мобильного меню */}
+          <nav
             className={` navigation navigation_type_visible-only-mobile ${
               mobileMenuOn ? "" : "display-none"
             } `}

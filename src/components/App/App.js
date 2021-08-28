@@ -23,86 +23,99 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import { api } from "../../utils/MoviesApi";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false); // стейт для авторизации пользователя.
-  const [shortMovieCheckbox, setShortMovieCheckbox] = useState(false); // стейт состояния чекбокса короткомертажных фильмов.
-  const [headerStyleMain, setHeaderStyleMain] = useState(true); // стейт для изменения фона компонента Header.
-  const [cardMovieDelete, setCardMovieDelete] = useState(false); // стейт кнопки лайка карточки фильма.
-  const [entryLocation, setEntryLocation] = useState(false); // стейт отображения компонентов Header и Footer.
+  // стейт для авторизации пользователя.
+  const [loggedIn, setLoggedIn] = useState(false);
+  // стейт чекбокса короткомертажных фильмов.
+  const [shortMovieCheckbox, setShortMovieCheckbox] = useState(false);
+  // стейт для изменения фона компонента Header.
+  const [headerStyleMain, setHeaderStyleMain] = useState(true);
+  // стейт кнопки лайка карточки фильма.
+  const [cardMovieDelete, setCardMovieDelete] = useState(false);
+  // стейт отображения компонентов Header и Footer.
+  const [entryLocation, setEntryLocation] = useState(false);
+  // стейт видимости модального окна с ошибкой.
   const [errorMessagePopupVisible, setErrorMessagePopupVisible] =
-    useState(false); // стейт видимости модального окна с ошибкой.
-  const [errorMessagePopupText, setErrorMessagePopupText] = useState(""); // стейт сообщения ошибки модального окна.
-  const [currentUser, setCurrentUser] = useState({}); // стейт с данными текущего авторизованного пользователя.
-  const [formSubmitSendingStatus, setFormSubmitSendingStatus] = useState(""); // стейт состояние обработки сабмита формы.
-  const [formSubmitStatus, setFormSubmitStatus] = useState(""); // стейт с результатом сабмита формы.
-  const [preloaderVisible, setPreloaderVisible] = useState(false); // стейт состояния отображения прелоадера.
-  const [moviesCards, setMoviesCards] = useState([]); // стейт с данными карточек фильмов полученных из API.
+    useState(false);
+  // стейт сообщения ошибки модального окна.
+  const [errorMessagePopupText, setErrorMessagePopupText] = useState("");
+  // стейт с данными текущего авторизованного пользователя.
+  const [currentUser, setCurrentUser] = useState({});
+  // стейт состояние обработки сабмита формы.
+  const [formSubmitSendingStatus, setFormSubmitSendingStatus] = useState("");
+  // стейт с результатом сабмита формы.
+  const [formSubmitStatus, setFormSubmitStatus] = useState("");
+  // стейт состояния отображения прелоадера в форме поиска фильмов.
+  const [preloaderVisible, setPreloaderVisible] = useState(false);
+  // стейт с данными карточек фильмов полученных из API.
+  const [moviesCards, setMoviesCards] = useState([]);
 
   const location = useLocation();
   const history = useHistory();
-console.log(moviesCards)
+
   useEffect(() => {
+    // на всех маршрутах, кроме этого, установить белый фон для компонента Header.
     if (location.pathname !== "/") {
-      // на всех маршрутах, кроме этого, установить белый фон для компонента Header.
       setHeaderStyleMain(false);
     } else {
       setHeaderStyleMain(true);
     }
+    // при переходе на роут, изменить икнони лайка с сердца на крестик при наведении.
     if (location.pathname === "/saved-movies") {
-      // при переходе на роут, изменить икнони лайка с сердца на крестик при наведении.
       setCardMovieDelete(true);
     } else {
       setCardMovieDelete(false);
     }
     if (
+      //  при переходе на все роуты, кроме данных, скрыть компоненты Header и Footer.
       location.pathname === "/movies" ||
       location.pathname === "/saved-movies" ||
       location.pathname === "/"
-      //  при переходе на все роуты, кроме данных, скрыть компоненты Header и Footer.
     ) {
       setEntryLocation(false);
     } else {
       setEntryLocation(true);
     }
-    setFormSubmitStatus("");
     // сбросить стейт с результатом сабмита формы.
+    setFormSubmitStatus("");
   }, [location]);
 
   useEffect(() => {
     checkValidityToken();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  function getMoviesCards() {
+  function showMoviesCards() {
     setPreloaderVisible(true);
-    // if(!localStorage.getItem("movies")) {
-    api
-      .getMovieCards()
-      .then((data) => {
-        setMoviesCards(data);
-        localStorage.setItem("movies", JSON.stringify(data));
-      })
-      .catch((err) => {
-        setErrorMessagePopupText(err);
-        setErrorMessagePopupVisible(true);
-      })
-      .finally(() => setPreloaderVisible(false));
-    // } else {
-    //   setPreloaderVisible(false);
-    // }
+    const movies = localStorage.getItem("movies");
+    if (movies) {
+      setMoviesCards(JSON.parse(movies));
+    } else {
+      api
+        .getMovieCards()
+        .then((data) => {
+          localStorage.setItem("movies", JSON.stringify(data));
+          setMoviesCards(data);
+        })
+        .catch((err) => {
+          setErrorMessagePopupText(err);
+          setErrorMessagePopupVisible(true);
+        });
+    }
+    setPreloaderVisible(false);
   }
 
   function handleMovieCheckbox() {
-    // смена состояния чекбокса короткометражными фильмами
     setShortMovieCheckbox(!shortMovieCheckbox);
   }
 
+  // обработчик открытия модального окна с ошибкой
   function handleOpenErrorMessagePopup(text) {
-    // обработчик открытия модального окна с ошибкой
     setErrorMessagePopupVisible(true);
     setErrorMessagePopupText(text);
   }
 
+  // обработчик закрытия модального окна с ошибкой
   function handleCloseErrorMessagePopup() {
-    // обработчик закрытия модального окна с ошибкой
     setErrorMessagePopupVisible(false);
     setErrorMessagePopupText("");
   }
@@ -119,9 +132,9 @@ console.log(moviesCards)
           }
         })
         .catch((err) => {
+          // при завершении проверки валидности jwt ошибкой, вернуть пользователя на главную страницу.
+          // т.к. компонент ProtectedRoute разрешает роут при наличии jwt в localStorage не проверяя его.
           history.push("/");
-          // При завершении проверки валидности jwt ошибкой, вернуть пользователя на главную страницу.
-          // т.к. компонент ProtectedRoute разрешает роут при наличии jwt в localStorage.
           setErrorMessagePopupText(err);
           setErrorMessagePopupVisible(true);
         });
@@ -214,6 +227,10 @@ console.log(moviesCards)
               formSubmitStatus={formSubmitStatus}
             />
             <Route path="/sign-in">
+              {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.
+              получается, что данный роут тоже защищен для авторизованного пользователя. Но в ТЗ есть такой пункт: 
+              "если пользователь закрыл вкладку и был авторизован, он может вернуться сразу на любую страницу приложения по URL-адресу, 
+              кроме страниц авторизации и регистрации. " */}
               {loggedIn ? (
                 <Redirect to="/" />
               ) : (
@@ -223,12 +240,12 @@ console.log(moviesCards)
                   formSubmitStatus={formSubmitStatus}
                 />
               )}
-              {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.
-              Получается, что данный роут тоже защищен для авторизованного пользователя. Но в ТЗ есть такой пункт: 
-              "Если пользователь закрыл вкладку и был авторизован, он может вернуться сразу на любую страницу приложения по URL-адресу, 
-              кроме страниц авторизации и регистрации. " */}
             </Route>
             <Route path="/sign-up">
+              {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.
+              получается, что данный роут тоже защищен для авторизованного пользователя. Но в ТЗ есть такой пункт: 
+              "если пользователь закрыл вкладку и был авторизован, он может вернуться сразу на любую страницу приложения по URL-адресу, 
+              кроме страниц авторизации и регистрации. " */}
               {loggedIn ? (
                 <Redirect to="/" />
               ) : (
@@ -238,10 +255,6 @@ console.log(moviesCards)
                   formSubmitStatus={formSubmitStatus}
                 />
               )}
-              {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.
-              Получается, что данный роут тоже защищен для авторизованного пользователя. Но в ТЗ есть такой пункт: 
-              "Если пользователь закрыл вкладку и был авторизован, он может вернуться сразу на любую страницу приложения по URL-адресу, 
-              кроме страниц авторизации и регистрации. " */}
             </Route>
             <ProtectedRoute
               path="/movies"
@@ -251,7 +264,7 @@ console.log(moviesCards)
               openPopupError={handleOpenErrorMessagePopup}
               loggedIn={loggedIn}
               preloaderVisible={preloaderVisible}
-              getMoviesCards={getMoviesCards}
+              showMoviesCards={showMoviesCards}
               moviesCards={moviesCards}
             />
             <ProtectedRoute
