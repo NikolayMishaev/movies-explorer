@@ -36,24 +36,41 @@
 
 .movies-card-list__container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
   grid-gap: 20px;
   list-style-type: none;
   margin-top: 18px;
   padding: 0;
 }
 
-/* временный модификатор, для совпадения макету т.к. реализован адаптив карточкек, балгодаря которому они тянутся, сохраняя пропорции, если их всего 3шт в контейнере */
-@media (min-width: 1280px) {     
-  .movies-card-list__container_place_saved-movies {
-    grid-template-columns: repeat(auto-fit, minmax(260px, 270px));
-  }
-}
-
 @media (max-width: 800px) {
   .movies-card-list__container {
     grid-gap: 30px;
     margin-bottom: 8px;
+  }
+}
+
+@media (min-width: 630px) {
+  .movies-card-list__container_type_less-four-cards {
+    grid-template-columns: repeat(auto-fit, calc(50% - 15px));
+  }
+}
+
+@media (min-width: 801px) {
+  .movies-card-list__container_type_less-four-cards {
+    grid-template-columns: repeat(auto-fit, calc(50% - 10px));
+  }
+}
+
+@media (min-width: 990px) {
+  .movies-card-list__container_type_less-four-cards {
+    grid-template-columns: repeat(auto-fit, calc(33% - 11px));
+  }
+}
+
+@media (min-width: 1280px) {
+  .movies-card-list__container_type_less-four-cards {
+    grid-template-columns: repeat(auto-fit, 270px);
   }
 }
 

@@ -1,0 +1,17 @@
+.search-message__message {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 27px;
+  letter-spacing: -0.04em;
+  max-width: 500px;
+  text-align: center;
+  margin: 0 25px;
+}
+
+@media (max-width: 400px) {
+  .search-message__message {
+    font-size: 18px;
+    line-height: 22px;
+  }
+}

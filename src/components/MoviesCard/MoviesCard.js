@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import "./MoviesCard.css";
 
-export default function MoviesCard({ card, cardMovieDelete, openPopupError }) {
+export default function MoviesCard({
+  card,
+  cardMovieDelete,
+  openPopupError,
+  onCardLike,
+}) {
   const [isLiked, setIsLiked] = useState(false);
 
   function handleLikeClick() {
     setIsLiked(!isLiked);
+    onCardLike();
   }
 
   function handleDeleteCard() {
@@ -21,12 +27,18 @@ export default function MoviesCard({ card, cardMovieDelete, openPopupError }) {
           cardMovieDelete && "movies-card_place_saved-movies"
         }`}
       >
-        <img
-          className="movies-card__wallpaper"
-          src={`https://api.nomoreparties.co${card.image.url}`}
-          alt={card.nameRU}
-          onClick={handleDeleteCard}
-        />
+        <a
+          className="movies-card__link"
+          href={card.trailerLink}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img
+            className="movies-card__wallpaper"
+            src={`https://api.nomoreparties.co${card.image.url}`}
+            alt={card.nameRU}
+          />
+        </a>
         <div className="movies-card__description">
           <h2 className="movies-card__title">{card.nameRU}</h2>
           <button

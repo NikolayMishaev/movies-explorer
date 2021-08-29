@@ -7,6 +7,11 @@ import {
   useLocation,
   useHistory,
 } from "react-router-dom";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import { api } from "../../utils/MoviesApi";
+import { register, login, getContent, editProfile } from "../../utils/MainApi";
+// импорт компонентов
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
@@ -17,12 +22,11 @@ import Login from "../Login/Login";
 import Profile from "../Profile/Profile";
 import NotFound from "../NotFound/NotFound";
 import ErrorMessagePopup from "../ErrorMessagePopup/ErrorMessagePopup";
-import { register, login, getContent, editProfile } from "../../utils/MainApi";
-import { CurrentUserContext } from "../../contexts/CurrentUserContext";
-import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-import { api } from "../../utils/MoviesApi";
 
-function App() {
+export default function App() {
+  const location = useLocation();
+  const history = useHistory();
+
   // стейт для авторизации пользователя.
   const [loggedIn, setLoggedIn] = useState(false);
   // стейт чекбокса короткомертажных фильмов.
@@ -46,11 +50,20 @@ function App() {
   const [formSubmitStatus, setFormSubmitStatus] = useState("");
   // стейт состояния отображения прелоадера в форме поиска фильмов.
   const [preloaderVisible, setPreloaderVisible] = useState(false);
+  // стейт сообщения с результатами поиска в форме поиска фильмов.
+  const [searchMessage, setSearchMessage] = useState("");
   // стейт с данными карточек фильмов полученных из API.
   const [moviesCards, setMoviesCards] = useState([]);
+  // стейт с отфильтрованными карточками.
+  const [filteredMoviesCards, setFilteredMoviesCards] = useState([]);
+  // стейт с ключевым словом поиска в фоме поиска фильмов
+  const [searchValue, setSearchValue] = useState("");
 
-  const location = useLocation();
-  const history = useHistory();
+  useEffect(() => {
+    checkValidityToken();
+    getMoviesCardsFromLocalStorage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     // на всех маршрутах, кроме этого, установить белый фон для компонента Header.
@@ -79,33 +92,98 @@ function App() {
     setFormSubmitStatus("");
   }, [location]);
 
-  useEffect(() => {
-    checkValidityToken();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function showMoviesCards() {
+  // обработчик фильтрации карточек по введенному ключевому слову в форму поиска и отмеченым флажкам.
+  // заложена масштабируемость, для возможности фильтрации по нескольким чекбоксам.
+  function handleFilteredMoviesCards() {
     setPreloaderVisible(true);
-    const movies = localStorage.getItem("movies");
-    if (movies) {
-      setMoviesCards(JSON.parse(movies));
-    } else {
-      api
-        .getMovieCards()
-        .then((data) => {
-          localStorage.setItem("movies", JSON.stringify(data));
-          setMoviesCards(data);
-        })
-        .catch((err) => {
-          setErrorMessagePopupText(err);
-          setErrorMessagePopupVisible(true);
-        });
+    const filteredMoviesCards = moviesCards.filter(
+      (card) =>
+        // передать массив с именами фильмов в функцию для поиска совпадения по имени.
+        findMatchMovieName([card.nameRU, card.nameEN]) &&
+        // если совпадение есть, передать картчоку в функцию проверки совпадений согласно установленным флажкам
+        findMatchCheckboxes(card)
+    );
+
+    // функция проверки совпадения по имени
+    function findMatchMovieName(arrayWithCardNameS) {
+      return arrayWithCardNameS.some(
+        (name) => name && name.toLowerCase().includes(searchValue)
+      );
     }
+
+    function findMatchCheckboxes(card) {
+      // если флажок "короткометражки" отмечен, передать продолжительность фильма в функцию проверки совпадения по длительности.
+      // если совпадение есть, инвертировать результат, чтобы условие не выполнилось, перейти к проверке следующего чекбокса
+      if (shortMovieCheckbox && !findMatchMovieShort(card.duration)) {
+        // если хотя бы один из чекбоксов не прошел проверку вернуть false
+        return false;
+      }
+      // если все проверки (для каждого чекбокса) прошли успешно, вернуть true
+      return true;
+    }
+
+    // функция проверки совпадения по длительности
+    function findMatchMovieShort(duration) {
+      // если продолжительности есть и она меньше или равна 40 минутам, вернуть true, иначе false.
+      return duration && duration <= 40;
+    }
+
+    setFilteredMoviesCards(filteredMoviesCards);
     setPreloaderVisible(false);
   }
 
+  // получить карточки фильмов из localStorage и записать в стейт
+  function getMoviesCardsFromLocalStorage() {
+    const movies = localStorage.getItem("movies");
+    if (movies) {
+      setMoviesCards(JSON.parse(movies));
+    }
+  }
+
+  // получить карточки фильмов через запрос к API
+  function getMoviesCardsFromAPI() {
+    api
+      .getMovieCards()
+      .then((data) => {
+        // записать карточки в localStorage и стейт
+        localStorage.setItem("movies", JSON.stringify(data));
+        setMoviesCards(data);
+      })
+      .catch((err) => {
+        setErrorMessagePopupText(err);
+        setErrorMessagePopupVisible(true);
+        setPreloaderVisible(false);
+        setSearchMessage(
+          "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
+        );
+      });
+  }
+
+  useEffect(() => {
+    // если в стейт-переменной нет карточек, и отправлен запрос в форме поиска, то получить карточки через API
+    if (!moviesCards.length && searchValue) {
+      setPreloaderVisible(true);
+      getMoviesCardsFromAPI();
+    }
+    moviesCards.length && searchValue && handleFilteredMoviesCards();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [moviesCards, searchValue, shortMovieCheckbox]);
+
+  useEffect(() => {
+    setSearchMessage("");
+    // если в стейт-переменной с отфильтрованными карточками нет данных и произошел сабмит формы поиска,
+    // изменить сообщение в стейт-переменной с сообщением о результате поиска.
+    !filteredMoviesCards.length &&
+      searchValue &&
+      setSearchMessage("Ничего не найдено");
+  }, [filteredMoviesCards, searchValue]);
+
   function handleMovieCheckbox() {
     setShortMovieCheckbox(!shortMovieCheckbox);
+  }
+
+  function handleSearchValue(searchValue) {
+    setSearchValue(searchValue);
   }
 
   // обработчик открытия модального окна с ошибкой
@@ -204,6 +282,8 @@ function App() {
     history.push("/");
   }
 
+  function handleCardLike() {}
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page page_align_center">
@@ -264,8 +344,10 @@ function App() {
               openPopupError={handleOpenErrorMessagePopup}
               loggedIn={loggedIn}
               preloaderVisible={preloaderVisible}
-              showMoviesCards={showMoviesCards}
-              moviesCards={moviesCards}
+              moviesCards={filteredMoviesCards}
+              handleSearchValue={handleSearchValue}
+              searchMessage={searchMessage}
+              onCardLike={handleCardLike}
             />
             <ProtectedRoute
               path="/saved-movies"
@@ -291,5 +373,3 @@ function App() {
     </CurrentUserContext.Provider>
   );
 }
-
-export default App;

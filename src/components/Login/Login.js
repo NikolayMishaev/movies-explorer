@@ -1,8 +1,9 @@
 import React from "react";
 import "./Login.css";
 import { Link } from "react-router-dom";
-import Navigation from "../Navigation/Navigation";
 import useFormValidator from "../../hooks/useFormValidator";
+// импорт компонентов
+import Navigation from "../Navigation/Navigation";
 
 export default function Login({
   onLogin,

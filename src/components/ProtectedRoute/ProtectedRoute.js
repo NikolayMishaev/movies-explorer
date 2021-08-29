@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-const ProtectedRoute = ({ component: Component, ...props }) => {
+export default function ProtectedRoute({ component: Component, ...props }) {
   return (
     <Route>
       {() =>
@@ -17,6 +17,4 @@ const ProtectedRoute = ({ component: Component, ...props }) => {
       }
     </Route>
   );
-};
-
-export default ProtectedRoute;
+}

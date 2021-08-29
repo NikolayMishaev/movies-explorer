@@ -1,5 +1,6 @@
 import React from "react";
 import "./Footer.css";
+// импорт компонентов
 import Navigation from "../Navigation/Navigation";
 
 export default function Footer({ entryLocation }) {

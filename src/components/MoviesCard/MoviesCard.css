@@ -24,16 +24,22 @@
   }
 }
 
+.movies-card__link {
+  flex: 1;
+  overflow: hidden;
+}
+
 .movies-card__wallpaper {
   width: 100%;
+  height: 100%;
   object-fit: cover;
+  transform: scale(1.1);
   transition: all 0.7s;
-  flex: 1;
 }
 
 .movies-card__wallpaper:hover {
   opacity: 0.7;
-  transform: scale(1.03);
+  transform: scale(1);
   cursor: pointer;
 }
 

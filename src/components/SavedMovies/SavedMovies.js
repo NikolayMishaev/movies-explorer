@@ -1,9 +1,9 @@
 import React from "react";
 import "./SavedMovies.css";
+// импорт компонентов
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Preloader from "../Preloader/Preloader";
-import { movieCardsLike } from "../../utils/constants";
 
 export default function SavedMovies({
   checkboxOn,
@@ -11,6 +11,7 @@ export default function SavedMovies({
   openPopupError,
   preloaderVisible,
   cardMovieDelete,
+  moviesCards,
 }) {
   return (
     <>
@@ -22,7 +23,7 @@ export default function SavedMovies({
         <Preloader />
       ) : (
         <MoviesCardList
-          movieCards={movieCardsLike}
+          movieCards={moviesCards}
           cardMovieDelete={cardMovieDelete}
           openPopupError={openPopupError}
         />

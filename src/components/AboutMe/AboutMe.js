@@ -1,7 +1,8 @@
 import React from "react";
 import "./AboutMe.css";
-import Navigation from "../Navigation/Navigation";
 import photo from "../../images/about-me-photo.jpg";
+// импорт компонентов
+import Navigation from "../Navigation/Navigation";
 
 export default function AboutMe() {
   return (

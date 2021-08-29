@@ -1,18 +1,32 @@
 import React from "react";
 import "./SearchForm.css";
-import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import useFormValidator from "../../hooks/useFormValidator";
+// импорт компонентов
+import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 
 export default function SearchForm({
   checkboxOn,
   handleMovieCheckbox,
-  showMoviesCards,
+  handleSearchValue,
 }) {
   const currentFormValidator = useFormValidator();
+
   function handleSubmit(e) {
     e.preventDefault();
-    showMoviesCards();
+    handleSearchValue(handleFormatInputValue());
   }
+
+  // function handleMovieCheckboxClick() {
+  //   handleMovieCheckbox();
+  //   handleSearchValue(handleFormatInputValue())
+  // }
+
+  function handleFormatInputValue() {
+    return currentFormValidator.isValid
+      ? currentFormValidator.values.movie.trim().toLowerCase()
+      : "";
+  }
+
   return (
     <section className="search">
       <form className="search-form" onSubmit={handleSubmit}>

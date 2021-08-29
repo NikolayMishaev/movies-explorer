@@ -1,30 +1,28 @@
 class Api {
-    constructor({ baseUrl }) {
-      this._baseUrl = baseUrl;
-    }
-  
-    _checkStatus(res) {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Произошла ошибка при запросе к API. ${res.status} ${res.statusText}`);
-    }
-  
-    getMovieCards() {
-      return fetch(`${this._baseUrl}`, {
-        headers: {
-          "Content-Type": "application/json"
-        },
-      }).then((res) => {
-        return this._checkStatus(res);
-      });
-    }
-    
-
+  constructor({ baseUrl }) {
+    this._baseUrl = baseUrl;
   }
-  
-  export const api = new Api({
-    baseUrl: "https://api.nomoreparties.co/beatfilm-movies",
-  });
-  
-  
+
+  _checkStatus(res) {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(
+      `Произошла ошибка при запросе к API. ${res.status} ${res.statusText}`
+    );
+  }
+
+  getMovieCards() {
+    return fetch(`${this._baseUrl}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      return this._checkStatus(res);
+    });
+  }
+}
+
+export const api = new Api({
+  baseUrl: "https://api.nomoreparties.co/beatfilm-movies",
+});

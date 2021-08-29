@@ -1,5 +1,6 @@
 import React from "react";
 import "./Header.css";
+// импорт компонентов
 import Navigation from "../Navigation/Navigation";
 
 export default function Header({ headerStyleMain, loggedIn, entryLocation }) {

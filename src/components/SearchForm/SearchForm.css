@@ -91,20 +91,26 @@
 }
 
 .search-form__button-submit:disabled {
-background:grey;
-color:  #aaaaaa;
+  background: grey;
+  color: #aaaaaa;
 }
 
 .search-form__button-submit:disabled:hover {
   cursor: auto;
   opacity: 1;
   transform: unset;
-  }
+}
 
 .search-form__button-submit:hover {
   cursor: pointer;
   opacity: 0.7;
   transform: scale(1.05);
+}
+
+.search-form__button-submit:active:hover {
+  opacity: 0.8;
+  transform: scale(1);
+  transition: transform 0.1s;
 }
 
 .search-form__input-error {
