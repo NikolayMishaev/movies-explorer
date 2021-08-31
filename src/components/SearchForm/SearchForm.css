@@ -87,7 +87,7 @@
   padding: 0;
   margin-left: 10px;
   height: 44px;
-  transition: opacity 0.5s, transform 0.5s;
+  transition: all 0.5s;
 }
 
 .search-form__button-submit:disabled {
@@ -99,6 +99,11 @@
   cursor: auto;
   opacity: 1;
   transform: unset;
+}
+
+.search-form__button-submit:disabled:hover + .search-form__input-error {
+  display: block;
+  color: #ff4062;
 }
 
 .search-form__button-submit:hover {
@@ -121,12 +126,17 @@
   font-weight: normal;
   font-size: 12px;
   line-height: 18px;
-  color: #ff4062;
   z-index: 1;
+  display: none;
 }
 
 @media (max-width: 400px) {
   .search-form__input-error {
     font-size: 10px;
   }
+}
+
+.search-form__input-error_active {
+  color: #ff4062;
+  display: block;
 }

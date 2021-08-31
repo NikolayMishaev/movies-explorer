@@ -8,17 +8,17 @@ export default function SearchForm({
   checkboxOn,
   handleMovieCheckbox,
   handleSearchValue,
+  onSearchMovies
 }) {
   const currentFormValidator = useFormValidator();
 
   function handleSubmit(e) {
     e.preventDefault();
-    handleSearchValue(handleFormatInputValue());
+    onSearchMovies(handleFormatInputValue());
   }
 
   // function handleMovieCheckboxClick() {
-  //   handleMovieCheckbox();
-  //   handleSearchValue(handleFormatInputValue())
+  //   handleMovieCheckbox(handleFormatInputValue());
   // }
 
   function handleFormatInputValue() {
@@ -40,16 +40,6 @@ export default function SearchForm({
             required
             onChange={currentFormValidator.handleChange}
           ></input>
-          <span
-            className={` ${
-              // если после события onChange поля инпута есть ошибка валидации, отобразить блок с кастомной ошибкой.
-              currentFormValidator.errors.movie
-                ? "search-form__input-error"
-                : "display-none"
-            } `}
-          >
-            Нужно ввести ключевое слово
-          </span>
           <button
             className="search-form__button-submit"
             type="submit"
@@ -58,6 +48,16 @@ export default function SearchForm({
           >
             Найти
           </button>
+          <span
+            className={` search-form__input-error ${
+              // если после события onChange поля инпута есть ошибка валидации, отобразить блок с кастомной ошибкой.
+              currentFormValidator.errors.movie
+                ? "search-form__input-error_active"
+                : ""
+            }`}
+          >
+            Нужно ввести ключевое слово
+          </span>
         </div>
         <FilterCheckbox
           checkboxOn={checkboxOn}

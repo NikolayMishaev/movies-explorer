@@ -28,9 +28,7 @@ export default function App() {
   const history = useHistory();
 
   // стейт для авторизации пользователя.
-  const [loggedIn, setLoggedIn] = useState(false);
-  // стейт чекбокса короткомертажных фильмов.
-  const [shortMovieCheckbox, setShortMovieCheckbox] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
   // стейт для изменения фона компонента Header.
   const [headerStyleMain, setHeaderStyleMain] = useState(true);
   // стейт кнопки лайка карточки фильма.
@@ -44,24 +42,50 @@ export default function App() {
   const [errorMessagePopupText, setErrorMessagePopupText] = useState("");
   // стейт с данными текущего авторизованного пользователя.
   const [currentUser, setCurrentUser] = useState({});
-  // стейт состояние обработки сабмита формы.
+  // стейт состояние обработки сабмита форм регистр авториз профиль.
   const [formSubmitSendingStatus, setFormSubmitSendingStatus] = useState("");
-  // стейт с результатом сабмита формы.
+  // стейт с результатом сабмита форм регистр авториз профиль.
   const [formSubmitStatus, setFormSubmitStatus] = useState("");
   // стейт состояния отображения прелоадера в форме поиска фильмов.
   const [preloaderVisible, setPreloaderVisible] = useState(false);
+
   // стейт сообщения с результатами поиска в форме поиска фильмов.
   const [searchMessage, setSearchMessage] = useState("");
-  // стейт с данными карточек фильмов полученных из API.
+  // стейт с данными всех карточек фильмов полученных из API.
   const [moviesCards, setMoviesCards] = useState([]);
   // стейт с отфильтрованными карточками.
   const [filteredMoviesCards, setFilteredMoviesCards] = useState([]);
-  // стейт с ключевым словом поиска в фоме поиска фильмов
-  const [searchValue, setSearchValue] = useState("");
+  // стейт с отфильтрованными карточками только по ключевому слову.
+  const [
+    filteredMoviesCardsOnlyBySearcyValue,
+    setFilteredMoviesCardsOnlyBySearcyValue,
+  ] = useState([]);
+  // стейт с ключевым словом поиска в форме фильмов
+  const [searchValueMovies, setSearchValueMovies] = useState("");
+  // стейт чекбокса короткомертажных фильмов.
+  const [shortMovieCheckbox, setShortMovieCheckbox] = useState(false);
+
+  // стейт сообщения с результатами поиска в форме поиска сохраненных фильмов.
+  const [searchMessageSavedMovies, setSearchMessageSavedMovies] = useState("");
+  // стейт с данными всех карточек сохраненных фильмов полученных из API.
+  const [savedMoviesCards, setSavedMoviesCards] = useState([]);
+  // стейт с отфильтрованными сохраненными карточками.
+  const [filteredSavedMoviesCards, setFilteredSavedMoviesCards] = useState([]);
+  // стейт с отфильтрованными сохраненными карточками только по ключевому слову.
+  const [
+    filteredSavedMoviesCardsOnlyBySearcyValue,
+    setFilteredSavedMoviesCardsOnlyBySearcyValue,
+  ] = useState([]);
+  // стейт с ключевым словом поиска в форме сохраненных фильмов
+  const [searchValueSavedMovies, setSearchValueSavedMovies] = useState("");
+  // стейт чекбокса короткомертажных сохнаненных фильмов.
+  const [shortSavedMoviesCheckbox, setShortSavedMoviesCheckbox] =
+    useState(false);
 
   useEffect(() => {
-    checkValidityToken();
+    // checkValidityToken();
     getMoviesCardsFromLocalStorage();
+    getSavedMoviesCardsFromAPI();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -90,31 +114,42 @@ export default function App() {
     }
     // сбросить стейт с результатом сабмита формы.
     setFormSubmitStatus("");
+    // setSearchValueSavedMovies("");
+    // setSearchValueMovies("");
   }, [location]);
 
   // обработчик фильтрации карточек по введенному ключевому слову в форму поиска и отмеченым флажкам.
   // заложена масштабируемость, для возможности фильтрации по нескольким чекбоксам.
-  function handleFilteredMoviesCards() {
-    setPreloaderVisible(true);
-    const filteredMoviesCards = moviesCards.filter(
-      (card) =>
-        // передать массив с именами фильмов в функцию для поиска совпадения по имени.
-        findMatchMovieName([card.nameRU, card.nameEN]) &&
+  function handleFilteredMoviesCards({ cards, search, checkbox }) {
+    console.log("фильтр");
+    const filteredMoviesCardsOnlyBySearcyValue = [];
+    const filteredMoviesCards = cards.filter((card) => {
+      const matchBySearchValue = search
+        ? findMatchMovieName([card.nameRU, card.nameEN])
+        : true;
+      search &&
+        matchBySearchValue &&
+        filteredMoviesCardsOnlyBySearcyValue.push(card);
+      // передать массив с именами фильмов в функцию для поиска совпадения по имени.
+      return (
+        matchBySearchValue &&
         // если совпадение есть, передать картчоку в функцию проверки совпадений согласно установленным флажкам
         findMatchCheckboxes(card)
-    );
+      );
+    });
 
     // функция проверки совпадения по имени
     function findMatchMovieName(arrayWithCardNameS) {
+      // если не задано ключевое слово, не ищем по нему, ищем по оставшимся фильтрам
       return arrayWithCardNameS.some(
-        (name) => name && name.toLowerCase().includes(searchValue)
+        (name) => name && name.toLowerCase().includes(search)
       );
     }
 
     function findMatchCheckboxes(card) {
       // если флажок "короткометражки" отмечен, передать продолжительность фильма в функцию проверки совпадения по длительности.
       // если совпадение есть, инвертировать результат, чтобы условие не выполнилось, перейти к проверке следующего чекбокса
-      if (shortMovieCheckbox && !findMatchMovieShort(card.duration)) {
+      if (checkbox && !findMatchMovieShort(card.duration)) {
         // если хотя бы один из чекбоксов не прошел проверку вернуть false
         return false;
       }
@@ -127,9 +162,12 @@ export default function App() {
       // если продолжительности есть и она меньше или равна 40 минутам, вернуть true, иначе false.
       return duration && duration <= 40;
     }
-
-    setFilteredMoviesCards(filteredMoviesCards);
-    setPreloaderVisible(false);
+    //     searchValue && setFilteredMoviesCardsOnlyBySearcyValue(filteredMoviesCardsOnlyBySearcyValue)
+    // return filteredMoviesCards;
+    return {
+      resultFiltered: filteredMoviesCards,
+      resultFilteredOnlyBySearcyValue: filteredMoviesCardsOnlyBySearcyValue,
+    };
   }
 
   // получить карточки фильмов из localStorage и записать в стейт
@@ -140,51 +178,135 @@ export default function App() {
     }
   }
 
-  // получить карточки фильмов через запрос к API
-  function getMoviesCardsFromAPI() {
-    api
-      .getMovieCards()
-      .then((data) => {
-        // записать карточки в localStorage и стейт
-        localStorage.setItem("movies", JSON.stringify(data));
-        setMoviesCards(data);
-      })
-      .catch((err) => {
-        setErrorMessagePopupText(err);
-        setErrorMessagePopupVisible(true);
-        setPreloaderVisible(false);
-        setSearchMessage(
-          "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
-        );
-      });
+  // получить карточки сохраненных фильмов через запрос к API
+  function getSavedMoviesCardsFromAPI() {}
+
+  function onSearchMovies(searchValue) {
+    setPreloaderVisible(true);
+    setSearchMessage("");
+    if (!moviesCards.length) {
+      api
+        .getMovieCards()
+        .then((data) => {
+          localStorage.setItem("movies", JSON.stringify(data));
+          setMoviesCards(data);
+          const { resultFiltered, resultFilteredOnlyBySearcyValue } =
+            handleFilteredMoviesCards({
+              cards: data,
+              search: searchValue,
+              checkbox: shortMovieCheckbox,
+            });
+          setFilteredMoviesCards(resultFiltered);
+          setFilteredMoviesCardsOnlyBySearcyValue(
+            resultFilteredOnlyBySearcyValue
+          );
+          !resultFiltered.length && setSearchMessage("Ничего не найдено");
+          setPreloaderVisible(false);
+        })
+        .catch((err) => {
+          setErrorMessagePopupText(`${err}`);
+          setErrorMessagePopupVisible(true);
+          setPreloaderVisible(false);
+          setSearchMessage(
+            "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
+          );
+        });
+    } else {
+      const { resultFiltered, resultFilteredOnlyBySearcyValue } =
+        handleFilteredMoviesCards({
+          cards: moviesCards,
+          search: searchValue,
+          checkbox: shortMovieCheckbox,
+        });
+      setFilteredMoviesCards(resultFiltered);
+      setFilteredMoviesCardsOnlyBySearcyValue(resultFilteredOnlyBySearcyValue);
+      !resultFiltered.length && setSearchMessage("Ничего не найдено");
+      setPreloaderVisible(false);
+    }
   }
 
-  useEffect(() => {
-    // если в стейт-переменной нет карточек, и отправлен запрос в форме поиска, то получить карточки через API
-    if (!moviesCards.length && searchValue) {
-      setPreloaderVisible(true);
-      getMoviesCardsFromAPI();
-    }
-    moviesCards.length && searchValue && handleFilteredMoviesCards();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [moviesCards, searchValue, shortMovieCheckbox]);
-
-  useEffect(() => {
-    setSearchMessage("");
-    // если в стейт-переменной с отфильтрованными карточками нет данных и произошел сабмит формы поиска,
-    // изменить сообщение в стейт-переменной с сообщением о результате поиска.
-    !filteredMoviesCards.length &&
-      searchValue &&
-      setSearchMessage("Ничего не найдено");
-  }, [filteredMoviesCards, searchValue]);
+  function onSearchSavedMovies(searchValue) {
+    // если поисковое слово равно предыдущему поисковому слову и нет ошибок, не делать фильтрацию и выйти, т.к. результат будет тем же.
+    // if (searchValueSavedMovies === searchValue && !searchMessageSavedMovies) return;
+    setPreloaderVisible(true);
+    setSearchValueSavedMovies(searchValue);
+    setSearchMessageSavedMovies("");
+    const { resultFiltered, resultFilteredOnlyBySearcyValue } =
+      handleFilteredMoviesCards({
+        cards: savedMoviesCards,
+        search: searchValue,
+        checkbox: shortSavedMoviesCheckbox,
+      });
+    setFilteredSavedMoviesCards(resultFiltered);
+    setFilteredSavedMoviesCardsOnlyBySearcyValue(
+      resultFilteredOnlyBySearcyValue
+    );
+    // !resultFiltered.length && setSearchMessageSavedMovies("Ничего не найдено")
+    setPreloaderVisible(false);
+  }
 
   function handleMovieCheckbox() {
-    setShortMovieCheckbox(!shortMovieCheckbox);
+    cardMovieDelete
+      ? setShortSavedMoviesCheckbox(!shortSavedMoviesCheckbox)
+      : setShortMovieCheckbox(!shortMovieCheckbox);
   }
 
-  function handleSearchValue(searchValue) {
-    setSearchValue(searchValue);
-  }
+  useEffect(() => {
+    if (shortMovieCheckbox && filteredMoviesCards.length) {
+      const { resultFiltered } = handleFilteredMoviesCards({
+        cards: filteredMoviesCards,
+        checkbox: shortMovieCheckbox,
+      });
+      setFilteredMoviesCards(resultFiltered);
+      !resultFiltered.length && setSearchMessage("Ничего не найдено");
+    } else {
+      setSearchMessage("");
+      setFilteredMoviesCards(filteredMoviesCardsOnlyBySearcyValue);
+    }
+  }, [shortMovieCheckbox]);
+
+  useEffect(() => {
+    if (shortSavedMoviesCheckbox && filteredSavedMoviesCards.length) {
+      const { resultFiltered } = handleFilteredMoviesCards({
+        cards: filteredSavedMoviesCards,
+        checkbox: shortSavedMoviesCheckbox,
+      });
+      setFilteredSavedMoviesCards(resultFiltered);
+      // !resultFiltered.length && setSearchMessageSavedMovies("Ничего не найдено")
+    } else {
+      // setSearchMessageSavedMovies("")
+      setFilteredSavedMoviesCards(filteredSavedMoviesCardsOnlyBySearcyValue);
+    }
+    if (
+      shortSavedMoviesCheckbox &&
+      savedMoviesCards.length &&
+      !searchValueSavedMovies &&
+      !filteredSavedMoviesCards.length
+    ) {
+      const { resultFiltered } = handleFilteredMoviesCards({
+        cards: savedMoviesCards,
+        checkbox: shortSavedMoviesCheckbox,
+      });
+      setFilteredSavedMoviesCards(resultFiltered);
+      setFilteredSavedMoviesCardsOnlyBySearcyValue(savedMoviesCards);
+      // !resultFiltered.length && setSearchMessageSavedMovies("Ничего не найдено")
+    }
+  }, [shortSavedMoviesCheckbox]);
+
+  useEffect(() => {
+    // если отфильтрованных сохраненных карточек нет и есть слово в фомре поиска
+    if (!filteredSavedMoviesCards.length && searchValueSavedMovies) {
+      setSearchMessageSavedMovies("Ничего не найдено");
+      // иначе, если отфильтрованные сохраненные карточки есть
+    } else if (filteredSavedMoviesCards.length) {
+      setSearchMessageSavedMovies("");
+      // иначе, если нет сохраненных карточек и отмечен чекбокс сохраненных фильмов
+    } else if (!filteredSavedMoviesCards.length && shortSavedMoviesCheckbox) {
+      setSearchMessageSavedMovies("Ничего не найдено");
+      // сделано, чтобы была возможность фильтровать карточки нажатием на чекбокс.
+      // т.к. при первом переходе на страницу, сразу отображаются все сохраненные карточк, а слово поиска не введено, и первое условие не сработает.
+    }
+  }, [filteredSavedMoviesCards, searchValueSavedMovies]);
 
   // обработчик открытия модального окна с ошибкой
   function handleOpenErrorMessagePopup(text) {
@@ -282,7 +404,19 @@ export default function App() {
     history.push("/");
   }
 
-  function handleCardLike() {}
+  function handleCardLike(card) {
+    setSavedMoviesCards([...savedMoviesCards, card]);
+  }
+
+  function handleCardDelete(card) {
+    setSavedMoviesCards((state) => state.filter((c) => c.id !== card.id));
+    setFilteredSavedMoviesCards((state) =>
+      state.filter((c) => c.id !== card.id)
+    );
+    setFilteredSavedMoviesCardsOnlyBySearcyValue((state) =>
+      state.filter((c) => c.id !== card.id)
+    );
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -345,18 +479,32 @@ export default function App() {
               loggedIn={loggedIn}
               preloaderVisible={preloaderVisible}
               moviesCards={filteredMoviesCards}
-              handleSearchValue={handleSearchValue}
+              // handleSearchValue={handleSearchValue}
+              onSearchMovies={onSearchMovies}
               searchMessage={searchMessage}
               onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+              savedMoviesCards={savedMoviesCards}
             />
             <ProtectedRoute
               path="/saved-movies"
               component={SavedMovies}
-              checkboxOn={shortMovieCheckbox}
+              checkboxOn={shortSavedMoviesCheckbox}
               handleMovieCheckbox={handleMovieCheckbox}
               cardMovieDelete={cardMovieDelete}
               openPopupError={handleOpenErrorMessagePopup}
               loggedIn={loggedIn}
+              // если есть отфильтрованные сохраненные фильмы или форма поиска уже была отправлена,
+              // показывать всегда все отфильтрованные сохраненные фильмы, иначе показать только все сохраненные фильмы.
+              savedMoviesCards={
+                filteredSavedMoviesCards.length || searchValueSavedMovies
+                  ? filteredSavedMoviesCards
+                  : savedMoviesCards
+              }
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+              onSearchSavedMovies={onSearchSavedMovies}
+              searchMessageSavedMovies={searchMessageSavedMovies}
             />
             <Route path="/">
               <NotFound />

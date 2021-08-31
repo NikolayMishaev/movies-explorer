@@ -8,6 +8,8 @@ export default function MoviesCardList({
   openPopupError,
   moviesCards,
   onCardLike,
+  savedMoviesCards,
+  onCardDelete
 }) {
   return (
     <section
@@ -30,6 +32,8 @@ export default function MoviesCardList({
             cardMovieDelete={cardMovieDelete}
             openPopupError={openPopupError}
             onCardLike={onCardLike}
+            savedMoviesCards={savedMoviesCards}
+            onCardDelete={onCardDelete}
           />
         ))}
       </ul>

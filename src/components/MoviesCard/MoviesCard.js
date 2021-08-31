@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./MoviesCard.css";
 
 export default function MoviesCard({
@@ -6,25 +6,25 @@ export default function MoviesCard({
   cardMovieDelete,
   openPopupError,
   onCardLike,
+  savedMoviesCards,
+  onCardDelete,
 }) {
-  const [isLiked, setIsLiked] = useState(false);
+  
+  const isLiked = savedMoviesCards.some(i=> i.id===card.id)
 
   function handleLikeClick() {
-    setIsLiked(!isLiked);
-    onCardLike();
+    isLiked? handleDeleteCard() : onCardLike(card);
   }
 
   function handleDeleteCard() {
-    openPopupError(
-      "Данный функционал еще не реализован. Демонстрация работы попапа для отображения ошибок при работе с API."
-    );
+    onCardDelete(card);
   }
 
   return (
     <>
       <li
         className={` movies-card ${
-          cardMovieDelete && "movies-card_place_saved-movies"
+          cardMovieDelete ? "movies-card_place_saved-movies" : ""
         }`}
       >
         <a
@@ -43,10 +43,10 @@ export default function MoviesCard({
           <h2 className="movies-card__title">{card.nameRU}</h2>
           <button
             className={`movies-card__like ${
-              isLiked && "movies-card__like_active"
-            } ${cardMovieDelete && "movies-card__like_type_saved-movies"}`}
+              isLiked ? "movies-card__like_active" : ""
+            } ${cardMovieDelete ? "movies-card__like_type_saved-movies" : ""}`}
             type="button"
-            onClick={cardMovieDelete ? handleDeleteCard : handleLikeClick}
+            onClick={handleLikeClick}
           ></button>
           <p className="movies-card__duration">{`${(
             card.duration / 60

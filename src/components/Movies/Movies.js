@@ -16,6 +16,9 @@ export default function Movies({
   moviesCards,
   searchMessage,
   onCardLike,
+  savedMoviesCards,
+  onSearchMovies,
+  onCardDelete
 }) {
   return (
     <>
@@ -24,6 +27,7 @@ export default function Movies({
         checkboxOn={checkboxOn}
         handleMovieCheckbox={handleMovieCheckbox}
         handleSearchValue={handleSearchValue}
+        onSearchMovies={onSearchMovies}
       />
       {preloaderVisible ? (
         <Preloader />
@@ -34,6 +38,8 @@ export default function Movies({
           moviesCards={moviesCards}
           openPopupError={openPopupError}
           onCardLike={onCardLike}
+          onCardDelete={onCardDelete}
+          savedMoviesCards={savedMoviesCards}
         />
       )}
     </>

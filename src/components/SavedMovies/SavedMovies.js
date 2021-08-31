@@ -4,6 +4,7 @@ import "./SavedMovies.css";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Preloader from "../Preloader/Preloader";
+import SearchMessage from "../SearchMessage/SearchMessage";
 
 export default function SavedMovies({
   checkboxOn,
@@ -11,21 +12,31 @@ export default function SavedMovies({
   openPopupError,
   preloaderVisible,
   cardMovieDelete,
-  moviesCards,
+  savedMoviesCards,
+  onCardLike,
+  onCardDelete,
+  onSearchSavedMovies,
+  searchMessageSavedMovies
 }) {
   return (
     <>
       <SearchForm
         checkboxOn={checkboxOn}
         handleMovieCheckbox={handleMovieCheckbox}
+        onSearchMovies={onSearchSavedMovies}
       />
       {preloaderVisible ? (
         <Preloader />
+      ) : searchMessageSavedMovies ? (
+        <SearchMessage searchMessage={searchMessageSavedMovies} />
       ) : (
         <MoviesCardList
-          movieCards={moviesCards}
+          moviesCards={savedMoviesCards}
           cardMovieDelete={cardMovieDelete}
           openPopupError={openPopupError}
+          onCardLike={onCardLike}
+          onCardDelete={onCardDelete}
+          savedMoviesCards={savedMoviesCards}
         />
       )}
     </>
