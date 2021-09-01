@@ -9,7 +9,7 @@ export default function MoviesCardList({
   moviesCards,
   onCardLike,
   savedMoviesCards,
-  onCardDelete
+  onCardDelete,
 }) {
   return (
     <section

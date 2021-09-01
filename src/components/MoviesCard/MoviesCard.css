@@ -35,6 +35,7 @@
   object-fit: cover;
   transform: scale(1.1);
   transition: all 0.7s;
+  min-height: 151px;
 }
 
 .movies-card__wallpaper:hover {

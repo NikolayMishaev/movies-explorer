@@ -18,7 +18,8 @@ export default function Movies({
   onCardLike,
   savedMoviesCards,
   onSearchMovies,
-  onCardDelete
+  onCardDelete,
+  previousValueSearchForm,
 }) {
   return (
     <>
@@ -28,6 +29,7 @@ export default function Movies({
         handleMovieCheckbox={handleMovieCheckbox}
         handleSearchValue={handleSearchValue}
         onSearchMovies={onSearchMovies}
+        previousValueSearchForm={previousValueSearchForm}
       />
       {preloaderVisible ? (
         <Preloader />

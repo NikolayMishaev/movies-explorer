@@ -9,11 +9,10 @@ export default function MoviesCard({
   savedMoviesCards,
   onCardDelete,
 }) {
-  
-  const isLiked = savedMoviesCards.some(i=> i.id===card.id)
+  const isLiked = savedMoviesCards.some((i) => i.id === card.id);
 
   function handleLikeClick() {
-    isLiked? handleDeleteCard() : onCardLike(card);
+    isLiked ? handleDeleteCard() : onCardLike(card);
   }
 
   function handleDeleteCard() {
