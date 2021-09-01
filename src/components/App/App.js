@@ -144,7 +144,7 @@ export default function App() {
     return localStorage.getItem("searchValueSavedMovies");
   }
 
-  // фильтр карточек по введенному ключевому слову в форму поиска и отмеченым флажкам.
+  // фильтр карточек по введенному ключевому слову в форму поиска и отмеченным флажкам.
   // заложена масштабируемость, для возможности фильтрации по нескольким чекбоксам.
   function filterMoviesCards({ cards, search, checkbox }) {
     console.log("фильтр");
@@ -280,7 +280,7 @@ export default function App() {
       });
     setFilteredSavedMoviesCards(resultFiltered);
     setFilteredSavedMoviesCardsOnlyBySearcyValue(
-      resultFilteredOnlyBySearcyValue
+      searchValue ? resultFilteredOnlyBySearcyValue : savedMoviesCards
     );
     // !resultFiltered.length && setSearchMessageSavedMovies("Ничего не найдено")
     setPreloaderVisible(false);
