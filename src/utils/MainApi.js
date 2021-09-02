@@ -8,7 +8,9 @@ const checkStatus = (res) => {
   if (res.ok) {
     return res.json();
   }
-  return Promise.reject(`Произошла ошибка при запросе к API. ${res.status} ${res.statusText}`);
+  return Promise.reject(
+    `Произошла ошибка при запросе к API. ${res.status} ${res.statusText}`
+  );
 };
 
 export const register = (name, email, password) => {
@@ -51,6 +53,18 @@ export const editProfile = (name, email, jwt) => {
       Authorization: `Bearer ${jwt}`,
     },
     body: JSON.stringify({ name, email }),
+  }).then((res) => {
+    return checkStatus(res);
+  });
+};
+
+export const getSavedMoviesCards = (token) => {
+  return fetch(`${BASE_URL}/movies`, {
+    method: "GET",
+    headers: {
+      ...headers,
+      Authorization: `Bearer ${token}`,
+    },
   }).then((res) => {
     return checkStatus(res);
   });

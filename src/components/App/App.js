@@ -10,7 +10,13 @@ import {
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import { api } from "../../utils/MoviesApi";
-import { register, login, getContent, editProfile } from "../../utils/MainApi";
+import {
+  register,
+  login,
+  getContent,
+  editProfile,
+  getSavedMoviesCards,
+} from "../../utils/MainApi";
 // импорт компонентов
 import Header from "../Header/Header";
 import Main from "../Main/Main";
@@ -28,16 +34,13 @@ export default function App() {
   const history = useHistory();
 
   // стейт для авторизации пользователя.
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   // стейт для изменения фона компонента Header.
   const [headerStyleMain, setHeaderStyleMain] = useState(true);
   // стейт кнопки лайка карточки фильма.
   const [cardMovieDelete, setCardMovieDelete] = useState(false);
   // стейт отображения компонентов Header и Footer.
   const [entryLocation, setEntryLocation] = useState(false);
-  // стейт видимости модального окна с ошибкой.
-  const [errorMessagePopupVisible, setErrorMessagePopupVisible] =
-    useState(false);
   // стейт сообщения ошибки модального окна.
   const [errorMessagePopupText, setErrorMessagePopupText] = useState("");
   // стейт с данными текущего авторизованного пользователя.
@@ -83,23 +86,106 @@ export default function App() {
     useState(false);
 
   useEffect(() => {
-    // checkValidityToken();
-    getSavedMoviesCardsFromAPI();
-
-    const shortMovieCheckbox = localStorage.getItem("shortMovieCheckbox");
-    setShortMovieCheckbox(shortMovieCheckbox === "true" ? true : false);
-    const shortSavedMoviesCheckbox = localStorage.getItem(
-      "shortSavedMoviesCheckbox"
-    );
-    setShortSavedMoviesCheckbox(
-      shortSavedMoviesCheckbox === "true" ? true : false
-    );
-
-    const searchValue = getSearchValueMoviesFromLocalStorage();
-    searchValue && onSearchMovies(searchValue);
-
+    handleDataLogin();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  async function handleDataLogin() {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      const currentUser = await checkValidityToken(jwt);
+      if (currentUser) {
+        setCurrentUser(currentUser);
+        const savedMoviesCards = await getSavedMoviesCardsFromAPI(jwt);
+        if (savedMoviesCards) {
+          setSavedMoviesCards(savedMoviesCards);
+          const {
+            moviesCards,
+            searchValueMovies,
+            searchValueSavedMovies,
+            shortMovieCheckbox,
+            shortSavedMoviesCheckbox,
+          } = getAllSavedValuesFromLocalStorage();
+          moviesCards && setMoviesCards(moviesCards);
+          searchValueMovies && setSearchValueMovies(searchValueMovies);
+          searchValueMovies && onSearchMovies(searchValueMovies, moviesCards);
+          searchValueSavedMovies &&
+            setSearchValueSavedMovies(searchValueSavedMovies);
+          shortMovieCheckbox && setShortMovieCheckbox(shortMovieCheckbox);
+          shortSavedMoviesCheckbox &&
+            setShortSavedMoviesCheckbox(shortSavedMoviesCheckbox);
+          setLoggedIn(true);
+        }
+      }
+    }
+  }
+
+  function getAllSavedValuesFromLocalStorage() {
+    const searchValueMovies = getSearchValueMoviesFromLocalStorage();
+    const searchValueSavedMovies = getSearchValueSavedMoviesFromLocalStorage();
+    const shortMovieCheckbox = getshortMovieCheckboxFromLocalStorage();
+    const shortSavedMoviesCheckbox =
+      getshortSavedMoviesCheckboxFromLocalStorage();
+    const moviesCards = getMoviesCardsFromLocalStorage();
+    return {
+      searchValueMovies,
+      searchValueSavedMovies,
+      shortMovieCheckbox,
+      shortSavedMoviesCheckbox,
+      moviesCards,
+    };
+  }
+
+  function getSearchValueMoviesFromLocalStorage() {
+    return localStorage.getItem("searchValueMovies");
+  }
+
+  function getSearchValueSavedMoviesFromLocalStorage() {
+    return localStorage.getItem("searchValueSavedMovies");
+  }
+
+  function getshortMovieCheckboxFromLocalStorage() {
+    return localStorage.getItem("shortMovieCheckbox") === "true";
+  }
+
+  function getshortSavedMoviesCheckboxFromLocalStorage() {
+    return localStorage.getItem("shortSavedMoviesCheckbox") === "true";
+  }
+
+  function getMoviesCardsFromLocalStorage() {
+    const moviesCards = localStorage.getItem("moviesCards");
+    if (moviesCards) {
+      return JSON.parse(moviesCards);
+    }
+  }
+
+  function checkValidityToken(jwt) {
+    return getContent(jwt)
+      .then((res) => {
+        if (res) {
+          return res;
+        }
+      })
+      .catch((err) => {
+        // при завершении проверки валидности jwt ошибкой, вернуть пользователя на главную страницу.
+        // т.к. компонент ProtectedRoute разрешает роут при наличии jwt в localStorage не проверяя его.
+        history.push("/");
+        setErrorMessagePopupText(`${err}`);
+      });
+  }
+
+  // получить карточки сохраненных фильмов через запрос к API
+  function getSavedMoviesCardsFromAPI(jwt) {
+    return getSavedMoviesCards(jwt)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        setErrorMessagePopupText(
+          `Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и обновите страницу. ${err}`
+        );
+      });
+  }
 
   useEffect(() => {
     // на всех маршрутах, кроме этого, установить белый фон для компонента Header.
@@ -113,9 +199,10 @@ export default function App() {
       setCardMovieDelete(true);
       // при удалении карточки на стр Фильмы, и переходе на стр Сохр фильмы для обновления результата стейта фильтра с сохраненными карточками.
       onSearchSavedMovies(
-        searchValueSavedMovies ||
-          getSearchValueSavedMoviesFromLocalStorage() ||
-          ""
+        searchValueSavedMovies
+        // ||
+        //   getSearchValueSavedMoviesFromLocalStorage() ||
+        //   ""
       );
     } else {
       setCardMovieDelete(false);
@@ -135,14 +222,6 @@ export default function App() {
     // setSearchValueSavedMovies("");
     // setSearchValueMovies("");
   }, [location]);
-
-  function getSearchValueMoviesFromLocalStorage() {
-    return localStorage.getItem("searchValueMovies");
-  }
-
-  function getSearchValueSavedMoviesFromLocalStorage() {
-    return localStorage.getItem("searchValueSavedMovies");
-  }
 
   // фильтр карточек по введенному ключевому слову в форму поиска и отмеченным флажкам.
   // заложена масштабируемость, для возможности фильтрации по нескольким чекбоксам.
@@ -209,56 +288,41 @@ export default function App() {
     setPreloaderVisible(false);
   }
 
-  // получить карточки фильмов из localStorage и записать в стейт
-  function getMoviesCardsFromLocalStorage() {
-    const movies = localStorage.getItem("movies");
-    if (movies) {
-      const moviesInObjectFormat = JSON.parse(movies);
-      setMoviesCards(moviesInObjectFormat);
-      return moviesInObjectFormat;
-    }
+  // получить карточки фильмов через запрос к API
+  function getMoviesCardsFromAPI() {
+    return api
+      .getMovieCards()
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        setErrorMessagePopupText(`${err}`);
+        setPreloaderVisible(false);
+        setSearchMessage(
+          "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
+        );
+      });
   }
 
-  // получить карточки сохраненных фильмов через запрос к API
-  function getSavedMoviesCardsFromAPI() {}
-
-  function onSearchMovies(searchValue) {
+  async function onSearchMovies(searchValue, movies) {
     setPreloaderVisible(true);
     setSearchValueMovies(searchValue);
     localStorage.setItem("searchValueMovies", searchValue);
     setSearchMessage("");
-    if (!moviesCards.length) {
-      const moviesCards = getMoviesCardsFromLocalStorage();
+    if (!moviesCards.length && !movies) {
+      const moviesCards = await getMoviesCardsFromAPI();
       if (moviesCards) {
+        localStorage.setItem("moviesCards", JSON.stringify(moviesCards));
+        setMoviesCards(moviesCards);
         handleFilterMoviesCards({
           cards: moviesCards,
           search: searchValue,
           checkbox: shortMovieCheckbox,
         });
-      } else {
-        api
-          .getMovieCards()
-          .then((data) => {
-            localStorage.setItem("movies", JSON.stringify(data));
-            setMoviesCards(data);
-            handleFilterMoviesCards({
-              cards: data,
-              search: searchValue,
-              checkbox: shortMovieCheckbox,
-            });
-          })
-          .catch((err) => {
-            setErrorMessagePopupText(`${err}`);
-            setErrorMessagePopupVisible(true);
-            setPreloaderVisible(false);
-            setSearchMessage(
-              "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
-            );
-          });
       }
     } else {
       handleFilterMoviesCards({
-        cards: moviesCards,
+        cards: movies || moviesCards,
         search: searchValue,
         checkbox: shortMovieCheckbox,
       });
@@ -351,42 +415,24 @@ export default function App() {
       shortSavedMoviesCheckbox &&
       savedMoviesCards.length
     ) {
-      setSearchMessageSavedMovies("Ничего не найдено");
+      setSearchMessageSavedMovies(
+        "Из всех ваших сохраненных фильмов не нашлось короткометражных"
+      );
       // сделано, чтобы была возможность фильтровать карточки нажатием на чекбокс.
       // т.к. при первом переходе на страницу, сразу отображаются все сохраненные карточк, а слово поиска не введено, и первое условие не сработает.
+    } else {
+      setSearchMessageSavedMovies("Вы еще не сохранили ни один фильм");
     }
   }, [filteredSavedMoviesCards]);
 
   // обработчик открытия модального окна с ошибкой
   function handleOpenErrorMessagePopup(text) {
-    setErrorMessagePopupVisible(true);
     setErrorMessagePopupText(text);
   }
 
   // обработчик закрытия модального окна с ошибкой
   function handleCloseErrorMessagePopup() {
-    setErrorMessagePopupVisible(false);
     setErrorMessagePopupText("");
-  }
-
-  function checkValidityToken() {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      getContent(jwt)
-        .then((res) => {
-          if (res) {
-            setCurrentUser(res);
-            setLoggedIn(true);
-          }
-        })
-        .catch((err) => {
-          // при завершении проверки валидности jwt ошибкой, вернуть пользователя на главную страницу.
-          // т.к. компонент ProtectedRoute разрешает роут при наличии jwt в localStorage не проверяя его.
-          history.push("/");
-          setErrorMessagePopupText(err);
-          setErrorMessagePopupVisible(true);
-        });
-    }
   }
 
   function onRegister(name, email, password) {
@@ -399,7 +445,6 @@ export default function App() {
       })
       .catch((err) => {
         setErrorMessagePopupText(err);
-        setErrorMessagePopupVisible(true);
         setFormSubmitStatus("Произошла ошибка при регистрации пользователя");
       })
       .finally(() => setFormSubmitSendingStatus(""));
@@ -417,13 +462,12 @@ export default function App() {
         if (data.token) {
           setFormSubmitStatus("Пользователь успешно авторизован!");
           localStorage.setItem("jwt", data.token);
-          checkValidityToken();
+          handleDataLogin();
           history.push("/movies");
         }
       })
       .catch((err) => {
         setErrorMessagePopupText(err);
-        setErrorMessagePopupVisible(true);
         setFormSubmitStatus("Произошла ошибка при авторизации пользователя");
       })
       .finally(() => setFormSubmitSendingStatus(""));
@@ -440,7 +484,6 @@ export default function App() {
       })
       .catch((err) => {
         setErrorMessagePopupText(err);
-        setErrorMessagePopupVisible(true);
         setFormSubmitStatus("Не удалось обновить данные профиля");
       })
       .finally(() => setFormSubmitSendingStatus(""));
@@ -564,7 +607,6 @@ export default function App() {
         <Footer entryLocation={entryLocation} />
         <ErrorMessagePopup
           errorMessage={errorMessagePopupText}
-          isOpen={errorMessagePopupVisible}
           onClose={handleCloseErrorMessagePopup}
         />
       </div>
