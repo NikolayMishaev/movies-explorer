@@ -69,3 +69,28 @@ export const getSavedMoviesCards = (token) => {
     return checkStatus(res);
   });
 };
+
+export const saveMovieCard = (token, card) => {
+  return fetch(`${BASE_URL}/movies`, {
+    method: "POST",
+    headers: {
+      ...headers,
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(card),
+  }).then((res) => {
+    return checkStatus(res);
+  });
+};
+
+export const deleteMovieCard = (token, cardId) => {
+  return fetch(`${BASE_URL}/movies/${cardId}`, {
+    method: "DELETE",
+    headers: {
+      ...headers,
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((res) => {
+    return checkStatus(res);
+  });
+};

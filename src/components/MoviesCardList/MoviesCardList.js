@@ -28,7 +28,7 @@ export default function MoviesCardList({
         {moviesCards.map((card) => (
           <MoviesCard
             card={card}
-            key={card.id}
+            key={card._id || card.id}
             cardMovieDelete={cardMovieDelete}
             openPopupError={openPopupError}
             onCardLike={onCardLike}

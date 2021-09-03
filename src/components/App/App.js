@@ -16,6 +16,8 @@ import {
   getContent,
   editProfile,
   getSavedMoviesCards,
+  saveMovieCard,
+  deleteMovieCard,
 } from "../../utils/MainApi";
 // импорт компонентов
 import Header from "../Header/Header";
@@ -88,7 +90,8 @@ export default function App() {
   useEffect(() => {
     if (loggedIn) {
       searchValueMovies && onSearchMovies(searchValueMovies);
-      searchValueSavedMovies && onSearchSavedMovies(searchValueSavedMovies);
+      (searchValueSavedMovies || savedMoviesCards.length) &&
+        onSearchSavedMovies(searchValueSavedMovies);
     } else {
       const jwt = localStorage.getItem("jwt");
       if (jwt) {
@@ -526,17 +529,60 @@ export default function App() {
   }
 
   function handleCardLike(card) {
-    setSavedMoviesCards([...savedMoviesCards, card]);
+    const jwt = localStorage.getItem("jwt");
+    const defaultStringValueForCard =
+      "данные отсутствовали в базе BeatfilmMovies";
+    const defaultNumberValueForCard = 0;
+    const defaultURLValueForImageCard = `https://api.nomoreparties.conodataavailable`;
+    const defaultURLValueForTrailerCard = `https://www.youtube.comnodataavailable`;
+    const cardWithRequiredFields = {
+      country: card.country || defaultStringValueForCard,
+      director: card.director || defaultStringValueForCard,
+      duration: card.duration || defaultNumberValueForCard,
+      year: card.year || defaultStringValueForCard,
+      description: card.description || defaultStringValueForCard,
+      image: card.image.url
+        ? `https://api.nomoreparties.co${card.image.url}`
+        : defaultURLValueForImageCard,
+      trailer: card.trailerLink || defaultURLValueForTrailerCard,
+      nameRU: card.nameRU || defaultStringValueForCard,
+      nameEN: card.nameEN || defaultStringValueForCard,
+      thumbnail: card.image.formats.thumbnail.url
+        ? `https://api.nomoreparties.co${card.image.formats.thumbnail.url}`
+        : defaultURLValueForImageCard,
+      // у каждой карточки должен быть уникальный id.
+      // не возможно задать дефолтный id, иначе будет две карточки с одинаковым id.
+      movieId: card.id,
+    };
+    saveMovieCard(jwt, cardWithRequiredFields)
+      .then((card) => {
+        setSavedMoviesCards([...savedMoviesCards, card]);
+      })
+      .catch((err) => {
+        setErrorMessagePopupText(`${err}`);
+      });
   }
 
   function handleCardDelete(card) {
-    setSavedMoviesCards((state) => state.filter((c) => c.id !== card.id));
-    setFilteredSavedMoviesCards((state) =>
-      state.filter((c) => c.id !== card.id)
-    );
-    setFilteredSavedMoviesCardsOnlyBySearcyValue((state) =>
-      state.filter((c) => c.id !== card.id)
-    );
+    const cardId =
+      card._id || savedMoviesCards.find((i) => i.movieId === card.id)._id;
+    const jwt = localStorage.getItem("jwt");
+    deleteMovieCard(jwt, cardId)
+      .then(() => {
+        setSavedMoviesCards((state) =>
+          state.filter((c) => c.movieId !== (card.movieId || card.id))
+        );
+        setFilteredSavedMoviesCards((state) =>
+          state.filter((c) => c.movieId !== (card.movieId || card.id))
+        );
+
+        setFilteredSavedMoviesCardsOnlyBySearcyValue((state) =>
+          state.filter((c) => c.movieId !== (card.movieId || card.id))
+        );
+      })
+      .catch((err) => {
+        setErrorMessagePopupText(`${err}`);
+      });
   }
 
   return (

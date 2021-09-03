@@ -9,7 +9,7 @@ export default function MoviesCard({
   savedMoviesCards,
   onCardDelete,
 }) {
-  const isLiked = savedMoviesCards.some((i) => i.id === card.id);
+  const isLiked = savedMoviesCards.some((i) => i.movieId === card.id);
 
   function handleLikeClick() {
     isLiked ? handleDeleteCard() : onCardLike(card);
@@ -18,7 +18,6 @@ export default function MoviesCard({
   function handleDeleteCard() {
     onCardDelete(card);
   }
-
   return (
     <>
       <li
@@ -28,13 +27,17 @@ export default function MoviesCard({
       >
         <a
           className="movies-card__link"
-          href={card.trailerLink}
+          href={cardMovieDelete ? card.trailer : card.trailerLink}
           target="_blank"
           rel="noreferrer"
         >
           <img
             className="movies-card__wallpaper"
-            src={`https://api.nomoreparties.co${card.image.url}`}
+            src={`${
+              typeof card.image === "object"
+                ? `https://api.nomoreparties.co/${card.image.url.slice(1)}`
+                : card.image
+            }`}
             alt={card.nameRU}
           />
         </a>
@@ -45,7 +48,7 @@ export default function MoviesCard({
               isLiked ? "movies-card__like_active" : ""
             } ${cardMovieDelete ? "movies-card__like_type_saved-movies" : ""}`}
             type="button"
-            onClick={handleLikeClick}
+            onClick={cardMovieDelete ? handleDeleteCard : handleLikeClick}
           ></button>
           <p className="movies-card__duration">{`${(
             card.duration / 60
