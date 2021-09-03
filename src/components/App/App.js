@@ -86,106 +86,20 @@ export default function App() {
     useState(false);
 
   useEffect(() => {
-    handleDataLogin();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  async function handleDataLogin() {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      const currentUser = await checkValidityToken(jwt);
-      if (currentUser) {
-        setCurrentUser(currentUser);
-        const savedMoviesCards = await getSavedMoviesCardsFromAPI(jwt);
-        if (savedMoviesCards) {
-          setSavedMoviesCards(savedMoviesCards);
-          const {
-            moviesCards,
-            searchValueMovies,
-            searchValueSavedMovies,
-            shortMovieCheckbox,
-            shortSavedMoviesCheckbox,
-          } = getAllSavedValuesFromLocalStorage();
-          moviesCards && setMoviesCards(moviesCards);
-          searchValueMovies && setSearchValueMovies(searchValueMovies);
-          searchValueMovies && onSearchMovies(searchValueMovies, moviesCards);
-          searchValueSavedMovies &&
-            setSearchValueSavedMovies(searchValueSavedMovies);
-          shortMovieCheckbox && setShortMovieCheckbox(shortMovieCheckbox);
-          shortSavedMoviesCheckbox &&
-            setShortSavedMoviesCheckbox(shortSavedMoviesCheckbox);
-          setLoggedIn(true);
-        }
+    if (loggedIn) {
+      searchValueMovies && onSearchMovies(searchValueMovies);
+      searchValueSavedMovies && onSearchSavedMovies(searchValueSavedMovies);
+    } else {
+      const jwt = localStorage.getItem("jwt");
+      if (jwt) {
+        handleDataLogin(jwt);
+      } else {
+        removeItemsFromLocalStorage();
+        resetStatesForRegisteredUser();
       }
     }
-  }
-
-  function getAllSavedValuesFromLocalStorage() {
-    const searchValueMovies = getSearchValueMoviesFromLocalStorage();
-    const searchValueSavedMovies = getSearchValueSavedMoviesFromLocalStorage();
-    const shortMovieCheckbox = getshortMovieCheckboxFromLocalStorage();
-    const shortSavedMoviesCheckbox =
-      getshortSavedMoviesCheckboxFromLocalStorage();
-    const moviesCards = getMoviesCardsFromLocalStorage();
-    return {
-      searchValueMovies,
-      searchValueSavedMovies,
-      shortMovieCheckbox,
-      shortSavedMoviesCheckbox,
-      moviesCards,
-    };
-  }
-
-  function getSearchValueMoviesFromLocalStorage() {
-    return localStorage.getItem("searchValueMovies");
-  }
-
-  function getSearchValueSavedMoviesFromLocalStorage() {
-    return localStorage.getItem("searchValueSavedMovies");
-  }
-
-  function getshortMovieCheckboxFromLocalStorage() {
-    return localStorage.getItem("shortMovieCheckbox") === "true";
-  }
-
-  function getshortSavedMoviesCheckboxFromLocalStorage() {
-    return localStorage.getItem("shortSavedMoviesCheckbox") === "true";
-  }
-
-  function getMoviesCardsFromLocalStorage() {
-    const moviesCards = localStorage.getItem("moviesCards");
-    if (moviesCards) {
-      return JSON.parse(moviesCards);
-    }
-  }
-
-  function checkValidityToken(jwt) {
-    return getContent(jwt)
-      .then((res) => {
-        if (res) {
-          return res;
-        }
-      })
-      .catch((err) => {
-        // при завершении проверки валидности jwt ошибкой, вернуть пользователя на главную страницу.
-        // т.к. компонент ProtectedRoute разрешает роут при наличии jwt в localStorage не проверяя его.
-        history.push("/");
-        setErrorMessagePopupText(`${err}`);
-      });
-  }
-
-  // получить карточки сохраненных фильмов через запрос к API
-  function getSavedMoviesCardsFromAPI(jwt) {
-    return getSavedMoviesCards(jwt)
-      .then((data) => {
-        return data;
-      })
-      .catch((err) => {
-        setErrorMessagePopupText(
-          `Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и обновите страницу. ${err}`
-        );
-      });
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loggedIn]);
 
   useEffect(() => {
     // на всех маршрутах, кроме этого, установить белый фон для компонента Header.
@@ -198,12 +112,7 @@ export default function App() {
     if (location.pathname === "/saved-movies") {
       setCardMovieDelete(true);
       // при удалении карточки на стр Фильмы, и переходе на стр Сохр фильмы для обновления результата стейта фильтра с сохраненными карточками.
-      onSearchSavedMovies(
-        searchValueSavedMovies
-        // ||
-        //   getSearchValueSavedMoviesFromLocalStorage() ||
-        //   ""
-      );
+      loggedIn && onSearchSavedMovies(searchValueSavedMovies);
     } else {
       setCardMovieDelete(false);
     }
@@ -223,141 +132,8 @@ export default function App() {
     // setSearchValueMovies("");
   }, [location]);
 
-  // фильтр карточек по введенному ключевому слову в форму поиска и отмеченным флажкам.
-  // заложена масштабируемость, для возможности фильтрации по нескольким чекбоксам.
-  function filterMoviesCards({ cards, search, checkbox }) {
-    console.log("фильтр");
-    const filteredMoviesCardsOnlyBySearcyValue = [];
-    const filteredMoviesCards = cards.filter((card) => {
-      const matchBySearchValue = search
-        ? findMatchMovieName([card.nameRU, card.nameEN])
-        : true;
-      search &&
-        matchBySearchValue &&
-        filteredMoviesCardsOnlyBySearcyValue.push(card);
-      // передать массив с именами фильмов в функцию для поиска совпадения по имени.
-      return (
-        matchBySearchValue &&
-        // если совпадение есть, передать картчоку в функцию проверки совпадений согласно установленным флажкам
-        findMatchCheckboxes(card)
-      );
-    });
-
-    // функция проверки совпадения по имени
-    function findMatchMovieName(arrayWithCardNameS) {
-      // если не задано ключевое слово, не ищем по нему, ищем по оставшимся фильтрам
-      return arrayWithCardNameS.some(
-        (name) => name && name.toLowerCase().includes(search)
-      );
-    }
-
-    function findMatchCheckboxes(card) {
-      // если флажок "короткометражки" отмечен, передать продолжительность фильма в функцию проверки совпадения по длительности.
-      // если совпадение есть, инвертировать результат, чтобы условие не выполнилось, перейти к проверке следующего чекбокса
-      if (checkbox && !findMatchMovieShort(card.duration)) {
-        // если хотя бы один из чекбоксов не прошел проверку вернуть false
-        return false;
-      }
-      // если все проверки (для каждого чекбокса) прошли успешно, вернуть true
-      return true;
-    }
-
-    // функция проверки совпадения по длительности
-    function findMatchMovieShort(duration) {
-      // если продолжительности есть и она меньше или равна 40 минутам, вернуть true, иначе false.
-      return duration && duration <= 40;
-    }
-    //     searchValue && setFilteredMoviesCardsOnlyBySearcyValue(filteredMoviesCardsOnlyBySearcyValue)
-    // return filteredMoviesCards;
-    return {
-      resultFiltered: filteredMoviesCards,
-      resultFilteredOnlyBySearcyValue: filteredMoviesCardsOnlyBySearcyValue,
-    };
-  }
-
-  function handleFilterMoviesCards({ cards, search, checkbox }) {
-    const { resultFiltered, resultFilteredOnlyBySearcyValue } =
-      filterMoviesCards({
-        cards,
-        search,
-        checkbox,
-      });
-    setFilteredMoviesCards(resultFiltered);
-    setFilteredMoviesCardsOnlyBySearcyValue(resultFilteredOnlyBySearcyValue);
-    !resultFiltered.length && setSearchMessage("Ничего не найдено");
-    setPreloaderVisible(false);
-  }
-
-  // получить карточки фильмов через запрос к API
-  function getMoviesCardsFromAPI() {
-    return api
-      .getMovieCards()
-      .then((data) => {
-        return data;
-      })
-      .catch((err) => {
-        setErrorMessagePopupText(`${err}`);
-        setPreloaderVisible(false);
-        setSearchMessage(
-          "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
-        );
-      });
-  }
-
-  async function onSearchMovies(searchValue, movies) {
-    setPreloaderVisible(true);
-    setSearchValueMovies(searchValue);
-    localStorage.setItem("searchValueMovies", searchValue);
-    setSearchMessage("");
-    if (!moviesCards.length && !movies) {
-      const moviesCards = await getMoviesCardsFromAPI();
-      if (moviesCards) {
-        localStorage.setItem("moviesCards", JSON.stringify(moviesCards));
-        setMoviesCards(moviesCards);
-        handleFilterMoviesCards({
-          cards: moviesCards,
-          search: searchValue,
-          checkbox: shortMovieCheckbox,
-        });
-      }
-    } else {
-      handleFilterMoviesCards({
-        cards: movies || moviesCards,
-        search: searchValue,
-        checkbox: shortMovieCheckbox,
-      });
-    }
-  }
-
-  function onSearchSavedMovies(searchValue) {
-    // если поисковое слово равно предыдущему поисковому слову и нет ошибок, не делать фильтрацию и выйти, т.к. результат будет тем же.
-    // if (searchValueSavedMovies === searchValue && !searchMessageSavedMovies) return;
-    setPreloaderVisible(true);
-    setSearchValueSavedMovies(searchValue);
-    localStorage.setItem("searchValueSavedMovies", searchValue);
-    setSearchMessageSavedMovies("");
-    const { resultFiltered, resultFilteredOnlyBySearcyValue } =
-      filterMoviesCards({
-        cards: savedMoviesCards,
-        search: searchValue,
-        checkbox: shortSavedMoviesCheckbox,
-      });
-    setFilteredSavedMoviesCards(resultFiltered);
-    setFilteredSavedMoviesCardsOnlyBySearcyValue(
-      searchValue ? resultFilteredOnlyBySearcyValue : savedMoviesCards
-    );
-    // !resultFiltered.length && setSearchMessageSavedMovies("Ничего не найдено")
-    setPreloaderVisible(false);
-  }
-
-  function handleMovieCheckbox() {
-    cardMovieDelete
-      ? setShortSavedMoviesCheckbox(!shortSavedMoviesCheckbox)
-      : setShortMovieCheckbox(!shortMovieCheckbox);
-  }
-
   useEffect(() => {
-    localStorage.setItem("shortMovieCheckbox", shortMovieCheckbox);
+    loggedIn && localStorage.setItem("shortMovieCheckbox", shortMovieCheckbox);
     if (shortMovieCheckbox && filteredMoviesCards.length) {
       const { resultFiltered } = filterMoviesCards({
         cards: filteredMoviesCards,
@@ -374,7 +150,11 @@ export default function App() {
   }, [shortMovieCheckbox]);
 
   useEffect(() => {
-    localStorage.setItem("shortSavedMoviesCheckbox", shortSavedMoviesCheckbox);
+    loggedIn &&
+      localStorage.setItem(
+        "shortSavedMoviesCheckbox",
+        shortSavedMoviesCheckbox
+      );
     if (shortSavedMoviesCheckbox && filteredSavedMoviesCards.length) {
       const { resultFiltered } = filterMoviesCards({
         cards: filteredSavedMoviesCards,
@@ -462,7 +242,7 @@ export default function App() {
         if (data.token) {
           setFormSubmitStatus("Пользователь успешно авторизован!");
           localStorage.setItem("jwt", data.token);
-          handleDataLogin();
+          handleDataLogin(data.token);
           history.push("/movies");
         }
       })
@@ -493,6 +273,256 @@ export default function App() {
     localStorage.removeItem("jwt");
     setLoggedIn(false);
     history.push("/");
+  }
+
+  async function handleDataLogin(jwt) {
+    const currentUser = await checkValidityToken(jwt);
+    if (currentUser) {
+      setCurrentUser(currentUser);
+      const savedMoviesCards = await getSavedMoviesCardsFromAPI(jwt);
+      if (savedMoviesCards) {
+        setSavedMoviesCards(savedMoviesCards);
+        const {
+          moviesCards,
+          searchValueMovies,
+          searchValueSavedMovies,
+          shortMovieCheckbox,
+          shortSavedMoviesCheckbox,
+        } = getAllSavedValuesFromLocalStorage();
+        moviesCards && setMoviesCards(moviesCards);
+        searchValueMovies && setSearchValueMovies(searchValueMovies);
+        searchValueSavedMovies &&
+          setSearchValueSavedMovies(searchValueSavedMovies);
+        shortMovieCheckbox && setShortMovieCheckbox(shortMovieCheckbox);
+        shortSavedMoviesCheckbox &&
+          setShortSavedMoviesCheckbox(shortSavedMoviesCheckbox);
+        setLoggedIn(true);
+      }
+    }
+  }
+
+  function checkValidityToken(jwt) {
+    return getContent(jwt)
+      .then((res) => {
+        if (res) {
+          return res;
+        }
+      })
+      .catch((err) => {
+        // при завершении проверки валидности jwt ошибкой, вернуть пользователя на главную страницу.
+        // т.к. компонент ProtectedRoute разрешает роут при наличии jwt в localStorage не проверяя его.
+        history.push("/");
+        setErrorMessagePopupText(`${err}`);
+      });
+  }
+
+  // получить карточки сохраненных фильмов через запрос к API
+  function getSavedMoviesCardsFromAPI(jwt) {
+    return getSavedMoviesCards(jwt)
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        setErrorMessagePopupText(
+          `Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и обновите страницу. ${err}`
+        );
+      });
+  }
+
+  function getAllSavedValuesFromLocalStorage() {
+    const searchValueMovies = getSearchValueMoviesFromLocalStorage();
+    const searchValueSavedMovies = getSearchValueSavedMoviesFromLocalStorage();
+    const shortMovieCheckbox = getshortMovieCheckboxFromLocalStorage();
+    const shortSavedMoviesCheckbox =
+      getshortSavedMoviesCheckboxFromLocalStorage();
+    const moviesCards = getMoviesCardsFromLocalStorage();
+    return {
+      searchValueMovies,
+      searchValueSavedMovies,
+      shortMovieCheckbox,
+      shortSavedMoviesCheckbox,
+      moviesCards,
+    };
+  }
+
+  function getSearchValueMoviesFromLocalStorage() {
+    return localStorage.getItem("searchValueMovies");
+  }
+
+  function getSearchValueSavedMoviesFromLocalStorage() {
+    return localStorage.getItem("searchValueSavedMovies");
+  }
+
+  function getshortMovieCheckboxFromLocalStorage() {
+    return localStorage.getItem("shortMovieCheckbox") === "true";
+  }
+
+  function getshortSavedMoviesCheckboxFromLocalStorage() {
+    return localStorage.getItem("shortSavedMoviesCheckbox") === "true";
+  }
+
+  function getMoviesCardsFromLocalStorage() {
+    const moviesCards = localStorage.getItem("moviesCards");
+    if (moviesCards) {
+      return JSON.parse(moviesCards);
+    }
+  }
+
+  function removeItemsFromLocalStorage() {
+    localStorage.removeItem("moviesCards");
+    localStorage.removeItem("searchValueMovies");
+    localStorage.removeItem("searchValueSavedMovies");
+    localStorage.removeItem("shortMovieCheckbox");
+    localStorage.removeItem("shortSavedMoviesCheckbox");
+  }
+
+  function resetStatesForRegisteredUser() {
+    setCurrentUser({});
+    setSearchMessage("");
+    setSearchMessageSavedMovies("");
+    setMoviesCards([]);
+    setSavedMoviesCards([]);
+    setFilteredMoviesCards([]);
+    setFilteredSavedMoviesCards([]);
+    setFilteredMoviesCardsOnlyBySearcyValue([]);
+    setFilteredSavedMoviesCardsOnlyBySearcyValue([]);
+    setSearchValueMovies("");
+    setSearchValueSavedMovies("");
+    setShortMovieCheckbox(false);
+    setShortSavedMoviesCheckbox(false);
+  }
+
+  function handleMovieCheckbox() {
+    cardMovieDelete
+      ? setShortSavedMoviesCheckbox(!shortSavedMoviesCheckbox)
+      : setShortMovieCheckbox(!shortMovieCheckbox);
+  }
+
+  async function onSearchMovies(searchValue) {
+    setPreloaderVisible(true);
+    setSearchValueMovies(searchValue);
+    localStorage.setItem("searchValueMovies", searchValue);
+    setSearchMessage("");
+    if (!moviesCards.length) {
+      const moviesCards = await getMoviesCardsFromAPI();
+      if (moviesCards) {
+        localStorage.setItem("moviesCards", JSON.stringify(moviesCards));
+        setMoviesCards(moviesCards);
+        handleFilterMoviesCards({
+          cards: moviesCards,
+          search: searchValue,
+          checkbox: shortMovieCheckbox,
+        });
+      }
+    } else {
+      handleFilterMoviesCards({
+        cards: moviesCards,
+        search: searchValue,
+        checkbox: shortMovieCheckbox,
+      });
+    }
+  }
+
+  function onSearchSavedMovies(searchValue) {
+    // если поисковое слово равно предыдущему поисковому слову и нет ошибок, не делать фильтрацию и выйти, т.к. результат будет тем же.
+    // if (searchValueSavedMovies === searchValue && !searchMessageSavedMovies) return;
+    setPreloaderVisible(true);
+    setSearchValueSavedMovies(searchValue);
+    localStorage.setItem("searchValueSavedMovies", searchValue);
+    setSearchMessageSavedMovies("");
+    const { resultFiltered, resultFilteredOnlyBySearcyValue } =
+      filterMoviesCards({
+        cards: savedMoviesCards,
+        search: searchValue,
+        checkbox: shortSavedMoviesCheckbox,
+      });
+    setFilteredSavedMoviesCards(resultFiltered);
+    setFilteredSavedMoviesCardsOnlyBySearcyValue(
+      searchValue ? resultFilteredOnlyBySearcyValue : savedMoviesCards
+    );
+    // !resultFiltered.length && setSearchMessageSavedMovies("Ничего не найдено")
+    setPreloaderVisible(false);
+  }
+
+  // получить карточки фильмов через запрос к API
+  function getMoviesCardsFromAPI() {
+    return api
+      .getMovieCards()
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        setErrorMessagePopupText(`${err}`);
+        setPreloaderVisible(false);
+        setSearchMessage(
+          "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
+        );
+      });
+  }
+
+  function handleFilterMoviesCards({ cards, search, checkbox }) {
+    const { resultFiltered, resultFilteredOnlyBySearcyValue } =
+      filterMoviesCards({
+        cards,
+        search,
+        checkbox,
+      });
+    setFilteredMoviesCards(resultFiltered);
+    setFilteredMoviesCardsOnlyBySearcyValue(resultFilteredOnlyBySearcyValue);
+    !resultFiltered.length && setSearchMessage("Ничего не найдено");
+    setPreloaderVisible(false);
+  }
+
+  // фильтр карточек по введенному ключевому слову в форму поиска и отмеченным флажкам.
+  // заложена масштабируемость, для возможности фильтрации по нескольким чекбоксам.
+  function filterMoviesCards({ cards, search, checkbox }) {
+    console.log("фильтр");
+    const filteredMoviesCardsOnlyBySearcyValue = [];
+    const filteredMoviesCards = cards.filter((card) => {
+      const matchBySearchValue = search
+        ? findMatchMovieName([card.nameRU, card.nameEN])
+        : true;
+      search &&
+        matchBySearchValue &&
+        filteredMoviesCardsOnlyBySearcyValue.push(card);
+      // передать массив с именами фильмов в функцию для поиска совпадения по имени.
+      return (
+        matchBySearchValue &&
+        // если совпадение есть, передать картчоку в функцию проверки совпадений согласно установленным флажкам
+        findMatchCheckboxes(card)
+      );
+    });
+
+    // функция проверки совпадения по имени
+    function findMatchMovieName(arrayWithCardNameS) {
+      // если не задано ключевое слово, не ищем по нему, ищем по оставшимся фильтрам
+      return arrayWithCardNameS.some(
+        (name) => name && name.toLowerCase().includes(search)
+      );
+    }
+
+    function findMatchCheckboxes(card) {
+      // если флажок "короткометражки" отмечен, передать продолжительность фильма в функцию проверки совпадения по длительности.
+      // если совпадение есть, инвертировать результат, чтобы условие не выполнилось, перейти к проверке следующего чекбокса
+      if (checkbox && !findMatchMovieShort(card.duration)) {
+        // если хотя бы один из чекбоксов не прошел проверку вернуть false
+        return false;
+      }
+      // если все проверки (для каждого чекбокса) прошли успешно, вернуть true
+      return true;
+    }
+
+    // функция проверки совпадения по длительности
+    function findMatchMovieShort(duration) {
+      // если продолжительности есть и она меньше или равна 40 минутам, вернуть true, иначе false.
+      return duration && duration <= 40;
+    }
+    //     searchValue && setFilteredMoviesCardsOnlyBySearcyValue(filteredMoviesCardsOnlyBySearcyValue)
+    // return filteredMoviesCards;
+    return {
+      resultFiltered: filteredMoviesCards,
+      resultFilteredOnlyBySearcyValue: filteredMoviesCardsOnlyBySearcyValue,
+    };
   }
 
   function handleCardLike(card) {
