@@ -10,7 +10,7 @@ export default function MoviesCardList({
   onCardLike,
   savedMoviesCards,
   onCardDelete,
-  filteredMoviesCards,
+  filteredMoviesCards = [],
   onAddMoreCard,
 }) {
   return (
@@ -19,14 +19,7 @@ export default function MoviesCardList({
         cardMovieDelete ? "movies-card-list_place_saved-movies" : ""
       } `}
     >
-      <ul
-        className={` movies-card-list__container ${
-          // если количество карточек меньше четырех применить класс, чтобы ограничить размер в колонках grid-сетки.
-          moviesCards.length < 4
-            ? "movies-card-list__container_type_less-four-cards"
-            : ""
-        } `}
-      >
+      <ul className={"movies-card-list__container"}>
         {moviesCards.map((card) => (
           <MoviesCard
             card={card}
@@ -41,7 +34,7 @@ export default function MoviesCardList({
       </ul>
       <button
         className={` ${
-          cardMovieDelete || (moviesCards.length === filteredMoviesCards.length)
+          cardMovieDelete || moviesCards.length === filteredMoviesCards.length
             ? "display-none"
             : "movies-card-list__button-add-more-cards"
         } `}
