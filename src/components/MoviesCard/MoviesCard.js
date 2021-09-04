@@ -1,5 +1,6 @@
 import React from "react";
 import "./MoviesCard.css";
+import { convertMinutesToHours } from "../../utils/utils";
 
 export default function MoviesCard({
   card,
@@ -50,9 +51,11 @@ export default function MoviesCard({
             type="button"
             onClick={cardMovieDelete ? handleDeleteCard : handleLikeClick}
           ></button>
-          <p className="movies-card__duration">{`${(
-            card.duration / 60
-          ).toFixed()}ч ${card.duration % 60}м`}</p>
+          <p className="movies-card__duration">
+            {card.duration
+              ? convertMinutesToHours(card.duration)
+              : "нет данных"}
+          </p>
         </div>
       </li>
     </>
