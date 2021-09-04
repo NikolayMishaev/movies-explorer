@@ -3,27 +3,6 @@
   flex-direction: column;
 }
 
-/*  временной решение для совпадения макету на данном разрешении */
-@media (max-width: 800px) {
-  .movies-card:nth-child(n + 9) {
-    display: none;
-  }
-}
-
-/*  временной решение для совпадения макету на данном разрешении */
-@media (max-width: 400px) {
-  .movies-card:nth-child(n + 6) {
-    display: none;
-  }
-}
-
-/*  временной решение для совпадения макету на данном разрешении */
-@media (max-width: 400px) {
-  .movies-card_place_saved-movies:nth-child(n + 3) {
-    display: none;
-  }
-}
-
 .movies-card__link {
   flex: 1;
   overflow: hidden;
@@ -32,10 +11,10 @@
 .movies-card__wallpaper {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   transform: scale(1.1);
   transition: all 0.7s;
-  min-height: 151px;
 }
 
 .movies-card__wallpaper:hover {

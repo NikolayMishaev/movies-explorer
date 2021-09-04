@@ -65,6 +65,8 @@ export default function App() {
     filteredMoviesCardsOnlyBySearcyValue,
     setFilteredMoviesCardsOnlyBySearcyValue,
   ] = useState([]);
+  // стейт с отображаемыми карточками.
+  const [displayedMoviesCards, setDisplayedMoviesCards] = useState([]);
   // стейт с ключевым словом поиска в форме фильмов
   const [searchValueMovies, setSearchValueMovies] = useState("");
   // стейт чекбокса короткомертажных фильмов.
@@ -86,6 +88,28 @@ export default function App() {
   // стейт чекбокса короткомертажных сохнаненных фильмов.
   const [shortSavedMoviesCheckbox, setShortSavedMoviesCheckbox] =
     useState(false);
+
+  const [numberMoviesCardsDisplayed, setNumberMoviesCardsDisplayed] =
+    useState(0);
+
+    useEffect(() => {
+      setDisplayedMoviesCards(filteredMoviesCards.slice(0, numberMoviesCardsDisplayed));
+    }, [filteredMoviesCards]);
+
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      setTimeout(() => setNumberMoviesCardsDisplayed(calculateNumberMoviesCards), 1000);
+    });
+    setNumberMoviesCardsDisplayed(calculateNumberMoviesCards());
+  }, []);
+
+  function calculateNumberMoviesCards() {
+    const currentWindowWidth = window.innerWidth;
+    if (currentWindowWidth <= 629) return 5;
+    if (currentWindowWidth <= 989) return 8;
+    if (currentWindowWidth <= 1279) return 12;
+    return 16;
+  }
 
   useEffect(() => {
     if (loggedIn) {
@@ -645,7 +669,7 @@ export default function App() {
               openPopupError={handleOpenErrorMessagePopup}
               loggedIn={loggedIn}
               preloaderVisible={preloaderVisible}
-              moviesCards={filteredMoviesCards}
+              moviesCards={displayedMoviesCards}
               // handleSearchValue={handleSearchValue}
               onSearchMovies={onSearchMovies}
               searchMessage={searchMessage}
