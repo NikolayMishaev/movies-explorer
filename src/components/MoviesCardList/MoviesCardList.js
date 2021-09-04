@@ -10,6 +10,8 @@ export default function MoviesCardList({
   onCardLike,
   savedMoviesCards,
   onCardDelete,
+  filteredMoviesCards,
+  onAddMoreCard,
 }) {
   return (
     <section
@@ -39,16 +41,12 @@ export default function MoviesCardList({
       </ul>
       <button
         className={` ${
-          cardMovieDelete
+          cardMovieDelete || (moviesCards.length === filteredMoviesCards.length)
             ? "display-none"
             : "movies-card-list__button-add-more-cards"
         } `}
         type="button"
-        onClick={() =>
-          openPopupError(
-            "Данный функционал еще не реализован. Демонстрация работы попапа для отображения ошибок при работе с API."
-          )
-        }
+        onClick={onAddMoreCard}
       >
         Ещё
       </button>

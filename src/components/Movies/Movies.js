@@ -20,6 +20,8 @@ export default function Movies({
   onSearchMovies,
   onCardDelete,
   previousValueSearchForm,
+  filteredMoviesCards,
+  onAddMoreCard,
 }) {
   return (
     <>
@@ -42,6 +44,8 @@ export default function Movies({
           onCardLike={onCardLike}
           onCardDelete={onCardDelete}
           savedMoviesCards={savedMoviesCards}
+          filteredMoviesCards={filteredMoviesCards}
+          onAddMoreCard={onAddMoreCard}
         />
       )}
     </>

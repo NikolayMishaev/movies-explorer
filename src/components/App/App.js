@@ -88,28 +88,56 @@ export default function App() {
   // стейт чекбокса короткомертажных сохнаненных фильмов.
   const [shortSavedMoviesCheckbox, setShortSavedMoviesCheckbox] =
     useState(false);
-
+  // стейт количества отображаемых карточек.
   const [numberMoviesCardsDisplayed, setNumberMoviesCardsDisplayed] =
     useState(0);
+  // стейт количества добавляемых карточек.
+  const [numberAddedMoviesCardsDisplayed, setNumberAddedMoviesCardsDisplayed] =
+    useState(0);
 
-    useEffect(() => {
-      setDisplayedMoviesCards(filteredMoviesCards.slice(0, numberMoviesCardsDisplayed));
-    }, [filteredMoviesCards]);
+  function handleMoreCards() {
+    const countAddMoreCards =
+      displayedMoviesCards.length +
+      calculateNumberMoviesCards({ buttonAddMoreClick: true });
+    setDisplayedMoviesCards(
+      filteredMoviesCards.slice(
+        0,
+        countAddMoreCards > filteredMoviesCards.length
+          ? filteredMoviesCards.length
+          : countAddMoreCards
+      )
+    );
+  }
 
   useEffect(() => {
-    window.addEventListener("resize", () => {
-      setTimeout(() => setNumberMoviesCardsDisplayed(calculateNumberMoviesCards), 1000);
-    });
-    setNumberMoviesCardsDisplayed(calculateNumberMoviesCards());
-  }, []);
+    setDisplayedMoviesCards(
+      filteredMoviesCards.slice(0, calculateNumberMoviesCards())
+    );
+  }, [filteredMoviesCards]);
 
-  function calculateNumberMoviesCards() {
+  // изменить название этой функции на добавить отображаемых карточек
+  function calculateNumberMoviesCards(buttonAddMoreClick) {
     const currentWindowWidth = window.innerWidth;
-    if (currentWindowWidth <= 629) return 5;
-    if (currentWindowWidth <= 989) return 8;
-    if (currentWindowWidth <= 1279) return 12;
-    return 16;
+    if (currentWindowWidth <= 629) return buttonAddMoreClick ? 2 : 5;
+    if (currentWindowWidth <= 989) return buttonAddMoreClick ? 2 : 8;
+    if (currentWindowWidth <= 1279) return buttonAddMoreClick ? 3 : 12;
+    return buttonAddMoreClick ? 4 : 16;
   }
+
+  // useEffect(() => {
+  //   setDisplayedMoviesCards(filteredMoviesCards.slice(0, numberMoviesCardsDisplayed+numberAddedMoviesCardsDisplayed > filteredMoviesCards.length ? filteredMoviesCards.length :  numberMoviesCardsDisplayed+numberAddedMoviesCardsDisplayed));
+  // }, [filteredMoviesCards,numberAddedMoviesCardsDisplayed]);
+
+  // useEffect(() => {
+  //   window.addEventListener("resize", () => {
+  //     setTimeout(() => handleResize(), 1000);
+  //   });
+  //   setNumberMoviesCardsDisplayed(calculateNumberMoviesCards());
+  // }, []);
+
+  // function handleResize() {
+  //   setNumberMoviesCardsDisplayed(calculateNumberMoviesCards());
+  // }
 
   useEffect(() => {
     if (loggedIn) {
@@ -669,12 +697,14 @@ export default function App() {
               openPopupError={handleOpenErrorMessagePopup}
               loggedIn={loggedIn}
               preloaderVisible={preloaderVisible}
+              filteredMoviesCards={filteredMoviesCards}
               moviesCards={displayedMoviesCards}
               // handleSearchValue={handleSearchValue}
               onSearchMovies={onSearchMovies}
               searchMessage={searchMessage}
               onCardLike={handleCardLike}
               onCardDelete={handleCardDelete}
+              onAddMoreCard={handleMoreCards}
               savedMoviesCards={savedMoviesCards}
               previousValueSearchForm={searchValueMovies}
             />
