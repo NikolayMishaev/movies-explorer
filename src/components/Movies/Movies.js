@@ -14,7 +14,7 @@ export default function Movies({
   preloaderVisible,
   handleMoviesCards,
   moviesCards,
-  searchMessage,
+  searchMessageMovies,
   onCardLike,
   savedMoviesCards,
   onSearchMovies,
@@ -35,8 +35,8 @@ export default function Movies({
       />
       {preloaderVisible ? (
         <Preloader />
-      ) : searchMessage ? (
-        <SearchMessage searchMessage={searchMessage} />
+      ) : searchMessageMovies ? (
+        <SearchMessage searchMessage={searchMessageMovies} />
       ) : (
         <MoviesCardList
           moviesCards={moviesCards}

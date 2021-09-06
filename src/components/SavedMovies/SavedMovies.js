@@ -11,7 +11,7 @@ export default function SavedMovies({
   handleMovieCheckbox,
   openPopupError,
   preloaderVisible,
-  cardMovieDelete,
+  locationSavedMovies,
   savedMoviesCards,
   onCardLike,
   onCardDelete,
@@ -34,7 +34,7 @@ export default function SavedMovies({
       ) : (
         <MoviesCardList
           moviesCards={savedMoviesCards}
-          cardMovieDelete={cardMovieDelete}
+          locationSavedMovies={locationSavedMovies}
           openPopupError={openPopupError}
           onCardLike={onCardLike}
           onCardDelete={onCardDelete}

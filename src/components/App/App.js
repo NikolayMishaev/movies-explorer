@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import {
@@ -13,12 +14,16 @@ import { api } from "../../utils/MoviesApi";
 import {
   register,
   login,
-  getContent,
+  getCurrentUser,
   editProfile,
   getSavedMoviesCards,
   saveMovieCard,
   deleteMovieCard,
 } from "../../utils/MainApi";
+import {
+  calculateNumberMoviesCards,
+  getNumberCardsForAlignLastRow,
+} from "../../utils/utils";
 // импорт компонентов
 import Header from "../Header/Header";
 import Main from "../Main/Main";
@@ -37,74 +42,82 @@ export default function App() {
 
   // стейт для авторизации пользователя.
   const [loggedIn, setLoggedIn] = useState(false);
-  // стейт для изменения фона компонента Header.
-  const [headerStyleMain, setHeaderStyleMain] = useState(true);
-  // стейт кнопки лайка карточки фильма.
-  const [cardMovieDelete, setCardMovieDelete] = useState(false);
-  // стейт отображения компонентов Header и Footer.
-  const [entryLocation, setEntryLocation] = useState(false);
-  // стейт сообщения ошибки модального окна.
-  const [errorMessagePopupText, setErrorMessagePopupText] = useState("");
   // стейт с данными текущего авторизованного пользователя.
   const [currentUser, setCurrentUser] = useState({});
-  // стейт состояние обработки сабмита форм регистр авториз профиль.
-  const [formSubmitSendingStatus, setFormSubmitSendingStatus] = useState("");
-  // стейт с результатом сабмита форм регистр авториз профиль.
-  const [formSubmitStatus, setFormSubmitStatus] = useState("");
-  // стейт состояния отображения прелоадера в форме поиска фильмов.
-  const [preloaderVisible, setPreloaderVisible] = useState(false);
+  // стейт использования основного стиля (цвета фона) компонента Header.
+  const [mainStyleHeader, setMainStyleHeader] = useState(true);
+  // стейт нахождения на странице /saved-movies.
+  const [locationSavedMovies, setLocationSavedMovies] = useState(false);
+  // стейт отображения компонентов Header и Footer.
+  const [visibleHeaderFooter, setVisibleHeaderFooter] = useState(true);
+  // стейт отображения прелоадера в процессе загрузки фильмов.
+  const [visiblePreloader, setVisiblePreloader] = useState(false);
+  // стейт сообщения ошибки попапа для ошибок.
+  const [errorMessagePopupForError, setErrorMessagePopupForError] =
+    useState("");
+  // стейт статуса отправки форм авторизации.
+  const [statusSubmitAuthorizationForms, setStatusSubmitAuthorizationForms] =
+    useState("");
+  // стейт с сообщением результата отправки форм авторизации.
+  const [
+    messageWithResultSubmitAuthorizationForms,
+    setMessageWithResultSubmitAuthorizationForms,
+  ] = useState("");
 
+  // стейт с ключевым словом поиска в форме фильмов
+  const [searchValueMovies, setSearchValueMovies] = useState("");
+  // стейт чекбокса короткомертажных фильмов.
+  const [shortMoviesCheckbox, setShortMoviesCheckbox] = useState(false);
   // стейт сообщения с результатами поиска в форме поиска фильмов.
-  const [searchMessage, setSearchMessage] = useState("");
-  // стейт с данными всех карточек фильмов полученных из API.
+  const [messageWithResultSearchMovies, setMessageWithResultSearchMovies] =
+    useState("");
+  // стейт всех карточек фильмов.
   const [moviesCards, setMoviesCards] = useState([]);
-  // стейт с отфильтрованными карточками.
+  // стейт отфильтрованных карточек фильмов.
   const [filteredMoviesCards, setFilteredMoviesCards] = useState([]);
-  // стейт с отфильтрованными карточками только по ключевому слову.
+  // стейт отфильтрованных карточек фильмов только по ключевому слову.
   const [
     filteredMoviesCardsOnlyBySearcyValue,
     setFilteredMoviesCardsOnlyBySearcyValue,
   ] = useState([]);
-  // стейт с отображаемыми карточками.
+  // стейт отображаемых карточек фильмов.
   const [displayedMoviesCards, setDisplayedMoviesCards] = useState([]);
-  // стейт с ключевым словом поиска в форме фильмов
-  const [searchValueMovies, setSearchValueMovies] = useState("");
-  // стейт чекбокса короткомертажных фильмов.
-  const [shortMovieCheckbox, setShortMovieCheckbox] = useState(false);
 
-  // стейт сообщения с результатами поиска в форме поиска сохраненных фильмов.
-  const [searchMessageSavedMovies, setSearchMessageSavedMovies] = useState("");
-  // стейт с данными всех карточек сохраненных фильмов полученных из API.
-  const [savedMoviesCards, setSavedMoviesCards] = useState([]);
-  // стейт с отфильтрованными сохраненными карточками.
-  const [filteredSavedMoviesCards, setFilteredSavedMoviesCards] = useState([]);
-  // стейт с отфильтрованными сохраненными карточками только по ключевому слову.
-  const [
-    filteredSavedMoviesCardsOnlyBySearcyValue,
-    setFilteredSavedMoviesCardsOnlyBySearcyValue,
-  ] = useState([]);
   // стейт с ключевым словом поиска в форме сохраненных фильмов
   const [searchValueSavedMovies, setSearchValueSavedMovies] = useState("");
   // стейт чекбокса короткомертажных сохнаненных фильмов.
   const [shortSavedMoviesCheckbox, setShortSavedMoviesCheckbox] =
     useState(false);
-  // стейт количества отображаемых карточек.
-  const [numberMoviesCardsDisplayed, setNumberMoviesCardsDisplayed] =
-    useState(0);
-  // стейт количества добавляемых карточек.
-  const [numberAddedMoviesCardsDisplayed, setNumberAddedMoviesCardsDisplayed] =
-    useState(0);
+  // стейт сообщения с результатами поиска в форме поиска сохраненных фильмов.
+  const [
+    messageWithResultSearchSavedMovies,
+    setMessageWithResultSearchSavedMovies,
+  ] = useState("");
+  // стейт всех карточек сохраненных фильмов.
+  const [savedMoviesCards, setSavedMoviesCards] = useState([]);
+  // стейт отфильтрованных карточек сохраненных фильмов.
+  const [filteredSavedMoviesCards, setFilteredSavedMoviesCards] = useState([]);
+  // стейт отфильтрованных карточек сохраненных фильмов только по ключевому слову.
+  const [
+    filteredSavedMoviesCardsOnlyBySearcyValue,
+    setFilteredSavedMoviesCardsOnlyBySearcyValue,
+  ] = useState([]);
 
-  function handleMoreCards() {
-    const countAddMoreCards =
-      displayedMoviesCards.length +
-      calculateNumberMoviesCards({ buttonAddMoreClick: true });
+  function handleAddMoreCards() {
+    const currentNumberCards = displayedMoviesCards.length;
+    const numberCardsInRow = calculateNumberMoviesCards({
+      onButtonAddMoreCards: true,
+    });
+    const totalNumberCards =
+      numberCardsInRow === 1
+        ? currentNumberCards + 2
+        : getNumberCardsForAlignLastRow(numberCardsInRow, currentNumberCards);
     setDisplayedMoviesCards(
       filteredMoviesCards.slice(
         0,
-        countAddMoreCards > filteredMoviesCards.length
+        totalNumberCards > filteredMoviesCards.length
           ? filteredMoviesCards.length
-          : countAddMoreCards
+          : totalNumberCards
       )
     );
   }
@@ -114,30 +127,6 @@ export default function App() {
       filteredMoviesCards.slice(0, calculateNumberMoviesCards())
     );
   }, [filteredMoviesCards]);
-
-  // изменить название этой функции на добавить отображаемых карточек
-  function calculateNumberMoviesCards(buttonAddMoreClick) {
-    const currentWindowWidth = window.innerWidth;
-    if (currentWindowWidth <= 629) return buttonAddMoreClick ? 2 : 5;
-    if (currentWindowWidth <= 989) return buttonAddMoreClick ? 2 : 8;
-    if (currentWindowWidth <= 1279) return buttonAddMoreClick ? 3 : 12;
-    return buttonAddMoreClick ? 4 : 16;
-  }
-
-  // useEffect(() => {
-  //   setDisplayedMoviesCards(filteredMoviesCards.slice(0, numberMoviesCardsDisplayed+numberAddedMoviesCardsDisplayed > filteredMoviesCards.length ? filteredMoviesCards.length :  numberMoviesCardsDisplayed+numberAddedMoviesCardsDisplayed));
-  // }, [filteredMoviesCards,numberAddedMoviesCardsDisplayed]);
-
-  // useEffect(() => {
-  //   window.addEventListener("resize", () => {
-  //     setTimeout(() => handleResize(), 1000);
-  //   });
-  //   setNumberMoviesCardsDisplayed(calculateNumberMoviesCards());
-  // }, []);
-
-  // function handleResize() {
-  //   setNumberMoviesCardsDisplayed(calculateNumberMoviesCards());
-  // }
 
   useEffect(() => {
     if (loggedIn) {
@@ -153,56 +142,54 @@ export default function App() {
         resetStatesForRegisteredUser();
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn]);
 
   useEffect(() => {
-    // на всех маршрутах, кроме этого, установить белый фон для компонента Header.
-    if (location.pathname !== "/") {
-      setHeaderStyleMain(false);
+    // на всех роутах, кроме этого, установить белый фон для компонента Header.
+    if (location.pathname === "/") {
+      setMainStyleHeader(true);
     } else {
-      setHeaderStyleMain(true);
+      setMainStyleHeader(false);
     }
     // при переходе на роут, изменить икнони лайка с сердца на крестик при наведении.
     if (location.pathname === "/saved-movies") {
-      setCardMovieDelete(true);
+      setLocationSavedMovies(true);
       // при удалении карточки на стр Фильмы, и переходе на стр Сохр фильмы для обновления результата стейта фильтра с сохраненными карточками.
       loggedIn && onSearchSavedMovies(searchValueSavedMovies);
     } else {
-      setCardMovieDelete(false);
+      setLocationSavedMovies(false);
     }
     if (
-      //  при переходе на все роуты, кроме данных, скрыть компоненты Header и Footer.
-      location.pathname === "/movies" ||
-      location.pathname === "/saved-movies" ||
-      location.pathname === "/"
+      //  при переходе на данные роуты, скрыть компоненты Header и Footer.
+      location.pathname === "/sign-in" ||
+      location.pathname === "/sign-up"
     ) {
-      setEntryLocation(false);
+      setVisibleHeaderFooter(false);
     } else {
-      setEntryLocation(true);
+      setVisibleHeaderFooter(true);
     }
     // сбросить стейт с результатом сабмита формы.
-    setFormSubmitStatus("");
-    // setSearchValueSavedMovies("");
-    // setSearchValueMovies("");
+    setMessageWithResultSubmitAuthorizationForms("");
   }, [location]);
 
   useEffect(() => {
-    loggedIn && localStorage.setItem("shortMovieCheckbox", shortMovieCheckbox);
-    if (shortMovieCheckbox && filteredMoviesCards.length) {
+    loggedIn &&
+      localStorage.setItem("shortMoviesCheckbox", shortMoviesCheckbox);
+    if (shortMoviesCheckbox && filteredMoviesCards.length) {
       const { resultFiltered } = filterMoviesCards({
         cards: filteredMoviesCards,
-        checkbox: shortMovieCheckbox,
+        checkbox: shortMoviesCheckbox,
       });
       setFilteredMoviesCards(resultFiltered);
-      !resultFiltered.length && setSearchMessage("Ничего не найдено");
+      !resultFiltered.length &&
+        setMessageWithResultSearchMovies("Ничего не найдено");
     } else {
-      setSearchMessage("");
+      setMessageWithResultSearchMovies("");
       // если в отфильтрованных только по слову ничего нет, тогда не обновляем стейт отфильтрованных карточек
       filteredMoviesCardsOnlyBySearcyValue.length &&
         setFilteredMoviesCards(filteredMoviesCardsOnlyBySearcyValue);
     }
-  }, [shortMovieCheckbox]);
+  }, [shortMoviesCheckbox]);
 
   useEffect(() => {
     loggedIn &&
@@ -216,9 +203,9 @@ export default function App() {
         checkbox: shortSavedMoviesCheckbox,
       });
       setFilteredSavedMoviesCards(resultFiltered);
-      // !resultFiltered.length && setSearchMessageSavedMovies("Ничего не найдено")
+      // !resultFiltered.length && setMessageWithResultSearchSavedMovies("Ничего не найдено")
     } else {
-      // setSearchMessageSavedMovies("")
+      // setMessageWithResultSearchSavedMovies("")
       setFilteredSavedMoviesCards(filteredSavedMoviesCardsOnlyBySearcyValue);
     }
     if (
@@ -233,95 +220,111 @@ export default function App() {
       });
       setFilteredSavedMoviesCards(resultFiltered);
       setFilteredSavedMoviesCardsOnlyBySearcyValue(savedMoviesCards);
-      // !resultFiltered.length && setSearchMessageSavedMovies("Ничего не найдено")
+      // !resultFiltered.length && setMessageWithResultSearchSavedMovies("Ничего не найдено")
     }
   }, [shortSavedMoviesCheckbox]);
 
   useEffect(() => {
     // если отфильтрованных сохраненных карточек нет и есть слово в фомре поиска
     if (!filteredSavedMoviesCards.length && searchValueSavedMovies) {
-      setSearchMessageSavedMovies("Ничего не найдено");
+      setMessageWithResultSearchSavedMovies("Ничего не найдено");
       // иначе, если отфильтрованные сохраненные карточки есть
     } else if (filteredSavedMoviesCards.length) {
-      setSearchMessageSavedMovies("");
+      setMessageWithResultSearchSavedMovies("");
       // иначе, если нет отфильтрованных сохраненных карточек и отмечен чекбокс сохраненных фильмов и есть сохраненные карточки
     } else if (
       !filteredSavedMoviesCards.length &&
       shortSavedMoviesCheckbox &&
       savedMoviesCards.length
     ) {
-      setSearchMessageSavedMovies(
+      setMessageWithResultSearchSavedMovies(
         "Из всех ваших сохраненных фильмов не нашлось короткометражных"
       );
       // сделано, чтобы была возможность фильтровать карточки нажатием на чекбокс.
       // т.к. при первом переходе на страницу, сразу отображаются все сохраненные карточк, а слово поиска не введено, и первое условие не сработает.
     } else {
-      setSearchMessageSavedMovies("Вы еще не сохранили ни один фильм");
+      setMessageWithResultSearchSavedMovies(
+        "Вы еще не сохранили ни один фильм"
+      );
     }
   }, [filteredSavedMoviesCards]);
 
   // обработчик открытия модального окна с ошибкой
   function handleOpenErrorMessagePopup(text) {
-    setErrorMessagePopupText(text);
+    setErrorMessagePopupForError(text);
   }
 
   // обработчик закрытия модального окна с ошибкой
   function handleCloseErrorMessagePopup() {
-    setErrorMessagePopupText("");
+    setErrorMessagePopupForError("");
   }
 
   function onRegister(name, email, password) {
-    setFormSubmitSendingStatus("Регистрация нового пользователя...");
-    setFormSubmitStatus("");
+    setStatusSubmitAuthorizationForms("Регистрация нового пользователя...");
+    setMessageWithResultSubmitAuthorizationForms("");
     register(name, email, password)
       .then(() => {
-        setFormSubmitStatus("Пользователь успешно зарегистрирован!");
+        setMessageWithResultSubmitAuthorizationForms(
+          "Пользователь успешно зарегистрирован!"
+        );
         onLogin(email, password);
       })
       .catch((err) => {
-        setErrorMessagePopupText(err);
-        setFormSubmitStatus("Произошла ошибка при регистрации пользователя");
+        setErrorMessagePopupForError(`${err}`);
+        setMessageWithResultSubmitAuthorizationForms(
+          "Произошла ошибка при регистрации пользователя"
+        );
       })
-      .finally(() => setFormSubmitSendingStatus(""));
+      .finally(() => setStatusSubmitAuthorizationForms(""));
   }
 
   function onLogin(email, password) {
-    setFormSubmitSendingStatus("Авторизация пользователя...");
-    setFormSubmitStatus("");
+    setStatusSubmitAuthorizationForms("Авторизация пользователя...");
+    setMessageWithResultSubmitAuthorizationForms("");
     login(email, password)
       .then((data) => {
         if (!data) {
-          setFormSubmitStatus("Произошла ошибка при авторизации пользователя");
+          setMessageWithResultSubmitAuthorizationForms(
+            "Произошла ошибка при авторизации пользователя"
+          );
           return;
         }
         if (data.token) {
-          setFormSubmitStatus("Пользователь успешно авторизован!");
+          setMessageWithResultSubmitAuthorizationForms(
+            "Пользователь успешно авторизован!"
+          );
           localStorage.setItem("jwt", data.token);
           handleDataLogin(data.token);
           history.push("/movies");
         }
       })
       .catch((err) => {
-        setErrorMessagePopupText(err);
-        setFormSubmitStatus("Произошла ошибка при авторизации пользователя");
+        setErrorMessagePopupForError(`${err}`);
+        setMessageWithResultSubmitAuthorizationForms(
+          "Произошла ошибка при авторизации пользователя"
+        );
       })
-      .finally(() => setFormSubmitSendingStatus(""));
+      .finally(() => setStatusSubmitAuthorizationForms(""));
   }
 
   function onEditProfile(name, email) {
-    setFormSubmitSendingStatus("Обновление данных профиля...");
-    setFormSubmitStatus("");
+    setStatusSubmitAuthorizationForms("Обновление данных профиля...");
+    setMessageWithResultSubmitAuthorizationForms("");
     const jwt = localStorage.getItem("jwt");
     editProfile(name, email, jwt)
       .then((data) => {
         setCurrentUser(data);
-        setFormSubmitStatus("Данные профиля успешно обновлены!");
+        setMessageWithResultSubmitAuthorizationForms(
+          "Данные профиля успешно обновлены!"
+        );
       })
       .catch((err) => {
-        setErrorMessagePopupText(err);
-        setFormSubmitStatus("Не удалось обновить данные профиля");
+        setErrorMessagePopupForError(`${err}`);
+        setMessageWithResultSubmitAuthorizationForms(
+          "Произошла ошибка. Обновить данные профиля не удалось."
+        );
       })
-      .finally(() => setFormSubmitSendingStatus(""));
+      .finally(() => setStatusSubmitAuthorizationForms(""));
   }
 
   function onSignOut() {
@@ -341,14 +344,14 @@ export default function App() {
           moviesCards,
           searchValueMovies,
           searchValueSavedMovies,
-          shortMovieCheckbox,
+          shortMoviesCheckbox,
           shortSavedMoviesCheckbox,
         } = getAllSavedValuesFromLocalStorage();
         moviesCards && setMoviesCards(moviesCards);
         searchValueMovies && setSearchValueMovies(searchValueMovies);
         searchValueSavedMovies &&
           setSearchValueSavedMovies(searchValueSavedMovies);
-        shortMovieCheckbox && setShortMovieCheckbox(shortMovieCheckbox);
+        shortMoviesCheckbox && setShortMoviesCheckbox(shortMoviesCheckbox);
         shortSavedMoviesCheckbox &&
           setShortSavedMoviesCheckbox(shortSavedMoviesCheckbox);
         setLoggedIn(true);
@@ -357,7 +360,7 @@ export default function App() {
   }
 
   function checkValidityToken(jwt) {
-    return getContent(jwt)
+    return getCurrentUser(jwt)
       .then((res) => {
         if (res) {
           return res;
@@ -367,7 +370,7 @@ export default function App() {
         // при завершении проверки валидности jwt ошибкой, вернуть пользователя на главную страницу.
         // т.к. компонент ProtectedRoute разрешает роут при наличии jwt в localStorage не проверяя его.
         history.push("/");
-        setErrorMessagePopupText(`${err}`);
+        setErrorMessagePopupForError(`${err}`);
       });
   }
 
@@ -378,7 +381,7 @@ export default function App() {
         return data;
       })
       .catch((err) => {
-        setErrorMessagePopupText(
+        setErrorMessagePopupForError(
           `Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и обновите страницу. ${err}`
         );
       });
@@ -387,14 +390,14 @@ export default function App() {
   function getAllSavedValuesFromLocalStorage() {
     const searchValueMovies = getSearchValueMoviesFromLocalStorage();
     const searchValueSavedMovies = getSearchValueSavedMoviesFromLocalStorage();
-    const shortMovieCheckbox = getshortMovieCheckboxFromLocalStorage();
+    const shortMoviesCheckbox = getshortMovieCheckboxFromLocalStorage();
     const shortSavedMoviesCheckbox =
       getshortSavedMoviesCheckboxFromLocalStorage();
     const moviesCards = getMoviesCardsFromLocalStorage();
     return {
       searchValueMovies,
       searchValueSavedMovies,
-      shortMovieCheckbox,
+      shortMoviesCheckbox,
       shortSavedMoviesCheckbox,
       moviesCards,
     };
@@ -409,7 +412,7 @@ export default function App() {
   }
 
   function getshortMovieCheckboxFromLocalStorage() {
-    return localStorage.getItem("shortMovieCheckbox") === "true";
+    return localStorage.getItem("shortMoviesCheckbox") === "true";
   }
 
   function getshortSavedMoviesCheckboxFromLocalStorage() {
@@ -427,14 +430,14 @@ export default function App() {
     localStorage.removeItem("moviesCards");
     localStorage.removeItem("searchValueMovies");
     localStorage.removeItem("searchValueSavedMovies");
-    localStorage.removeItem("shortMovieCheckbox");
+    localStorage.removeItem("shortMoviesCheckbox");
     localStorage.removeItem("shortSavedMoviesCheckbox");
   }
 
   function resetStatesForRegisteredUser() {
     setCurrentUser({});
-    setSearchMessage("");
-    setSearchMessageSavedMovies("");
+    setMessageWithResultSearchMovies("");
+    setMessageWithResultSearchSavedMovies("");
     setMoviesCards([]);
     setSavedMoviesCards([]);
     setFilteredMoviesCards([]);
@@ -443,21 +446,21 @@ export default function App() {
     setFilteredSavedMoviesCardsOnlyBySearcyValue([]);
     setSearchValueMovies("");
     setSearchValueSavedMovies("");
-    setShortMovieCheckbox(false);
+    setShortMoviesCheckbox(false);
     setShortSavedMoviesCheckbox(false);
   }
 
   function handleMovieCheckbox() {
-    cardMovieDelete
+    locationSavedMovies
       ? setShortSavedMoviesCheckbox(!shortSavedMoviesCheckbox)
-      : setShortMovieCheckbox(!shortMovieCheckbox);
+      : setShortMoviesCheckbox(!shortMoviesCheckbox);
   }
 
   async function onSearchMovies(searchValue) {
-    setPreloaderVisible(true);
+    setVisiblePreloader(true);
     setSearchValueMovies(searchValue);
     localStorage.setItem("searchValueMovies", searchValue);
-    setSearchMessage("");
+    setMessageWithResultSearchMovies("");
     if (!moviesCards.length) {
       const moviesCards = await getMoviesCardsFromAPI();
       if (moviesCards) {
@@ -466,25 +469,25 @@ export default function App() {
         handleFilterMoviesCards({
           cards: moviesCards,
           search: searchValue,
-          checkbox: shortMovieCheckbox,
+          checkbox: shortMoviesCheckbox,
         });
       }
     } else {
       handleFilterMoviesCards({
         cards: moviesCards,
         search: searchValue,
-        checkbox: shortMovieCheckbox,
+        checkbox: shortMoviesCheckbox,
       });
     }
   }
 
   function onSearchSavedMovies(searchValue) {
     // если поисковое слово равно предыдущему поисковому слову и нет ошибок, не делать фильтрацию и выйти, т.к. результат будет тем же.
-    // if (searchValueSavedMovies === searchValue && !searchMessageSavedMovies) return;
-    setPreloaderVisible(true);
+    // if (searchValueSavedMovies === searchValue && !messageWithResultSearchSavedMovies) return;
+    setVisiblePreloader(true);
     setSearchValueSavedMovies(searchValue);
     localStorage.setItem("searchValueSavedMovies", searchValue);
-    setSearchMessageSavedMovies("");
+    setMessageWithResultSearchSavedMovies("");
     const { resultFiltered, resultFilteredOnlyBySearcyValue } =
       filterMoviesCards({
         cards: savedMoviesCards,
@@ -495,8 +498,8 @@ export default function App() {
     setFilteredSavedMoviesCardsOnlyBySearcyValue(
       searchValue ? resultFilteredOnlyBySearcyValue : savedMoviesCards
     );
-    // !resultFiltered.length && setSearchMessageSavedMovies("Ничего не найдено")
-    setPreloaderVisible(false);
+    // !resultFiltered.length && setMessageWithResultSearchSavedMovies("Ничего не найдено")
+    setVisiblePreloader(false);
   }
 
   // получить карточки фильмов через запрос к API
@@ -507,9 +510,9 @@ export default function App() {
         return data;
       })
       .catch((err) => {
-        setErrorMessagePopupText(`${err}`);
-        setPreloaderVisible(false);
-        setSearchMessage(
+        setErrorMessagePopupForError(`${err}`);
+        setVisiblePreloader(false);
+        setMessageWithResultSearchMovies(
           "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
         );
       });
@@ -524,8 +527,9 @@ export default function App() {
       });
     setFilteredMoviesCards(resultFiltered);
     setFilteredMoviesCardsOnlyBySearcyValue(resultFilteredOnlyBySearcyValue);
-    !resultFiltered.length && setSearchMessage("Ничего не найдено");
-    setPreloaderVisible(false);
+    !resultFiltered.length &&
+      setMessageWithResultSearchMovies("Ничего не найдено");
+    setVisiblePreloader(false);
   }
 
   // фильтр карточек по введенному ключевому слову в форму поиска и отмеченным флажкам.
@@ -611,7 +615,7 @@ export default function App() {
         setSavedMoviesCards([...savedMoviesCards, card]);
       })
       .catch((err) => {
-        setErrorMessagePopupText(`${err}`);
+        setErrorMessagePopupForError(`${err}`);
       });
   }
 
@@ -633,7 +637,7 @@ export default function App() {
         );
       })
       .catch((err) => {
-        setErrorMessagePopupText(`${err}`);
+        setErrorMessagePopupForError(`${err}`);
       });
   }
 
@@ -641,9 +645,9 @@ export default function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page page_align_center">
         <Header
-          headerStyleMain={headerStyleMain}
+          mainStyleHeader={mainStyleHeader}
           loggedIn={loggedIn}
-          entryLocation={entryLocation}
+          visibleHeaderFooter={visibleHeaderFooter}
         />
         <main className="content">
           <Switch>
@@ -656,8 +660,10 @@ export default function App() {
               signOut={onSignOut}
               onEditProfile={onEditProfile}
               loggedIn={loggedIn}
-              formSubmitSendingStatus={formSubmitSendingStatus}
-              formSubmitStatus={formSubmitStatus}
+              formSubmitSendingStatus={statusSubmitAuthorizationForms}
+              messageWithResultSubmit={
+                messageWithResultSubmitAuthorizationForms
+              }
             />
             <Route path="/sign-in">
               {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.
@@ -669,8 +675,10 @@ export default function App() {
               ) : (
                 <Login
                   onLogin={onLogin}
-                  formSubmitSendingStatus={formSubmitSendingStatus}
-                  formSubmitStatus={formSubmitStatus}
+                  formSubmitSendingStatus={statusSubmitAuthorizationForms}
+                  messageWithResultSubmit={
+                    messageWithResultSubmitAuthorizationForms
+                  }
                 />
               )}
             </Route>
@@ -684,27 +692,29 @@ export default function App() {
               ) : (
                 <Register
                   onRegister={onRegister}
-                  formSubmitSendingStatus={formSubmitSendingStatus}
-                  formSubmitStatus={formSubmitStatus}
+                  formSubmitSendingStatus={statusSubmitAuthorizationForms}
+                  messageWithResultSubmit={
+                    messageWithResultSubmitAuthorizationForms
+                  }
                 />
               )}
             </Route>
             <ProtectedRoute
               path="/movies"
               component={Movies}
-              checkboxOn={shortMovieCheckbox}
+              checkboxOn={shortMoviesCheckbox}
               handleMovieCheckbox={handleMovieCheckbox}
               openPopupError={handleOpenErrorMessagePopup}
               loggedIn={loggedIn}
-              preloaderVisible={preloaderVisible}
+              visiblePreloader={visiblePreloader}
               filteredMoviesCards={filteredMoviesCards}
               moviesCards={displayedMoviesCards}
               // handleSearchValue={handleSearchValue}
               onSearchMovies={onSearchMovies}
-              searchMessage={searchMessage}
+              searchMessageMovies={messageWithResultSearchMovies}
               onCardLike={handleCardLike}
               onCardDelete={handleCardDelete}
-              onAddMoreCard={handleMoreCards}
+              onAddMoreCard={handleAddMoreCards}
               savedMoviesCards={savedMoviesCards}
               previousValueSearchForm={searchValueMovies}
             />
@@ -713,7 +723,7 @@ export default function App() {
               component={SavedMovies}
               checkboxOn={shortSavedMoviesCheckbox}
               handleMovieCheckbox={handleMovieCheckbox}
-              cardMovieDelete={cardMovieDelete}
+              locationSavedMovies={locationSavedMovies}
               openPopupError={handleOpenErrorMessagePopup}
               loggedIn={loggedIn}
               // если есть отфильтрованные сохраненные фильмы или форма поиска уже была отправлена,
@@ -726,7 +736,7 @@ export default function App() {
               onCardLike={handleCardLike}
               onCardDelete={handleCardDelete}
               onSearchSavedMovies={onSearchSavedMovies}
-              searchMessageSavedMovies={searchMessageSavedMovies}
+              searchMessageSavedMovies={messageWithResultSearchSavedMovies}
               previousValueSearchForm={searchValueSavedMovies}
             />
             <Route path="/">
@@ -734,9 +744,9 @@ export default function App() {
             </Route>
           </Switch>
         </main>
-        <Footer entryLocation={entryLocation} />
+        <Footer visibleHeaderFooter={visibleHeaderFooter} />
         <ErrorMessagePopup
-          errorMessage={errorMessagePopupText}
+          errorMessage={errorMessagePopupForError}
           onClose={handleCloseErrorMessagePopup}
         />
       </div>

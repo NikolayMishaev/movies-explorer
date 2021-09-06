@@ -8,7 +8,7 @@ import Navigation from "../Navigation/Navigation";
 export default function Register({
   onRegister,
   formSubmitSendingStatus,
-  formSubmitStatus,
+  messageWithResultSubmit,
 }) {
   const currentFormValidator = useFormValidator();
 
@@ -96,10 +96,12 @@ export default function Register({
         </label>
         <span
           className={` entry__submit-message ${
-            formSubmitStatus ? "entry__submit-message_active" : ""
-          } `}
+            messageWithResultSubmit ? "entry__submit-message_active" : ""
+          } 
+          ${messageWithResultSubmit.includes("ошибка") ? "entry__submit-message_type_error" : "" }
+          `}
         >
-          {formSubmitStatus}
+          {messageWithResultSubmit}
         </span>
         <button
           aria-label="submit form"

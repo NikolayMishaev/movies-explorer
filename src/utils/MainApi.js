@@ -33,7 +33,7 @@ export const login = (email, password) => {
   });
 };
 
-export const getContent = (token) => {
+export const getCurrentUser = (token) => {
   return fetch(`${BASE_URL}/users/me`, {
     method: "GET",
     headers: {

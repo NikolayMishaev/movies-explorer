@@ -4,7 +4,7 @@ import "./MoviesCardList.css";
 import MoviesCard from "../MoviesCard/MoviesCard";
 
 export default function MoviesCardList({
-  cardMovieDelete,
+  locationSavedMovies,
   openPopupError,
   moviesCards,
   onCardLike,
@@ -16,7 +16,7 @@ export default function MoviesCardList({
   return (
     <section
       className={` movies-card-list ${
-        cardMovieDelete ? "movies-card-list_place_saved-movies" : ""
+        locationSavedMovies ? "movies-card-list_place_saved-movies" : ""
       } `}
     >
       <ul className={"movies-card-list__container"}>
@@ -24,7 +24,7 @@ export default function MoviesCardList({
           <MoviesCard
             card={card}
             key={card._id || card.id}
-            cardMovieDelete={cardMovieDelete}
+            locationSavedMovies={locationSavedMovies}
             openPopupError={openPopupError}
             onCardLike={onCardLike}
             savedMoviesCards={savedMoviesCards}
@@ -34,7 +34,7 @@ export default function MoviesCardList({
       </ul>
       <button
         className={` ${
-          cardMovieDelete || moviesCards.length === filteredMoviesCards.length
+          locationSavedMovies || moviesCards.length === filteredMoviesCards.length
             ? "display-none"
             : "movies-card-list__button-add-more-cards"
         } `}

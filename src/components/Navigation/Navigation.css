@@ -67,7 +67,14 @@
     height: 100%;
     justify-content: unset;
     transition: all 1s;
-    min-height: 500px;
+    min-height: 100vh;
+  }
+}
+
+@media (max-height: 428px) {
+  .navigation__links_type_mobile-menu {
+overflow-y: auto;
+flex-wrap: nowrap;
   }
 }
 
@@ -198,6 +205,12 @@
 @media (max-width: 400px) {
   .navigation__list_type_mobile-menu-account {
     margin-bottom: 48px;
+  }
+}
+
+@media (max-height: 428px) {
+  .navigation__list_type_mobile-menu-account {
+    margin-top: 28px;
   }
 }
 

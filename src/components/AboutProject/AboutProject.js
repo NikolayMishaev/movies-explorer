@@ -8,20 +8,20 @@ export default function AboutProject() {
       <ul className="about-project__description-items">
         <li className="about-project__description-item">
           <p className="about-project__subtitle">
-            Дипломный проект включал 5 этапов
+          Дипломный проект включал 5&nbsp;этапов
           </p>
           <p className="about-project__text">
-            Составление плана, работу над бэкендом, вёрстку, добавление
-            функциональности и финальные доработки.
+          Составление плана, работу над бэкендом, вёрстку, добавление
+функциональности и&nbsp;финальные доработки.
           </p>
         </li>
         <li className="about-project__description-item">
           <p className="about-project__subtitle">
-            На выполнение диплома ушло 5 недель
+          На&nbsp;выполнение диплома ушло 5&nbsp;недель
           </p>
           <p className="about-project__text">
-            У каждого этапа был мягкий и жёсткий дедлайн, которые нужно было
-            соблюдать, чтобы успешно защититься.
+          У&nbsp;каждого этапа был мягкий и&nbsp;жёсткий дедлайн, которые нужно было
+соблюдать, чтобы успешно защититься.
           </p>
         </li>
       </ul>

@@ -4,7 +4,7 @@ import { convertMinutesToHours } from "../../utils/utils";
 
 export default function MoviesCard({
   card,
-  cardMovieDelete,
+  locationSavedMovies,
   openPopupError,
   onCardLike,
   savedMoviesCards,
@@ -23,12 +23,12 @@ export default function MoviesCard({
     <>
       <li
         className={` movies-card ${
-          cardMovieDelete ? "movies-card_place_saved-movies" : ""
+          locationSavedMovies ? "movies-card_place_saved-movies" : ""
         }`}
       >
         <a
           className="movies-card__link"
-          href={cardMovieDelete ? card.trailer : card.trailerLink}
+          href={locationSavedMovies ? card.trailer : card.trailerLink}
           target="_blank"
           rel="noreferrer"
         >
@@ -47,9 +47,9 @@ export default function MoviesCard({
           <button
             className={`movies-card__like ${
               isLiked ? "movies-card__like_active" : ""
-            } ${cardMovieDelete ? "movies-card__like_type_saved-movies" : ""}`}
+            } ${locationSavedMovies ? "movies-card__like_type_saved-movies" : ""}`}
             type="button"
-            onClick={cardMovieDelete ? handleDeleteCard : handleLikeClick}
+            onClick={locationSavedMovies ? handleDeleteCard : handleLikeClick}
           ></button>
           <p className="movies-card__duration">
             {card.duration

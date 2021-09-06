@@ -20,8 +20,8 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  flex: 1;
 }
 
 .section-title {
@@ -364,7 +364,7 @@
 
 .entry__submit-message {
   position: absolute;
-  top: 70%;
+  bottom: 25%;
   left: 50%;
   transform: translateX(-50%);
   font-style: normal;
@@ -387,4 +387,8 @@
   opacity: 1;
   visibility: visible;
   transition: opacity 1s;
+}
+
+.entry__submit-message_type_error {
+color:red;
 }
