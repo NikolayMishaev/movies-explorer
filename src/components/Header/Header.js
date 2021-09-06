@@ -3,7 +3,11 @@ import "./Header.css";
 // импорт компонентов
 import Navigation from "../Navigation/Navigation";
 
-export default function Header({ mainStyleHeader, loggedIn, visibleHeaderFooter }) {
+export default function Header({
+  mainStyleHeader,
+  loggedIn,
+  visibleHeaderFooter,
+}) {
   return (
     <>
       <header

@@ -73,8 +73,8 @@
 
 @media (max-height: 428px) {
   .navigation__links_type_mobile-menu {
-overflow-y: auto;
-flex-wrap: nowrap;
+    overflow-y: auto;
+    flex-wrap: nowrap;
   }
 }
 

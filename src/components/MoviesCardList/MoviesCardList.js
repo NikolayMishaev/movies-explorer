@@ -34,7 +34,8 @@ export default function MoviesCardList({
       </ul>
       <button
         className={` ${
-          locationSavedMovies || moviesCards.length === filteredMoviesCards.length
+          locationSavedMovies ||
+          moviesCards.length === filteredMoviesCards.length
             ? "display-none"
             : "movies-card-list__button-add-more-cards"
         } `}

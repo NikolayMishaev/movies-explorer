@@ -47,7 +47,9 @@ export default function MoviesCard({
           <button
             className={`movies-card__like ${
               isLiked ? "movies-card__like_active" : ""
-            } ${locationSavedMovies ? "movies-card__like_type_saved-movies" : ""}`}
+            } ${
+              locationSavedMovies ? "movies-card__like_type_saved-movies" : ""
+            }`}
             type="button"
             onClick={locationSavedMovies ? handleDeleteCard : handleLikeClick}
           ></button>

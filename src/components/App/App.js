@@ -35,6 +35,18 @@ import Login from "../Login/Login";
 import Profile from "../Profile/Profile";
 import NotFound from "../NotFound/NotFound";
 import ErrorMessagePopup from "../ErrorMessagePopup/ErrorMessagePopup";
+// импорт сообщений ошибок
+import {
+  authorizationErrors,
+  movieCardErrors,
+} from "../../utils/errorMessages";
+// импорт информационных сообщений
+import {
+  authorizationMessages,
+  authorizationStatus,
+  movieSearchFormMessages,
+} from "../../utils/informationalMessages";
+import { DEFAULT_VALUES_API_DATA } from "../../utils/constants";
 
 export default function App() {
   const location = useLocation();
@@ -158,7 +170,9 @@ export default function App() {
       });
       setFilteredMoviesCards(resultFiltered);
       !resultFiltered.length &&
-        setMessageWithResultSearchMovies("Ничего не найдено");
+        setMessageWithResultSearchMovies(
+          movieSearchFormMessages.nothingWasFound
+        );
     } else {
       setMessageWithResultSearchMovies("");
       // если в отфильтрованных только по слову ничего нет, тогда не обновляем стейт отфильтрованных карточек
@@ -200,7 +214,9 @@ export default function App() {
   useEffect(() => {
     // если отфильтрованных сохраненных карточек нет и есть слово в фомре поиска
     if (!filteredSavedMoviesCards.length && searchValueSavedMovies) {
-      setMessageWithResultSearchSavedMovies("Ничего не найдено");
+      setMessageWithResultSearchSavedMovies(
+        movieSearchFormMessages.nothingWasFound
+      );
       // иначе, если отфильтрованные сохраненные карточки есть
     } else if (filteredSavedMoviesCards.length) {
       setMessageWithResultSearchSavedMovies("");
@@ -211,13 +227,13 @@ export default function App() {
       savedMoviesCards.length
     ) {
       setMessageWithResultSearchSavedMovies(
-        "Из всех ваших сохраненных фильмов не нашлось короткометражных"
+        movieSearchFormMessages.noSavedShortMovies
       );
       // сделано, чтобы была возможность фильтровать карточки нажатием на чекбокс.
       // т.к. при первом переходе на страницу, сразу отображаются все сохраненные карточк, а слово поиска не введено, и первое условие не сработает.
     } else {
       setMessageWithResultSearchSavedMovies(
-        "Вы еще не сохранили ни один фильм"
+        movieSearchFormMessages.noSavedMovies
       );
     }
   }, [filteredSavedMoviesCards]);
@@ -239,32 +255,32 @@ export default function App() {
   }
 
   function onRegister(name, email, password) {
-    setStatusSubmitAuthorizationForms("Регистрация нового пользователя...");
+    setStatusSubmitAuthorizationForms(authorizationStatus.registerNewUser);
     setMessageWithResultSubmitAuthorizationForms("");
     register(name, email, password)
       .then(() => {
         setMessageWithResultSubmitAuthorizationForms(
-          "Пользователь успешно зарегистрирован!"
+          authorizationMessages.successfulRegistration
         );
         onLogin(email, password);
       })
       .catch((err) => {
         setErrorMessagePopupForError(`${err}`);
         setMessageWithResultSubmitAuthorizationForms(
-          "Произошла ошибка при регистрации пользователя"
+          authorizationErrors.registration
         );
       })
       .finally(() => setStatusSubmitAuthorizationForms(""));
   }
 
   function onLogin(email, password) {
-    setStatusSubmitAuthorizationForms("Авторизация пользователя...");
+    setStatusSubmitAuthorizationForms(authorizationStatus.authorizationUser);
     setMessageWithResultSubmitAuthorizationForms("");
     login(email, password)
       .then((data) => {
         if (data.token) {
           setMessageWithResultSubmitAuthorizationForms(
-            "Пользователь успешно авторизован!"
+            authorizationMessages.successfulAuthorization
           );
           localStorage.setItem("jwt", data.token);
           handleDataLogin(data.token);
@@ -274,27 +290,27 @@ export default function App() {
       .catch((err) => {
         setErrorMessagePopupForError(`${err}`);
         setMessageWithResultSubmitAuthorizationForms(
-          "Произошла ошибка при авторизации пользователя"
+          authorizationErrors.authorization
         );
       })
       .finally(() => setStatusSubmitAuthorizationForms(""));
   }
 
   function onEditProfile(name, email) {
-    setStatusSubmitAuthorizationForms("Обновление данных профиля...");
+    setStatusSubmitAuthorizationForms(authorizationStatus.updatingProfileData);
     setMessageWithResultSubmitAuthorizationForms("");
     const jwt = localStorage.getItem("jwt");
     editProfile(name, email, jwt)
       .then((data) => {
         setCurrentUser(data);
         setMessageWithResultSubmitAuthorizationForms(
-          "Данные профиля успешно обновлены!"
+          authorizationMessages.successfulProfileUpdate
         );
       })
       .catch((err) => {
         setErrorMessagePopupForError(`${err}`);
         setMessageWithResultSubmitAuthorizationForms(
-          "Произошла ошибка. Обновить данные профиля не удалось."
+          authorizationErrors.profileChanges
         );
       })
       .finally(() => setStatusSubmitAuthorizationForms(""));
@@ -339,7 +355,9 @@ export default function App() {
         }
       })
       .catch((err) => {
-        setErrorMessagePopupForError(`${err}`);
+        setErrorMessagePopupForError(
+          `${authorizationErrors.tokenValidation} ${err}`
+        );
       });
   }
 
@@ -350,7 +368,7 @@ export default function App() {
       })
       .catch((err) => {
         setErrorMessagePopupForError(
-          `Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и обновите страницу. ${err}`
+          `${movieCardErrors.getSavedMovies} ${err}`
         );
       });
   }
@@ -404,6 +422,10 @@ export default function App() {
 
   function resetStatesForRegisteredUser() {
     setCurrentUser({});
+    setSearchValueMovies("");
+    setSearchValueSavedMovies("");
+    setShortMoviesCheckbox(false);
+    setShortSavedMoviesCheckbox(false);
     setMessageWithResultSearchMovies("");
     setMessageWithResultSearchSavedMovies("");
     setMoviesCards([]);
@@ -412,10 +434,6 @@ export default function App() {
     setFilteredSavedMoviesCards([]);
     setFilteredMoviesCardsOnlyBySearcyValue([]);
     setFilteredSavedMoviesCardsOnlyBySearcyValue([]);
-    setSearchValueMovies("");
-    setSearchValueSavedMovies("");
-    setShortMoviesCheckbox(false);
-    setShortSavedMoviesCheckbox(false);
   }
 
   function handleMovieCheckbox() {
@@ -476,9 +494,7 @@ export default function App() {
       .catch((err) => {
         setErrorMessagePopupForError(`${err}`);
         setVisiblePreloader(false);
-        setMessageWithResultSearchMovies(
-          "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
-        );
+        setMessageWithResultSearchMovies(movieCardErrors.getMovies);
       });
   }
 
@@ -492,7 +508,7 @@ export default function App() {
     setFilteredMoviesCards(resultFiltered);
     setFilteredMoviesCardsOnlyBySearcyValue(resultFilteredOnlyBySearcyValue);
     !resultFiltered.length &&
-      setMessageWithResultSearchMovies("Ничего не найдено");
+      setMessageWithResultSearchMovies(movieSearchFormMessages.nothingWasFound);
     setVisiblePreloader(false);
   }
 
@@ -544,26 +560,21 @@ export default function App() {
 
   function handleCardLike(card) {
     const jwt = localStorage.getItem("jwt");
-    const defaultStringValueForCard =
-      "данные отсутствовали в базе BeatfilmMovies";
-    const defaultNumberValueForCard = 0;
-    const defaultURLValueForImageCard = `https://api.nomoreparties.conodataavailable`;
-    const defaultURLValueForTrailerCard = `https://www.youtube.comnodataavailable`;
     const cardWithRequiredFields = {
-      country: card.country || defaultStringValueForCard,
-      director: card.director || defaultStringValueForCard,
-      duration: card.duration || defaultNumberValueForCard,
-      year: card.year || defaultStringValueForCard,
-      description: card.description || defaultStringValueForCard,
+      country: card.country || DEFAULT_VALUES_API_DATA.string,
+      director: card.director || DEFAULT_VALUES_API_DATA.string,
+      duration: card.duration || DEFAULT_VALUES_API_DATA.number,
+      year: card.year || DEFAULT_VALUES_API_DATA.string,
+      description: card.description || DEFAULT_VALUES_API_DATA.string,
       image: card.image.url
         ? `https://api.nomoreparties.co${card.image.url}`
-        : defaultURLValueForImageCard,
-      trailer: card.trailerLink || defaultURLValueForTrailerCard,
-      nameRU: card.nameRU || defaultStringValueForCard,
-      nameEN: card.nameEN || defaultStringValueForCard,
+        : DEFAULT_VALUES_API_DATA.URLForImage,
+      trailer: card.trailerLink || DEFAULT_VALUES_API_DATA.URLForVideo,
+      nameRU: card.nameRU || DEFAULT_VALUES_API_DATA.string,
+      nameEN: card.nameEN || DEFAULT_VALUES_API_DATA.string,
       thumbnail: card.image.formats.thumbnail.url
         ? `https://api.nomoreparties.co${card.image.formats.thumbnail.url}`
-        : defaultURLValueForImageCard,
+        : DEFAULT_VALUES_API_DATA.URLForImage,
       // у каждой карточки должен быть уникальный id.
       // не возможно задать дефолтный id, иначе будет две карточки с одинаковым id.
       movieId: card.id,
@@ -573,7 +584,7 @@ export default function App() {
         setSavedMoviesCards([...savedMoviesCards, card]);
       })
       .catch((err) => {
-        setErrorMessagePopupForError(`${err}`);
+        setErrorMessagePopupForError(`${movieCardErrors.likeMovies} ${err}`);
       });
   }
 
@@ -595,7 +606,7 @@ export default function App() {
         );
       })
       .catch((err) => {
-        setErrorMessagePopupForError(`${err}`);
+        setErrorMessagePopupForError(`${movieCardErrors.deleteMovies} ${err}`);
       });
   }
 

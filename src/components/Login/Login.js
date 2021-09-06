@@ -74,7 +74,11 @@ export default function Login({
           className={` entry__submit-message ${
             messageWithResultSubmit ? "entry__submit-message_active" : ""
           } 
-          ${messageWithResultSubmit.includes("ошибка") ? "entry__submit-message_type_error" : "" }
+          ${
+            messageWithResultSubmit.includes("ошибка")
+              ? "entry__submit-message_type_error"
+              : ""
+          }
           `}
         >
           {messageWithResultSubmit}
