@@ -103,31 +103,6 @@ export default function App() {
     setFilteredSavedMoviesCardsOnlyBySearcyValue,
   ] = useState([]);
 
-  function handleAddMoreCards() {
-    const currentNumberCards = displayedMoviesCards.length;
-    const numberCardsInRow = calculateNumberMoviesCards({
-      onButtonAddMoreCards: true,
-    });
-    const totalNumberCards =
-      numberCardsInRow === 1
-        ? currentNumberCards + 2
-        : getNumberCardsForAlignLastRow(numberCardsInRow, currentNumberCards);
-    setDisplayedMoviesCards(
-      filteredMoviesCards.slice(
-        0,
-        totalNumberCards > filteredMoviesCards.length
-          ? filteredMoviesCards.length
-          : totalNumberCards
-      )
-    );
-  }
-
-  useEffect(() => {
-    setDisplayedMoviesCards(
-      filteredMoviesCards.slice(0, calculateNumberMoviesCards())
-    );
-  }, [filteredMoviesCards]);
-
   useEffect(() => {
     if (loggedIn) {
       searchValueMovies && onSearchMovies(searchValueMovies);
@@ -145,16 +120,16 @@ export default function App() {
   }, [loggedIn]);
 
   useEffect(() => {
-    // на всех роутах, кроме этого, установить белый фон для компонента Header.
+    // на всех роутах, кроме этого, установить главный стиль(белый фон) для компонента Header.
     if (location.pathname === "/") {
       setMainStyleHeader(true);
     } else {
       setMainStyleHeader(false);
     }
-    // при переходе на роут, изменить икнони лайка с сердца на крестик при наведении.
+    // при переходе на роут, установить соответствующий стейт локации.
     if (location.pathname === "/saved-movies") {
       setLocationSavedMovies(true);
-      // при удалении карточки на стр Фильмы, и переходе на стр Сохр фильмы для обновления результата стейта фильтра с сохраненными карточками.
+      // обновить результаты стейта фильтра с сохраненными карточками.
       loggedIn && onSearchSavedMovies(searchValueSavedMovies);
     } else {
       setLocationSavedMovies(false);
@@ -168,8 +143,9 @@ export default function App() {
     } else {
       setVisibleHeaderFooter(true);
     }
-    // сбросить стейт с результатом сабмита формы.
-    setMessageWithResultSubmitAuthorizationForms("");
+    // сбросить стейт с сообщением результата отправки форм авторизации.
+    messageWithResultSubmitAuthorizationForms &&
+      setMessageWithResultSubmitAuthorizationForms("");
   }, [location]);
 
   useEffect(() => {
@@ -203,9 +179,7 @@ export default function App() {
         checkbox: shortSavedMoviesCheckbox,
       });
       setFilteredSavedMoviesCards(resultFiltered);
-      // !resultFiltered.length && setMessageWithResultSearchSavedMovies("Ничего не найдено")
     } else {
-      // setMessageWithResultSearchSavedMovies("")
       setFilteredSavedMoviesCards(filteredSavedMoviesCardsOnlyBySearcyValue);
     }
     if (
@@ -220,7 +194,6 @@ export default function App() {
       });
       setFilteredSavedMoviesCards(resultFiltered);
       setFilteredSavedMoviesCardsOnlyBySearcyValue(savedMoviesCards);
-      // !resultFiltered.length && setMessageWithResultSearchSavedMovies("Ничего не найдено")
     }
   }, [shortSavedMoviesCheckbox]);
 
@@ -249,9 +222,15 @@ export default function App() {
     }
   }, [filteredSavedMoviesCards]);
 
+  useEffect(() => {
+    setDisplayedMoviesCards(
+      filteredMoviesCards.slice(0, calculateNumberMoviesCards())
+    );
+  }, [filteredMoviesCards]);
+
   // обработчик открытия модального окна с ошибкой
-  function handleOpenErrorMessagePopup(text) {
-    setErrorMessagePopupForError(text);
+  function handleOpenErrorMessagePopup(errorMessage) {
+    setErrorMessagePopupForError(errorMessage);
   }
 
   // обработчик закрытия модального окна с ошибкой
@@ -283,12 +262,6 @@ export default function App() {
     setMessageWithResultSubmitAuthorizationForms("");
     login(email, password)
       .then((data) => {
-        if (!data) {
-          setMessageWithResultSubmitAuthorizationForms(
-            "Произошла ошибка при авторизации пользователя"
-          );
-          return;
-        }
         if (data.token) {
           setMessageWithResultSubmitAuthorizationForms(
             "Пользователь успешно авторизован!"
@@ -330,7 +303,6 @@ export default function App() {
   function onSignOut() {
     localStorage.removeItem("jwt");
     setLoggedIn(false);
-    history.push("/");
   }
 
   async function handleDataLogin(jwt) {
@@ -367,14 +339,10 @@ export default function App() {
         }
       })
       .catch((err) => {
-        // при завершении проверки валидности jwt ошибкой, вернуть пользователя на главную страницу.
-        // т.к. компонент ProtectedRoute разрешает роут при наличии jwt в localStorage не проверяя его.
-        history.push("/");
         setErrorMessagePopupForError(`${err}`);
       });
   }
 
-  // получить карточки сохраненных фильмов через запрос к API
   function getSavedMoviesCardsFromAPI(jwt) {
     return getSavedMoviesCards(jwt)
       .then((data) => {
@@ -482,8 +450,6 @@ export default function App() {
   }
 
   function onSearchSavedMovies(searchValue) {
-    // если поисковое слово равно предыдущему поисковому слову и нет ошибок, не делать фильтрацию и выйти, т.к. результат будет тем же.
-    // if (searchValueSavedMovies === searchValue && !messageWithResultSearchSavedMovies) return;
     setVisiblePreloader(true);
     setSearchValueSavedMovies(searchValue);
     localStorage.setItem("searchValueSavedMovies", searchValue);
@@ -498,11 +464,9 @@ export default function App() {
     setFilteredSavedMoviesCardsOnlyBySearcyValue(
       searchValue ? resultFilteredOnlyBySearcyValue : savedMoviesCards
     );
-    // !resultFiltered.length && setMessageWithResultSearchSavedMovies("Ничего не найдено")
     setVisiblePreloader(false);
   }
 
-  // получить карточки фильмов через запрос к API
   function getMoviesCardsFromAPI() {
     return api
       .getMovieCards()
@@ -535,26 +499,23 @@ export default function App() {
   // фильтр карточек по введенному ключевому слову в форму поиска и отмеченным флажкам.
   // заложена масштабируемость, для возможности фильтрации по нескольким чекбоксам.
   function filterMoviesCards({ cards, search, checkbox }) {
-    console.log("фильтр");
     const filteredMoviesCardsOnlyBySearcyValue = [];
     const filteredMoviesCards = cards.filter((card) => {
+      // если не задано ключевое слово, не ищем по нему, ищем по оставшимся фильтрам
       const matchBySearchValue = search
-        ? findMatchMovieName([card.nameRU, card.nameEN])
+        ? // передать массив с именами фильмов в функцию для поиска совпадения по ключевому слову.
+          findMatchMovieName([card.nameRU, card.nameEN])
         : true;
       search &&
         matchBySearchValue &&
         filteredMoviesCardsOnlyBySearcyValue.push(card);
-      // передать массив с именами фильмов в функцию для поиска совпадения по имени.
       return (
-        matchBySearchValue &&
-        // если совпадение есть, передать картчоку в функцию проверки совпадений согласно установленным флажкам
-        findMatchCheckboxes(card)
+        // если совпадение по ключевому слову есть, передать картчоку в функцию проверки совпадений согласно установленным чекбоксам
+        matchBySearchValue && findMatchCheckboxes(card)
       );
     });
 
-    // функция проверки совпадения по имени
     function findMatchMovieName(arrayWithCardNameS) {
-      // если не задано ключевое слово, не ищем по нему, ищем по оставшимся фильтрам
       return arrayWithCardNameS.some(
         (name) => name && name.toLowerCase().includes(search)
       );
@@ -571,13 +532,10 @@ export default function App() {
       return true;
     }
 
-    // функция проверки совпадения по длительности
     function findMatchMovieShort(duration) {
-      // если продолжительности есть и она меньше или равна 40 минутам, вернуть true, иначе false.
       return duration && duration <= 40;
     }
-    //     searchValue && setFilteredMoviesCardsOnlyBySearcyValue(filteredMoviesCardsOnlyBySearcyValue)
-    // return filteredMoviesCards;
+
     return {
       resultFiltered: filteredMoviesCards,
       resultFilteredOnlyBySearcyValue: filteredMoviesCardsOnlyBySearcyValue,
@@ -641,6 +599,25 @@ export default function App() {
       });
   }
 
+  function handleAddMoreCards() {
+    const currentNumberCards = displayedMoviesCards.length;
+    const numberCardsInRow = calculateNumberMoviesCards({
+      onButtonAddMoreCards: true,
+    });
+    const totalNumberCards =
+      numberCardsInRow === 1
+        ? currentNumberCards + 2
+        : getNumberCardsForAlignLastRow(numberCardsInRow, currentNumberCards);
+    setDisplayedMoviesCards(
+      filteredMoviesCards.slice(
+        0,
+        totalNumberCards > filteredMoviesCards.length
+          ? filteredMoviesCards.length
+          : totalNumberCards
+      )
+    );
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page page_align_center">
@@ -683,10 +660,7 @@ export default function App() {
               )}
             </Route>
             <Route path="/sign-up">
-              {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.
-              получается, что данный роут тоже защищен для авторизованного пользователя. Но в ТЗ есть такой пункт: 
-              "если пользователь закрыл вкладку и был авторизован, он может вернуться сразу на любую страницу приложения по URL-адресу, 
-              кроме страниц авторизации и регистрации. " */}
+              {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.*/}
               {loggedIn ? (
                 <Redirect to="/" />
               ) : (
@@ -709,7 +683,6 @@ export default function App() {
               visiblePreloader={visiblePreloader}
               filteredMoviesCards={filteredMoviesCards}
               moviesCards={displayedMoviesCards}
-              // handleSearchValue={handleSearchValue}
               onSearchMovies={onSearchMovies}
               searchMessageMovies={messageWithResultSearchMovies}
               onCardLike={handleCardLike}

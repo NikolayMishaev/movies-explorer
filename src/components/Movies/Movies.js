@@ -11,7 +11,7 @@ export default function Movies({
   handleMovieCheckbox,
   handleSearchValue,
   openPopupError,
-  preloaderVisible,
+  visiblePreloader,
   handleMoviesCards,
   moviesCards,
   searchMessageMovies,
@@ -33,7 +33,7 @@ export default function Movies({
         onSearchMovies={onSearchMovies}
         previousValueSearchForm={previousValueSearchForm}
       />
-      {preloaderVisible ? (
+      {visiblePreloader ? (
         <Preloader />
       ) : searchMessageMovies ? (
         <SearchMessage searchMessage={searchMessageMovies} />
