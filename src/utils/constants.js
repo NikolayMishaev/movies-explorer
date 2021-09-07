@@ -5,4 +5,12 @@ const DEFAULT_VALUES_API_DATA = {
   URLForVideo: `https://www.youtube.comnodataavailable`,
 };
 
-export { DEFAULT_VALUES_API_DATA };
+const API = {
+  moviesURL: "https://api.nomoreparties.co/beatfilm-movies",
+  savedMoviesURL: "https://api.movies-star.nikolaym.nomoredomains.club",
+  headers: {
+    "Content-Type": "application/json",
+  },
+};
+
+export { DEFAULT_VALUES_API_DATA, API };

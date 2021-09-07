@@ -38,14 +38,14 @@ import ErrorMessagePopup from "../ErrorMessagePopup/ErrorMessagePopup";
 import Preloader from "../Preloader/Preloader";
 // импорт сообщений ошибок.
 import {
-  authorizationErrors,
-  movieCardErrors,
+  AUTHORIZATION_ERRORS,
+  MOVIE_CARD_ERRORS,
 } from "../../utils/errorMessages";
 // импорт информационных сообщений.
 import {
-  authorizationMessages,
-  authorizationStatus,
-  movieSearchFormMessages,
+  AUTHORIZATION_MESSAGES,
+  AUTHORIZATION_STATUSES,
+  MOVIE_SEARCH_FORM_MESSAGES,
 } from "../../utils/informationalMessages";
 import { DEFAULT_VALUES_API_DATA } from "../../utils/constants";
 
@@ -105,7 +105,7 @@ export default function App() {
   ] = useState([]);
   // стейт отображаемых карточек фильмов.
   const [displayedMoviesCards, setDisplayedMoviesCards] = useState([]);
-  //
+  // стейт с общим количеством карточек для отображения. Если добавляли карточки кнопкой "Еще".
   const [totalNumberMoviesCards, setTotalNumberMoviesCards] = useState(0);
 
   // стейт с ключевым словом поиска в форме сохраненных фильмов.
@@ -196,7 +196,7 @@ export default function App() {
       setFilteredMoviesCards(resultFiltered);
       !resultFiltered.length &&
         setMessageWithResultSearchMovies(
-          movieSearchFormMessages.nothingWasFound
+          MOVIE_SEARCH_FORM_MESSAGES.nothingWasFound
         );
     } else {
       setMessageWithResultSearchMovies("");
@@ -237,33 +237,6 @@ export default function App() {
   }, [shortSavedMoviesCheckbox]);
 
   useEffect(() => {
-    // если отфильтрованных сохраненных карточек нет и есть слово в фомре поиска.
-    if (!filteredSavedMoviesCards.length && searchValueSavedMovies) {
-      setMessageWithResultSearchSavedMovies(
-        movieSearchFormMessages.nothingWasFound
-      );
-      // иначе, если отфильтрованные сохраненные карточки есть.
-    } else if (filteredSavedMoviesCards.length) {
-      setMessageWithResultSearchSavedMovies("");
-      // иначе, если нет отфильтрованных сохраненных карточек и отмечен чекбокс сохраненных фильмов и есть сохраненные карточки.
-    } else if (
-      !filteredSavedMoviesCards.length &&
-      shortSavedMoviesCheckbox &&
-      savedMoviesCards.length
-    ) {
-      setMessageWithResultSearchSavedMovies(
-        movieSearchFormMessages.noSavedShortMovies
-      );
-      // сделано, чтобы была возможность фильтровать карточки нажатием на чекбокс.
-      // т.к. при первом переходе на страницу, сразу отображаются все сохраненные карточк, а слово поиска не введено, и первое условие не сработает.
-    } else {
-      setMessageWithResultSearchSavedMovies(
-        movieSearchFormMessages.noSavedMovies
-      );
-    }
-  }, [filteredSavedMoviesCards]);
-
-  useEffect(() => {
     const numberCards = calculateNumberMoviesCards();
     setDisplayedMoviesCards(
       filteredMoviesCards.slice(0, totalNumberMoviesCards || numberCards)
@@ -276,6 +249,33 @@ export default function App() {
     totalNumberMoviesCards && setTotalNumberMoviesCards(0);
   }, [filteredMoviesCards]);
 
+  useEffect(() => {
+    // если отфильтрованных сохраненных карточек нет и есть слово в форме поиска.
+    if (!filteredSavedMoviesCards.length && searchValueSavedMovies) {
+      setMessageWithResultSearchSavedMovies(
+        MOVIE_SEARCH_FORM_MESSAGES.nothingWasFound
+      );
+      // иначе, если отфильтрованные сохраненные карточки есть.
+    } else if (filteredSavedMoviesCards.length) {
+      setMessageWithResultSearchSavedMovies("");
+      // иначе, если нет отфильтрованных сохраненных карточек и отмечен чекбокс сохраненных фильмов и есть сохраненные карточки.
+    } else if (
+      !filteredSavedMoviesCards.length &&
+      shortSavedMoviesCheckbox &&
+      savedMoviesCards.length
+    ) {
+      setMessageWithResultSearchSavedMovies(
+        MOVIE_SEARCH_FORM_MESSAGES.noSavedShortMovies
+      );
+      // сделано, чтобы была возможность фильтровать карточки нажатием на чекбокс.
+      // т.к. при первом переходе на страницу, сразу отображаются все сохраненные карточк, а слово поиска не введено, и первое условие не сработает.
+    } else {
+      setMessageWithResultSearchSavedMovies(
+        MOVIE_SEARCH_FORM_MESSAGES.noSavedMovies
+      );
+    }
+  }, [filteredSavedMoviesCards]);
+
   // обработчик открытия модального окна с ошибкой.
   function handleOpenErrorMessagePopup(errorMessage) {
     setErrorMessagePopupForError(errorMessage);
@@ -287,32 +287,32 @@ export default function App() {
   }
 
   function onRegister(name, email, password) {
-    setStatusSubmitAuthorizationForms(authorizationStatus.registerNewUser);
+    setStatusSubmitAuthorizationForms(AUTHORIZATION_STATUSES.registerNewUser);
     setMessageWithResultSubmitAuthorizationForms("");
     register(name, email, password)
       .then(() => {
         setMessageWithResultSubmitAuthorizationForms(
-          authorizationMessages.successfulRegistration
+          AUTHORIZATION_MESSAGES.successfulRegistration
         );
         onLogin(email, password);
       })
       .catch((err) => {
         setErrorMessagePopupForError(`${err}`);
         setMessageWithResultSubmitAuthorizationForms(
-          authorizationErrors.registration
+          AUTHORIZATION_ERRORS.registration
         );
       })
       .finally(() => setStatusSubmitAuthorizationForms(""));
   }
 
   function onLogin(email, password) {
-    setStatusSubmitAuthorizationForms(authorizationStatus.authorizationUser);
+    setStatusSubmitAuthorizationForms(AUTHORIZATION_STATUSES.authorizationUser);
     setMessageWithResultSubmitAuthorizationForms("");
     login(email, password)
       .then((data) => {
         if (data.token) {
           setMessageWithResultSubmitAuthorizationForms(
-            authorizationMessages.successfulAuthorization
+            AUTHORIZATION_MESSAGES.successfulAuthorization
           );
           localStorage.setItem("jwt", data.token);
           handleDataLogin(data.token);
@@ -322,27 +322,29 @@ export default function App() {
       .catch((err) => {
         setErrorMessagePopupForError(`${err}`);
         setMessageWithResultSubmitAuthorizationForms(
-          authorizationErrors.authorization
+          AUTHORIZATION_ERRORS.authorization
         );
       })
       .finally(() => setStatusSubmitAuthorizationForms(""));
   }
 
   function onEditProfile(name, email) {
-    setStatusSubmitAuthorizationForms(authorizationStatus.updatingProfileData);
+    setStatusSubmitAuthorizationForms(
+      AUTHORIZATION_STATUSES.updatingProfileData
+    );
     setMessageWithResultSubmitAuthorizationForms("");
     const jwt = localStorage.getItem("jwt");
     editProfile(name, email, jwt)
       .then((data) => {
         setCurrentUser(data);
         setMessageWithResultSubmitAuthorizationForms(
-          authorizationMessages.successfulProfileUpdate
+          AUTHORIZATION_MESSAGES.successfulProfileUpdate
         );
       })
       .catch((err) => {
         setErrorMessagePopupForError(`${err}`);
         setMessageWithResultSubmitAuthorizationForms(
-          authorizationErrors.profileChanges
+          AUTHORIZATION_ERRORS.profileChanges
         );
       })
       .finally(() => setStatusSubmitAuthorizationForms(""));
@@ -353,6 +355,7 @@ export default function App() {
     setLoggedIn(false);
   }
 
+  // обработчик данных для авторизации.
   async function handleDataLogin(jwt) {
     setVisiblePreloaderLoggedIn(true);
     const currentUser = await checkValidityToken(jwt);
@@ -393,7 +396,7 @@ export default function App() {
       })
       .catch((err) => {
         setErrorMessagePopupForError(
-          `${authorizationErrors.tokenValidation} ${err}`
+          `${AUTHORIZATION_ERRORS.tokenValidation} ${err}`
         );
         removeItemsFromLocalStorage();
         resetStatesForRegisteredUser();
@@ -407,7 +410,7 @@ export default function App() {
       })
       .catch((err) => {
         setErrorMessagePopupForError(
-          `${movieCardErrors.getSavedMovies} ${err}`
+          `${MOVIE_CARD_ERRORS.getSavedMovies} ${err}`
         );
       });
   }
@@ -457,14 +460,6 @@ export default function App() {
     return localStorage.getItem("totalNumberMoviesCards");
   }
 
-  function updateData() {
-    searchValueMovies && onSearchMovies(searchValueMovies);
-    (searchValueSavedMovies || savedMoviesCards.length) &&
-      onSearchSavedMovies(searchValueSavedMovies);
-    pathURL && history.push(pathURL);
-    setPathURL("");
-  }
-
   function removeItemsFromLocalStorage() {
     localStorage.removeItem("jwt");
     localStorage.removeItem("moviesCards");
@@ -489,6 +484,14 @@ export default function App() {
     setFilteredSavedMoviesCards([]);
     setFilteredMoviesCardsOnlyBySearcyValue([]);
     setFilteredSavedMoviesCardsOnlyBySearcyValue([]);
+  }
+
+  function updateData() {
+    searchValueMovies && onSearchMovies(searchValueMovies);
+    (searchValueSavedMovies || savedMoviesCards.length) &&
+      onSearchSavedMovies(searchValueSavedMovies);
+    pathURL && history.push(pathURL);
+    setPathURL("");
   }
 
   function handleMovieCheckbox() {
@@ -549,7 +552,7 @@ export default function App() {
       .catch((err) => {
         setErrorMessagePopupForError(`${err}`);
         setVisiblePreloaderMovies(false);
-        setMessageWithResultSearchMovies(movieCardErrors.getMovies);
+        setMessageWithResultSearchMovies(MOVIE_CARD_ERRORS.getMovies);
       });
   }
 
@@ -563,7 +566,9 @@ export default function App() {
     setFilteredMoviesCards(resultFiltered);
     setFilteredMoviesCardsOnlyBySearcyValue(resultFilteredOnlyBySearcyValue);
     !resultFiltered.length &&
-      setMessageWithResultSearchMovies(movieSearchFormMessages.nothingWasFound);
+      setMessageWithResultSearchMovies(
+        MOVIE_SEARCH_FORM_MESSAGES.nothingWasFound
+      );
     setVisiblePreloaderMovies(false);
   }
 
@@ -640,7 +645,7 @@ export default function App() {
         setSavedMoviesCards([...savedMoviesCards, card]);
       })
       .catch((err) => {
-        setErrorMessagePopupForError(`${movieCardErrors.likeMovies} ${err}`);
+        setErrorMessagePopupForError(`${MOVIE_CARD_ERRORS.likeMovies} ${err}`);
       })
       .finally(() => setStatusLikeDislikeMovieCard(false));
   }
@@ -664,7 +669,9 @@ export default function App() {
         );
       })
       .catch((err) => {
-        setErrorMessagePopupForError(`${movieCardErrors.deleteMovies} ${err}`);
+        setErrorMessagePopupForError(
+          `${MOVIE_CARD_ERRORS.deleteMovies} ${err}`
+        );
       })
       .finally(() => setStatusLikeDislikeMovieCard(false));
   }

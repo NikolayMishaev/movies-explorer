@@ -1,22 +1,19 @@
-const BASE_URL = "https://api.movies-star.nikolaym.nomoredomains.club";
-
-const headers = {
-  "Content-Type": "application/json",
-};
+import { API } from "./constants";
+import { API_ERRORS } from "./errorMessages";
 
 const checkStatus = (res) => {
   if (res.ok) {
     return res.json();
   }
   return Promise.reject(
-    `Произошла ошибка при запросе к API. ${res.status} ${res.statusText}`
+    `${API_ERRORS.general} ${res.status} ${res.statusText}`
   );
 };
 
 export const register = (name, email, password) => {
-  return fetch(`${BASE_URL}/signup`, {
+  return fetch(`${API.savedMoviesURL}/signup`, {
     method: "POST",
-    headers,
+    headers: API.headers,
     body: JSON.stringify({ name, email, password }),
   }).then((res) => {
     return checkStatus(res);
@@ -24,9 +21,9 @@ export const register = (name, email, password) => {
 };
 
 export const login = (email, password) => {
-  return fetch(`${BASE_URL}/signin`, {
+  return fetch(`${API.savedMoviesURL}/signin`, {
     method: "POST",
-    headers,
+    headers: API.headers,
     body: JSON.stringify({ email, password }),
   }).then((res) => {
     return checkStatus(res);
@@ -34,24 +31,18 @@ export const login = (email, password) => {
 };
 
 export const getCurrentUser = (token) => {
-  return fetch(`${BASE_URL}/users/me`, {
+  return fetch(`${API.savedMoviesURL}/users/me`, {
     method: "GET",
-    headers: {
-      ...headers,
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { ...API.headers, Authorization: `Bearer ${token}` },
   }).then((res) => {
     return checkStatus(res);
   });
 };
 
-export const editProfile = (name, email, jwt) => {
-  return fetch(`${BASE_URL}/users/me`, {
+export const editProfile = (name, email, token) => {
+  return fetch(`${API.savedMoviesURL}/users/me`, {
     method: "PATCH",
-    headers: {
-      ...headers,
-      Authorization: `Bearer ${jwt}`,
-    },
+    headers: { ...API.headers, Authorization: `Bearer ${token}` },
     body: JSON.stringify({ name, email }),
   }).then((res) => {
     return checkStatus(res);
@@ -59,24 +50,18 @@ export const editProfile = (name, email, jwt) => {
 };
 
 export const getSavedMoviesCards = (token) => {
-  return fetch(`${BASE_URL}/movies`, {
+  return fetch(`${API.savedMoviesURL}/movies`, {
     method: "GET",
-    headers: {
-      ...headers,
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { ...API.headers, Authorization: `Bearer ${token}` },
   }).then((res) => {
     return checkStatus(res);
   });
 };
 
 export const saveMovieCard = (token, card) => {
-  return fetch(`${BASE_URL}/movies`, {
+  return fetch(`${API.savedMoviesURL}/movies`, {
     method: "POST",
-    headers: {
-      ...headers,
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { ...API.headers, Authorization: `Bearer ${token}` },
     body: JSON.stringify(card),
   }).then((res) => {
     return checkStatus(res);
@@ -84,12 +69,9 @@ export const saveMovieCard = (token, card) => {
 };
 
 export const deleteMovieCard = (token, cardId) => {
-  return fetch(`${BASE_URL}/movies/${cardId}`, {
+  return fetch(`${API.savedMoviesURL}/movies/${cardId}`, {
     method: "DELETE",
-    headers: {
-      ...headers,
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { ...API.headers, Authorization: `Bearer ${token}` },
   }).then((res) => {
     return checkStatus(res);
   });

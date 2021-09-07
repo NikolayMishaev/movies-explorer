@@ -1,3 +1,6 @@
+import { API } from "./constants";
+import { API_ERRORS } from "./errorMessages";
+
 class Api {
   constructor({ baseUrl }) {
     this._baseUrl = baseUrl;
@@ -8,15 +11,13 @@ class Api {
       return res.json();
     }
     return Promise.reject(
-      `Произошла ошибка при запросе к API. ${res.status} ${res.statusText}`
+      `${API_ERRORS.general} ${res.status} ${res.statusText}`
     );
   }
 
   getMovieCards() {
     return fetch(`${this._baseUrl}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: API.headers,
     }).then((res) => {
       return this._checkStatus(res);
     });
@@ -24,5 +25,5 @@ class Api {
 }
 
 export const api = new Api({
-  baseUrl: "https://api.nomoreparties.co/beatfilm-movies",
+  baseUrl: API.moviesURL,
 });
