@@ -22,6 +22,7 @@ export default function Movies({
   previousValueSearchForm,
   filteredMoviesCards,
   onAddMoreCard,
+  statusLikeDislikeMovieCard,
 }) {
   return (
     <>
@@ -46,6 +47,7 @@ export default function Movies({
           savedMoviesCards={savedMoviesCards}
           filteredMoviesCards={filteredMoviesCards}
           onAddMoreCard={onAddMoreCard}
+          statusLikeDislikeMovieCard={statusLikeDislikeMovieCard}
         />
       )}
     </>

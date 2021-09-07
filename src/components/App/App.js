@@ -71,6 +71,9 @@ export default function App() {
   // стейт сообщения ошибки попапа для ошибок.
   const [errorMessagePopupForError, setErrorMessagePopupForError] =
     useState("");
+  // стейт статуса лайка/дизлайка форм в формах фильмов.
+  const [statusLikeDislikeMovieCard, setStatusLikeDislikeMovieCard] =
+    useState(false);
   // стейт статуса отправки форм авторизации.
   const [statusSubmitAuthorizationForms, setStatusSubmitAuthorizationForms] =
     useState("");
@@ -121,10 +124,6 @@ export default function App() {
     setFilteredSavedMoviesCardsOnlyBySearcyValue,
   ] = useState([]);
 
-  function handlePathURL(URL) {
-    setPathURL(URL);
-  }
-
   useEffect(() => {
     if (loggedIn) {
       updateData();
@@ -140,14 +139,22 @@ export default function App() {
   }, [loggedIn]);
 
   useEffect(() => {
+    const route = location.pathname;
+    // если пользователь переходит на защищенный роут через адрес в URL, записываем его в стейт, чтобы после авторизации перейти на этот роут.
+    // т.к. ProtectedRoute заблокирует роут при пока не прошла авторизация.
+    !loggedIn &&
+      (route === "/saved-movies" ||
+        route === "/movies" ||
+        route === "/profile") &&
+      setPathURL(route);
     // на всех роутах, кроме этого, установить главный стиль(белый фон) для компонента Header.
-    if (location.pathname === "/") {
+    if (route === "/") {
       setMainStyleHeader(true);
     } else {
       setMainStyleHeader(false);
     }
     // при переходе на роут, установить соответствующий стейт локации.
-    if (location.pathname === "/saved-movies") {
+    if (route === "/saved-movies") {
       setLocationSavedMovies(true);
       // обновить результаты стейта фильтра с сохраненными карточками.
       loggedIn && onSearchSavedMovies(searchValueSavedMovies);
@@ -156,8 +163,8 @@ export default function App() {
     }
     if (
       //  при переходе на данные роуты, скрыть компоненты Header и Footer.
-      location.pathname === "/sign-in" ||
-      location.pathname === "/sign-up"
+      route === "/sign-in" ||
+      route === "/sign-up"
     ) {
       setVisibleHeaderFooter(false);
     } else {
@@ -585,6 +592,7 @@ export default function App() {
   }
 
   function handleCardLike(card) {
+    setStatusLikeDislikeMovieCard(true);
     const jwt = localStorage.getItem("jwt");
     const cardWithRequiredFields = {
       country: card.country || DEFAULT_VALUES_API_DATA.string,
@@ -611,10 +619,12 @@ export default function App() {
       })
       .catch((err) => {
         setErrorMessagePopupForError(`${movieCardErrors.likeMovies} ${err}`);
-      });
+      })
+      .finally(() => setStatusLikeDislikeMovieCard(false));
   }
 
   function handleCardDelete(card) {
+    setStatusLikeDislikeMovieCard(true);
     const cardId =
       card._id || savedMoviesCards.find((i) => i.movieId === card.id)._id;
     const jwt = localStorage.getItem("jwt");
@@ -633,7 +643,8 @@ export default function App() {
       })
       .catch((err) => {
         setErrorMessagePopupForError(`${movieCardErrors.deleteMovies} ${err}`);
-      });
+      })
+      .finally(() => setStatusLikeDislikeMovieCard(false));
   }
 
   function handleAddMoreCards() {
@@ -658,11 +669,13 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page page_align_center">
-        <Header
-          mainStyleHeader={mainStyleHeader}
-          loggedIn={loggedIn}
-          visibleHeaderFooter={visibleHeaderFooter}
-        />
+        {!visiblePreloaderLoggedIn && (
+          <Header
+            mainStyleHeader={mainStyleHeader}
+            loggedIn={loggedIn}
+            visibleHeaderFooter={visibleHeaderFooter}
+          />
+        )}
         <main className="content">
           {visiblePreloaderLoggedIn ? (
             <Preloader type="logged-in" />
@@ -674,7 +687,6 @@ export default function App() {
               <ProtectedRoute
                 path="/profile"
                 component={Profile}
-                handlePathURL={handlePathURL}
                 signOut={onSignOut}
                 onEditProfile={onEditProfile}
                 loggedIn={loggedIn}
@@ -714,7 +726,6 @@ export default function App() {
               <ProtectedRoute
                 path="/movies"
                 component={Movies}
-                handlePathURL={handlePathURL}
                 checkboxOn={shortMoviesCheckbox}
                 handleMovieCheckbox={handleMovieCheckbox}
                 openPopupError={handleOpenErrorMessagePopup}
@@ -729,11 +740,11 @@ export default function App() {
                 onAddMoreCard={handleAddMoreCards}
                 savedMoviesCards={savedMoviesCards}
                 previousValueSearchForm={searchValueMovies}
+                statusLikeDislikeMovieCard={statusLikeDislikeMovieCard}
               />
               <ProtectedRoute
                 path="/saved-movies"
                 component={SavedMovies}
-                handlePathURL={handlePathURL}
                 checkboxOn={shortSavedMoviesCheckbox}
                 handleMovieCheckbox={handleMovieCheckbox}
                 locationSavedMovies={locationSavedMovies}
@@ -760,7 +771,9 @@ export default function App() {
             </Switch>
           )}
         </main>
-        <Footer visibleHeaderFooter={visibleHeaderFooter} />
+        {!visiblePreloaderLoggedIn && (
+          <Footer visibleHeaderFooter={visibleHeaderFooter} />
+        )}
         <ErrorMessagePopup
           errorMessage={errorMessagePopupForError}
           onClose={handleCloseErrorMessagePopup}

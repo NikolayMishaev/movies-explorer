@@ -125,16 +125,16 @@ export default function Profile({
           >
             {formSubmitSendingStatus || "Редактировать"}
           </button>
-          <button
-            // выключить кнопку, если отправляется запрос.
-            disabled={formSubmitSendingStatus}
-            aria-label="sign out page"
-            className="entry__button-sign-out"
-            onClick={signOut}
-          >
-            Выйти из аккаунта
-          </button>
         </form>
+        <button
+          // выключить кнопку, если отправляется запрос.
+          disabled={formSubmitSendingStatus}
+          aria-label="sign out page"
+          className="entry__button-sign-out"
+          onClick={signOut}
+        >
+          Выйти из аккаунта
+        </button>
       </section>
     </>
   );

@@ -9,10 +9,10 @@ export default function MoviesCard({
   onCardLike,
   savedMoviesCards,
   onCardDelete,
+  statusLikeDislikeMovieCard,
 }) {
   const isLiked = savedMoviesCards.some((i) => i.movieId === card.id);
-
-  function handleLikeClick() {
+  function handleLikeClick(e) {
     isLiked ? handleDeleteCard() : onCardLike(card);
   }
 
@@ -45,14 +45,18 @@ export default function MoviesCard({
         <div className="movies-card__description">
           <h2 className="movies-card__title">{card.nameRU}</h2>
           <button
+            disabled={statusLikeDislikeMovieCard}
             className={`movies-card__like ${
               isLiked ? "movies-card__like_active" : ""
             } ${
               locationSavedMovies ? "movies-card__like_type_saved-movies" : ""
-            }`}
+            }
+          `}
             type="button"
             onClick={locationSavedMovies ? handleDeleteCard : handleLikeClick}
-          ></button>
+          >
+            {statusLikeDislikeMovieCard}
+          </button>
           <p className="movies-card__duration">
             {card.duration
               ? convertMinutesToHours(card.duration)

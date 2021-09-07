@@ -12,6 +12,7 @@ export default function MoviesCardList({
   onCardDelete,
   filteredMoviesCards = [],
   onAddMoreCard,
+  statusLikeDislikeMovieCard,
 }) {
   return (
     <section
@@ -29,6 +30,7 @@ export default function MoviesCardList({
             onCardLike={onCardLike}
             savedMoviesCards={savedMoviesCards}
             onCardDelete={onCardDelete}
+            statusLikeDislikeMovieCard={statusLikeDislikeMovieCard}
           />
         ))}
       </ul>
