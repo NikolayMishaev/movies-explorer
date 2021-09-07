@@ -35,6 +35,7 @@ import Login from "../Login/Login";
 import Profile from "../Profile/Profile";
 import NotFound from "../NotFound/NotFound";
 import ErrorMessagePopup from "../ErrorMessagePopup/ErrorMessagePopup";
+import Preloader from "../Preloader/Preloader";
 // импорт сообщений ошибок.
 import {
   authorizationErrors,
@@ -62,8 +63,11 @@ export default function App() {
   const [locationSavedMovies, setLocationSavedMovies] = useState(false);
   // стейт отображения компонентов Header и Footer.
   const [visibleHeaderFooter, setVisibleHeaderFooter] = useState(true);
+  // стейт отображения прелоадера в процессе авторизации пользователя.
+  const [visiblePreloaderLoggedIn, setVisiblePreloaderLoggedIn] =
+    useState(false);
   // стейт отображения прелоадера в процессе загрузки фильмов.
-  const [visiblePreloader, setVisiblePreloader] = useState(false);
+  const [visiblePreloaderMovies, setVisiblePreloaderMovies] = useState(false);
   // стейт сообщения ошибки попапа для ошибок.
   const [errorMessagePopupForError, setErrorMessagePopupForError] =
     useState("");
@@ -331,6 +335,7 @@ export default function App() {
   }
 
   async function handleDataLogin(jwt) {
+    setVisiblePreloaderLoggedIn(true);
     const currentUser = await checkValidityToken(jwt);
     if (currentUser) {
       setCurrentUser(currentUser);
@@ -354,6 +359,7 @@ export default function App() {
         setLoggedIn(true);
       }
     }
+    setVisiblePreloaderLoggedIn(false);
   }
 
   function checkValidityToken(jwt) {
@@ -367,6 +373,8 @@ export default function App() {
         setErrorMessagePopupForError(
           `${authorizationErrors.tokenValidation} ${err}`
         );
+        removeItemsFromLocalStorage();
+        resetStatesForRegisteredUser();
       });
   }
 
@@ -430,6 +438,7 @@ export default function App() {
   }
 
   function removeItemsFromLocalStorage() {
+    localStorage.removeItem("jwt");
     localStorage.removeItem("moviesCards");
     localStorage.removeItem("searchValueMovies");
     localStorage.removeItem("searchValueSavedMovies");
@@ -460,7 +469,7 @@ export default function App() {
   }
 
   async function onSearchMovies(searchValue) {
-    setVisiblePreloader(true);
+    setVisiblePreloaderMovies(true);
     setSearchValueMovies(searchValue);
     localStorage.setItem("searchValueMovies", searchValue);
     setMessageWithResultSearchMovies("");
@@ -485,7 +494,7 @@ export default function App() {
   }
 
   function onSearchSavedMovies(searchValue) {
-    setVisiblePreloader(true);
+    setVisiblePreloaderMovies(true);
     setSearchValueSavedMovies(searchValue);
     localStorage.setItem("searchValueSavedMovies", searchValue);
     setMessageWithResultSearchSavedMovies("");
@@ -499,7 +508,7 @@ export default function App() {
     setFilteredSavedMoviesCardsOnlyBySearcyValue(
       searchValue ? resultFilteredOnlyBySearcyValue : savedMoviesCards
     );
-    setVisiblePreloader(false);
+    setVisiblePreloaderMovies(false);
   }
 
   function getMoviesCardsFromAPI() {
@@ -510,7 +519,7 @@ export default function App() {
       })
       .catch((err) => {
         setErrorMessagePopupForError(`${err}`);
-        setVisiblePreloader(false);
+        setVisiblePreloaderMovies(false);
         setMessageWithResultSearchMovies(movieCardErrors.getMovies);
       });
   }
@@ -526,7 +535,7 @@ export default function App() {
     setFilteredMoviesCardsOnlyBySearcyValue(resultFilteredOnlyBySearcyValue);
     !resultFiltered.length &&
       setMessageWithResultSearchMovies(movieSearchFormMessages.nothingWasFound);
-    setVisiblePreloader(false);
+    setVisiblePreloaderMovies(false);
   }
 
   // фильтр карточек по введенному ключевому слову в форму поиска и отмеченным флажкам.
@@ -655,95 +664,101 @@ export default function App() {
           visibleHeaderFooter={visibleHeaderFooter}
         />
         <main className="content">
-          <Switch>
-            <Route exact path="/">
-              <Main />
-            </Route>
-            <ProtectedRoute
-              path="/profile"
-              component={Profile}
-              handlePathURL={handlePathURL}
-              signOut={onSignOut}
-              onEditProfile={onEditProfile}
-              loggedIn={loggedIn}
-              formSubmitSendingStatus={statusSubmitAuthorizationForms}
-              messageWithResultSubmit={
-                messageWithResultSubmitAuthorizationForms
-              }
-            />
-            <Route path="/sign-in">
-              {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.*/}
-              {localStorage.getItem("jwt") ? (
-                <Redirect to="/" />
-              ) : (
-                <Login
-                  onLogin={onLogin}
-                  formSubmitSendingStatus={statusSubmitAuthorizationForms}
-                  messageWithResultSubmit={
-                    messageWithResultSubmitAuthorizationForms
-                  }
+          {visiblePreloaderLoggedIn ? (
+            <Preloader type="logged-in" />
+          ) : (
+            <Switch>
+              <Route exact path="/">
+                <Main />
+              </Route>
+              <ProtectedRoute
+                path="/profile"
+                component={Profile}
+                handlePathURL={handlePathURL}
+                signOut={onSignOut}
+                onEditProfile={onEditProfile}
+                loggedIn={loggedIn}
+                formSubmitSendingStatus={statusSubmitAuthorizationForms}
+                messageWithResultSubmit={
+                  messageWithResultSubmitAuthorizationForms
+                }
+              />
+              <Route path="/sign-in">
+                {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.*/}
+                {localStorage.getItem("jwt") ? (
+                  <Redirect to="/" />
+                ) : (
+                  <Login
+                    onLogin={onLogin}
+                    formSubmitSendingStatus={statusSubmitAuthorizationForms}
+                    messageWithResultSubmit={
+                      messageWithResultSubmitAuthorizationForms
+                    }
+                  />
+                )}
+              </Route>
+              <Route path="/sign-up">
+                {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.*/}
+                {localStorage.getItem("jwt") ? (
+                  <Redirect to="/" />
+                ) : (
+                  <Register
+                    onRegister={onRegister}
+                    formSubmitSendingStatus={statusSubmitAuthorizationForms}
+                    messageWithResultSubmit={
+                      messageWithResultSubmitAuthorizationForms
+                    }
+                  />
+                )}
+              </Route>
+              <ProtectedRoute
+                path="/movies"
+                component={Movies}
+                handlePathURL={handlePathURL}
+                checkboxOn={shortMoviesCheckbox}
+                handleMovieCheckbox={handleMovieCheckbox}
+                openPopupError={handleOpenErrorMessagePopup}
+                loggedIn={loggedIn}
+                visiblePreloader={visiblePreloaderMovies}
+                filteredMoviesCards={filteredMoviesCards}
+                moviesCards={displayedMoviesCards}
+                onSearchMovies={onSearchMovies}
+                searchMessageMovies={messageWithResultSearchMovies}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
+                onAddMoreCard={handleAddMoreCards}
+                savedMoviesCards={savedMoviesCards}
+                previousValueSearchForm={searchValueMovies}
+              />
+              <ProtectedRoute
+                path="/saved-movies"
+                component={SavedMovies}
+                handlePathURL={handlePathURL}
+                checkboxOn={shortSavedMoviesCheckbox}
+                handleMovieCheckbox={handleMovieCheckbox}
+                locationSavedMovies={locationSavedMovies}
+                openPopupError={handleOpenErrorMessagePopup}
+                loggedIn={loggedIn}
+                // если есть отфильтрованные сохраненные фильмы или форма поиска уже была отправлена,
+                // показывать всегда все отфильтрованные сохраненные фильмы, иначе показать только все сохраненные фильмы.
+                savedMoviesCards={
+                  filteredSavedMoviesCards.length || searchValueSavedMovies
+                    ? filteredSavedMoviesCards
+                    : savedMoviesCards
+                }
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
+                onSearchSavedMovies={onSearchSavedMovies}
+                searchMessageSavedMovies={messageWithResultSearchSavedMovies}
+                previousValueSearchForm={searchValueSavedMovies}
+              />
+              <Route path="/">
+                <NotFound
+                  handleVisibleHeaderFooter={handleVisibleHeaderFooter}
                 />
-              )}
-            </Route>
-            <Route path="/sign-up">
-              {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.*/}
-              {localStorage.getItem("jwt") ? (
-                <Redirect to="/" />
-              ) : (
-                <Register
-                  onRegister={onRegister}
-                  formSubmitSendingStatus={statusSubmitAuthorizationForms}
-                  messageWithResultSubmit={
-                    messageWithResultSubmitAuthorizationForms
-                  }
-                />
-              )}
-            </Route>
-            <ProtectedRoute
-              path="/movies"
-              component={Movies}
-              handlePathURL={handlePathURL}
-              checkboxOn={shortMoviesCheckbox}
-              handleMovieCheckbox={handleMovieCheckbox}
-              openPopupError={handleOpenErrorMessagePopup}
-              loggedIn={loggedIn}
-              visiblePreloader={visiblePreloader}
-              filteredMoviesCards={filteredMoviesCards}
-              moviesCards={displayedMoviesCards}
-              onSearchMovies={onSearchMovies}
-              searchMessageMovies={messageWithResultSearchMovies}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
-              onAddMoreCard={handleAddMoreCards}
-              savedMoviesCards={savedMoviesCards}
-              previousValueSearchForm={searchValueMovies}
-            />
-            <ProtectedRoute
-              path="/saved-movies"
-              component={SavedMovies}
-              handlePathURL={handlePathURL}
-              checkboxOn={shortSavedMoviesCheckbox}
-              handleMovieCheckbox={handleMovieCheckbox}
-              locationSavedMovies={locationSavedMovies}
-              openPopupError={handleOpenErrorMessagePopup}
-              loggedIn={loggedIn}
-              // если есть отфильтрованные сохраненные фильмы или форма поиска уже была отправлена,
-              // показывать всегда все отфильтрованные сохраненные фильмы, иначе показать только все сохраненные фильмы.
-              savedMoviesCards={
-                filteredSavedMoviesCards.length || searchValueSavedMovies
-                  ? filteredSavedMoviesCards
-                  : savedMoviesCards
-              }
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
-              onSearchSavedMovies={onSearchSavedMovies}
-              searchMessageSavedMovies={messageWithResultSearchSavedMovies}
-              previousValueSearchForm={searchValueSavedMovies}
-            />
-            <Route path="/">
-              <NotFound handleVisibleHeaderFooter={handleVisibleHeaderFooter} />
-            </Route>
-          </Switch>
+              </Route>
+            </Switch>
+          )}
         </main>
         <Footer visibleHeaderFooter={visibleHeaderFooter} />
         <ErrorMessagePopup

@@ -48,6 +48,12 @@
   z-index: 10;
 }
 
+.preloader_type_logged-in {
+  margin-top: 100px;
+  transform: scale(2);
+  opacity: 0.7;
+}
+
 .preloader__container {
   width: 100px;
   height: 100px;
