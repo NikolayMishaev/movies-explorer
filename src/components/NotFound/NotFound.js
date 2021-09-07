@@ -2,8 +2,9 @@ import React from "react";
 import "./NotFound.css";
 import { useHistory } from "react-router-dom";
 
-export default function NotFound() {
+export default function NotFound({handleVisibleHeaderFooter}) {
   const history = useHistory();
+  handleVisibleHeaderFooter();
 
   return (
     <section className="not-found">

@@ -24,7 +24,7 @@ import {
   calculateNumberMoviesCards,
   getNumberCardsForAlignLastRow,
 } from "../../utils/utils";
-// импорт компонентов
+// импорт компонентов.
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
@@ -35,12 +35,12 @@ import Login from "../Login/Login";
 import Profile from "../Profile/Profile";
 import NotFound from "../NotFound/NotFound";
 import ErrorMessagePopup from "../ErrorMessagePopup/ErrorMessagePopup";
-// импорт сообщений ошибок
+// импорт сообщений ошибок.
 import {
   authorizationErrors,
   movieCardErrors,
 } from "../../utils/errorMessages";
-// импорт информационных сообщений
+// импорт информационных сообщений.
 import {
   authorizationMessages,
   authorizationStatus,
@@ -75,8 +75,10 @@ export default function App() {
     messageWithResultSubmitAuthorizationForms,
     setMessageWithResultSubmitAuthorizationForms,
   ] = useState("");
+  // стейт пути URL для перехода после авторизации пользователя.
+  const [pathURL, setPathURL] = useState("");
 
-  // стейт с ключевым словом поиска в форме фильмов
+  // стейт с ключевым словом поиска в форме фильмов.
   const [searchValueMovies, setSearchValueMovies] = useState("");
   // стейт чекбокса короткомертажных фильмов.
   const [shortMoviesCheckbox, setShortMoviesCheckbox] = useState(false);
@@ -95,7 +97,7 @@ export default function App() {
   // стейт отображаемых карточек фильмов.
   const [displayedMoviesCards, setDisplayedMoviesCards] = useState([]);
 
-  // стейт с ключевым словом поиска в форме сохраненных фильмов
+  // стейт с ключевым словом поиска в форме сохраненных фильмов.
   const [searchValueSavedMovies, setSearchValueSavedMovies] = useState("");
   // стейт чекбокса короткомертажных сохнаненных фильмов.
   const [shortSavedMoviesCheckbox, setShortSavedMoviesCheckbox] =
@@ -115,11 +117,13 @@ export default function App() {
     setFilteredSavedMoviesCardsOnlyBySearcyValue,
   ] = useState([]);
 
+  function handlePathURL(URL) {
+    setPathURL(URL);
+  }
+
   useEffect(() => {
     if (loggedIn) {
-      searchValueMovies && onSearchMovies(searchValueMovies);
-      (searchValueSavedMovies || savedMoviesCards.length) &&
-        onSearchSavedMovies(searchValueSavedMovies);
+      updateData();
     } else {
       const jwt = localStorage.getItem("jwt");
       if (jwt) {
@@ -175,7 +179,7 @@ export default function App() {
         );
     } else {
       setMessageWithResultSearchMovies("");
-      // если в отфильтрованных только по слову ничего нет, тогда не обновляем стейт отфильтрованных карточек
+      // если в отфильтрованных только по слову ничего нет, тогда не обновляем стейт отфильтрованных карточек.
       filteredMoviesCardsOnlyBySearcyValue.length &&
         setFilteredMoviesCards(filteredMoviesCardsOnlyBySearcyValue);
     }
@@ -212,15 +216,15 @@ export default function App() {
   }, [shortSavedMoviesCheckbox]);
 
   useEffect(() => {
-    // если отфильтрованных сохраненных карточек нет и есть слово в фомре поиска
+    // если отфильтрованных сохраненных карточек нет и есть слово в фомре поиска.
     if (!filteredSavedMoviesCards.length && searchValueSavedMovies) {
       setMessageWithResultSearchSavedMovies(
         movieSearchFormMessages.nothingWasFound
       );
-      // иначе, если отфильтрованные сохраненные карточки есть
+      // иначе, если отфильтрованные сохраненные карточки есть.
     } else if (filteredSavedMoviesCards.length) {
       setMessageWithResultSearchSavedMovies("");
-      // иначе, если нет отфильтрованных сохраненных карточек и отмечен чекбокс сохраненных фильмов и есть сохраненные карточки
+      // иначе, если нет отфильтрованных сохраненных карточек и отмечен чекбокс сохраненных фильмов и есть сохраненные карточки.
     } else if (
       !filteredSavedMoviesCards.length &&
       shortSavedMoviesCheckbox &&
@@ -244,14 +248,19 @@ export default function App() {
     );
   }, [filteredMoviesCards]);
 
-  // обработчик открытия модального окна с ошибкой
+  // обработчик открытия модального окна с ошибкой.
   function handleOpenErrorMessagePopup(errorMessage) {
     setErrorMessagePopupForError(errorMessage);
   }
 
-  // обработчик закрытия модального окна с ошибкой
+  // обработчик закрытия модального окна с ошибкой.
   function handleCloseErrorMessagePopup() {
     setErrorMessagePopupForError("");
+  }
+
+  // обработчик отображения компонентов Header и Footer для страницы 404.
+  function handleVisibleHeaderFooter() {
+    setVisibleHeaderFooter(false);
   }
 
   function onRegister(name, email, password) {
@@ -284,7 +293,7 @@ export default function App() {
           );
           localStorage.setItem("jwt", data.token);
           handleDataLogin(data.token);
-          history.push("/movies");
+          setPathURL("/movies");
         }
       })
       .catch((err) => {
@@ -412,6 +421,14 @@ export default function App() {
     }
   }
 
+  function updateData() {
+    searchValueMovies && onSearchMovies(searchValueMovies);
+    (searchValueSavedMovies || savedMoviesCards.length) &&
+      onSearchSavedMovies(searchValueSavedMovies);
+    pathURL && history.push(pathURL);
+    setPathURL("");
+  }
+
   function removeItemsFromLocalStorage() {
     localStorage.removeItem("moviesCards");
     localStorage.removeItem("searchValueMovies");
@@ -517,7 +534,7 @@ export default function App() {
   function filterMoviesCards({ cards, search, checkbox }) {
     const filteredMoviesCardsOnlyBySearcyValue = [];
     const filteredMoviesCards = cards.filter((card) => {
-      // если не задано ключевое слово, не ищем по нему, ищем по оставшимся фильтрам
+      // если не задано ключевое слово, не ищем по нему, ищем по оставшимся фильтрам.
       const matchBySearchValue = search
         ? // передать массив с именами фильмов в функцию для поиска совпадения по ключевому слову.
           findMatchMovieName([card.nameRU, card.nameEN])
@@ -526,7 +543,7 @@ export default function App() {
         matchBySearchValue &&
         filteredMoviesCardsOnlyBySearcyValue.push(card);
       return (
-        // если совпадение по ключевому слову есть, передать картчоку в функцию проверки совпадений согласно установленным чекбоксам
+        // если совпадение по ключевому слову есть, передать картчоку в функцию проверки совпадений согласно установленным чекбоксам.
         matchBySearchValue && findMatchCheckboxes(card)
       );
     });
@@ -539,12 +556,12 @@ export default function App() {
 
     function findMatchCheckboxes(card) {
       // если флажок "короткометражки" отмечен, передать продолжительность фильма в функцию проверки совпадения по длительности.
-      // если совпадение есть, инвертировать результат, чтобы условие не выполнилось, перейти к проверке следующего чекбокса
+      // если совпадение есть, инвертировать результат, чтобы условие не выполнилось, перейти к проверке следующего чекбокса.
       if (checkbox && !findMatchMovieShort(card.duration)) {
-        // если хотя бы один из чекбоксов не прошел проверку вернуть false
+        // если хотя бы один из чекбоксов не прошел проверку вернуть false.
         return false;
       }
-      // если все проверки (для каждого чекбокса) прошли успешно, вернуть true
+      // если все проверки (для каждого чекбокса) прошли успешно, вернуть true.
       return true;
     }
 
@@ -645,6 +662,7 @@ export default function App() {
             <ProtectedRoute
               path="/profile"
               component={Profile}
+              handlePathURL={handlePathURL}
               signOut={onSignOut}
               onEditProfile={onEditProfile}
               loggedIn={loggedIn}
@@ -654,11 +672,8 @@ export default function App() {
               }
             />
             <Route path="/sign-in">
-              {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.
-              получается, что данный роут тоже защищен для авторизованного пользователя. Но в ТЗ есть такой пункт: 
-              "если пользователь закрыл вкладку и был авторизован, он может вернуться сразу на любую страницу приложения по URL-адресу, 
-              кроме страниц авторизации и регистрации. " */}
-              {loggedIn ? (
+              {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.*/}
+              {localStorage.getItem("jwt") ? (
                 <Redirect to="/" />
               ) : (
                 <Login
@@ -672,7 +687,7 @@ export default function App() {
             </Route>
             <Route path="/sign-up">
               {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.*/}
-              {loggedIn ? (
+              {localStorage.getItem("jwt") ? (
                 <Redirect to="/" />
               ) : (
                 <Register
@@ -687,6 +702,7 @@ export default function App() {
             <ProtectedRoute
               path="/movies"
               component={Movies}
+              handlePathURL={handlePathURL}
               checkboxOn={shortMoviesCheckbox}
               handleMovieCheckbox={handleMovieCheckbox}
               openPopupError={handleOpenErrorMessagePopup}
@@ -705,6 +721,7 @@ export default function App() {
             <ProtectedRoute
               path="/saved-movies"
               component={SavedMovies}
+              handlePathURL={handlePathURL}
               checkboxOn={shortSavedMoviesCheckbox}
               handleMovieCheckbox={handleMovieCheckbox}
               locationSavedMovies={locationSavedMovies}
@@ -724,7 +741,7 @@ export default function App() {
               previousValueSearchForm={searchValueSavedMovies}
             />
             <Route path="/">
-              <NotFound />
+              <NotFound handleVisibleHeaderFooter={handleVisibleHeaderFooter} />
             </Route>
           </Switch>
         </main>
