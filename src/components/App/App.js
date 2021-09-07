@@ -61,8 +61,10 @@ export default function App() {
   const [mainStyleHeader, setMainStyleHeader] = useState(true);
   // стейт нахождения на странице /saved-movies.
   const [locationSavedMovies, setLocationSavedMovies] = useState(false);
-  // стейт отображения компонентов Header и Footer.
-  const [visibleHeaderFooter, setVisibleHeaderFooter] = useState(true);
+  // стейт отображения компонента Header.
+  const [visibleHeader, setVisibleHeader] = useState(true);
+  // стейт отображения компонента Footer.
+  const [visibleFooter, setVisibleFooter] = useState(true);
   // стейт отображения прелоадера в процессе авторизации пользователя.
   const [visiblePreloaderLoggedIn, setVisiblePreloaderLoggedIn] =
     useState(false);
@@ -103,6 +105,8 @@ export default function App() {
   ] = useState([]);
   // стейт отображаемых карточек фильмов.
   const [displayedMoviesCards, setDisplayedMoviesCards] = useState([]);
+  //
+  const [totalNumberMoviesCards, setTotalNumberMoviesCards] = useState(0);
 
   // стейт с ключевым словом поиска в форме сохраненных фильмов.
   const [searchValueSavedMovies, setSearchValueSavedMovies] = useState("");
@@ -162,13 +166,19 @@ export default function App() {
       setLocationSavedMovies(false);
     }
     if (
-      //  при переходе на данные роуты, скрыть компоненты Header и Footer.
-      route === "/sign-in" ||
-      route === "/sign-up"
+      //  при переходе на данные роуты, отобразить компоненты Header и Footer, иначе скрыть.
+      route === "/" ||
+      route === "/movies" ||
+      route === "/saved-movies"
     ) {
-      setVisibleHeaderFooter(false);
+      setVisibleHeader(true);
+      setVisibleFooter(true);
     } else {
-      setVisibleHeaderFooter(true);
+      setVisibleHeader(false);
+      setVisibleFooter(false);
+    }
+    if (route === "/profile") {
+      setVisibleHeader(true);
     }
     // сбросить стейт с сообщением результата отправки форм авторизации.
     messageWithResultSubmitAuthorizationForms &&
@@ -254,9 +264,16 @@ export default function App() {
   }, [filteredSavedMoviesCards]);
 
   useEffect(() => {
+    const numberCards = calculateNumberMoviesCards();
     setDisplayedMoviesCards(
-      filteredMoviesCards.slice(0, calculateNumberMoviesCards())
+      filteredMoviesCards.slice(0, totalNumberMoviesCards || numberCards)
     );
+    loggedIn &&
+      localStorage.setItem(
+        "totalNumberMoviesCards",
+        totalNumberMoviesCards || numberCards
+      );
+    totalNumberMoviesCards && setTotalNumberMoviesCards(0);
   }, [filteredMoviesCards]);
 
   // обработчик открытия модального окна с ошибкой.
@@ -267,11 +284,6 @@ export default function App() {
   // обработчик закрытия модального окна с ошибкой.
   function handleCloseErrorMessagePopup() {
     setErrorMessagePopupForError("");
-  }
-
-  // обработчик отображения компонентов Header и Footer для страницы 404.
-  function handleVisibleHeaderFooter() {
-    setVisibleHeaderFooter(false);
   }
 
   function onRegister(name, email, password) {
@@ -355,6 +367,7 @@ export default function App() {
           searchValueSavedMovies,
           shortMoviesCheckbox,
           shortSavedMoviesCheckbox,
+          totalNumberMoviesCards,
         } = getAllSavedValuesFromLocalStorage();
         moviesCards && setMoviesCards(moviesCards);
         searchValueMovies && setSearchValueMovies(searchValueMovies);
@@ -363,6 +376,8 @@ export default function App() {
         shortMoviesCheckbox && setShortMoviesCheckbox(shortMoviesCheckbox);
         shortSavedMoviesCheckbox &&
           setShortSavedMoviesCheckbox(shortSavedMoviesCheckbox);
+        totalNumberMoviesCards &&
+          setTotalNumberMoviesCards(totalNumberMoviesCards);
         setLoggedIn(true);
       }
     }
@@ -404,12 +419,14 @@ export default function App() {
     const shortSavedMoviesCheckbox =
       getshortSavedMoviesCheckboxFromLocalStorage();
     const moviesCards = getMoviesCardsFromLocalStorage();
+    const totalNumberMoviesCards = getTotalNumberMoviesCardsFromLocalStorage();
     return {
       searchValueMovies,
       searchValueSavedMovies,
       shortMoviesCheckbox,
       shortSavedMoviesCheckbox,
       moviesCards,
+      totalNumberMoviesCards,
     };
   }
 
@@ -436,6 +453,10 @@ export default function App() {
     }
   }
 
+  function getTotalNumberMoviesCardsFromLocalStorage() {
+    return localStorage.getItem("totalNumberMoviesCards");
+  }
+
   function updateData() {
     searchValueMovies && onSearchMovies(searchValueMovies);
     (searchValueSavedMovies || savedMoviesCards.length) &&
@@ -451,6 +472,7 @@ export default function App() {
     localStorage.removeItem("searchValueSavedMovies");
     localStorage.removeItem("shortMoviesCheckbox");
     localStorage.removeItem("shortSavedMoviesCheckbox");
+    localStorage.removeItem("totalNumberMoviesCards");
   }
 
   function resetStatesForRegisteredUser() {
@@ -652,18 +674,13 @@ export default function App() {
     const numberCardsInRow = calculateNumberMoviesCards({
       onButtonAddMoreCards: true,
     });
-    const totalNumberCards =
+    let totalNumberCards =
       numberCardsInRow === 1
         ? currentNumberCards + 2
         : getNumberCardsForAlignLastRow(numberCardsInRow, currentNumberCards);
-    setDisplayedMoviesCards(
-      filteredMoviesCards.slice(
-        0,
-        totalNumberCards > filteredMoviesCards.length
-          ? filteredMoviesCards.length
-          : totalNumberCards
-      )
-    );
+    while (totalNumberCards > filteredMoviesCards.length) --totalNumberCards;
+    localStorage.setItem("totalNumberMoviesCards", totalNumberCards);
+    setDisplayedMoviesCards(filteredMoviesCards.slice(0, totalNumberCards));
   }
 
   return (
@@ -673,7 +690,7 @@ export default function App() {
           <Header
             mainStyleHeader={mainStyleHeader}
             loggedIn={loggedIn}
-            visibleHeaderFooter={visibleHeaderFooter}
+            visibleHeader={visibleHeader}
           />
         )}
         <main className="content">
@@ -685,6 +702,7 @@ export default function App() {
                 <Main />
               </Route>
               <ProtectedRoute
+                exact
                 path="/profile"
                 component={Profile}
                 signOut={onSignOut}
@@ -695,7 +713,7 @@ export default function App() {
                   messageWithResultSubmitAuthorizationForms
                 }
               />
-              <Route path="/sign-in">
+              <Route exact path="/sign-in">
                 {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.*/}
                 {localStorage.getItem("jwt") ? (
                   <Redirect to="/" />
@@ -709,7 +727,7 @@ export default function App() {
                   />
                 )}
               </Route>
-              <Route path="/sign-up">
+              <Route exact path="/sign-up">
                 {/* если пользователь авторизовался, запрещаем переход на страницу авторизации по URL-адресу данного роута.*/}
                 {localStorage.getItem("jwt") ? (
                   <Redirect to="/" />
@@ -724,6 +742,7 @@ export default function App() {
                 )}
               </Route>
               <ProtectedRoute
+                exact
                 path="/movies"
                 component={Movies}
                 checkboxOn={shortMoviesCheckbox}
@@ -743,6 +762,7 @@ export default function App() {
                 statusLikeDislikeMovieCard={statusLikeDislikeMovieCard}
               />
               <ProtectedRoute
+                exact
                 path="/saved-movies"
                 component={SavedMovies}
                 checkboxOn={shortSavedMoviesCheckbox}
@@ -764,16 +784,12 @@ export default function App() {
                 previousValueSearchForm={searchValueSavedMovies}
               />
               <Route path="/">
-                <NotFound
-                  handleVisibleHeaderFooter={handleVisibleHeaderFooter}
-                />
+                <NotFound />
               </Route>
             </Switch>
           )}
         </main>
-        {!visiblePreloaderLoggedIn && (
-          <Footer visibleHeaderFooter={visibleHeaderFooter} />
-        )}
+        {!visiblePreloaderLoggedIn && <Footer visibleFooter={visibleFooter} />}
         <ErrorMessagePopup
           errorMessage={errorMessagePopupForError}
           onClose={handleCloseErrorMessagePopup}

@@ -3,9 +3,9 @@ import "./Footer.css";
 // импорт компонентов
 import Navigation from "../Navigation/Navigation";
 
-export default function Footer({ visibleHeaderFooter }) {
+export default function Footer({ visibleFooter }) {
   return (
-    <footer className={` ${visibleHeaderFooter ? "footer" : "display-none"} `}>
+    <footer className={` ${visibleFooter ? "footer" : "display-none"} `}>
       <p className="footer__description">
         Учебный проект Яндекс.Практикум х BeatFilm.
       </p>

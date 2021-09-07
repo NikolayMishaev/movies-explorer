@@ -54,9 +54,7 @@ export default function MoviesCard({
           `}
             type="button"
             onClick={locationSavedMovies ? handleDeleteCard : handleLikeClick}
-          >
-            {statusLikeDislikeMovieCard}
-          </button>
+          ></button>
           <p className="movies-card__duration">
             {card.duration
               ? convertMinutesToHours(card.duration)
