@@ -116,7 +116,7 @@ export default function Profile({
             aria-label="submit form"
             className={` entry__button-submit entry__button-submit_type_profile ${
               !currentFormValidator.isValid
-                ? "entry__button-submit_disabled"
+                ? "entry__button-submit_type_profile-disabled"
                 : ""
             }`}
             type="submit"

@@ -53,7 +53,7 @@
 
 @media (max-width: 979px) {
   .movies-card-list__container {
-    grid-auto-rows: 33vw;
+    grid-auto-rows: 35vw;
     grid-template-columns: repeat(2, 1fr);
   }
 }

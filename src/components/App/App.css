@@ -249,16 +249,42 @@
   transform: scale(1.05);
 }
 
-.entry__button-submit_disabled {
-  background: rgb(219, 218, 218);
-  color: #b8b8b8;
+.entry__button-submit:active:hover {
+  opacity: 0.8;
+  transform: scale(1);
+  transition: transform 0.1s;
+}
+
+.entry__button-submit_type_disabled {
+  background: rgb(223, 222, 222);
+  color: #cacaca;
+}
+
+.entry__button-submit_type_disabled:hover {
+  opacity: 1;
+  transform: none;
+  cursor: auto;
+}
+
+.entry__button-submit_type_profile-disabled {
+  background: rgb(223, 222, 222);
+  color: #cacaca;
   opacity: 0.4;
 }
 
-.entry__button-submit_disabled:hover {
+.entry__button-submit_type_profile-disabled:hover {
   transform: none;
-  cursor: auto;
   opacity: 0.4;
+  cursor: auto;
+}
+
+.entry__button-submit_type_disabled:hover::after {
+  content: "Нужно заполнить все поля формы.";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 70%;
+  color: red;
 }
 
 .entry__button-submit_type_profile {

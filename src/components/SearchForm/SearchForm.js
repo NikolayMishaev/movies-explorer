@@ -24,7 +24,7 @@ export default function SearchForm({
     const inputValue = currentFormValidator.isValid
       ? currentFormValidator.values.movie
       : previousValueSearchForm;
-    return inputValue.trim().toLowerCase();
+    return inputValue.toLowerCase();
   }
 
   function handleInputValue(e) {

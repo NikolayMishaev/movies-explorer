@@ -110,7 +110,9 @@ export default function Register({
         <button
           aria-label="submit form"
           className={` entry__button-submit ${
-            !currentFormValidator.isValid ? "entry__button-submit_disabled" : ""
+            !currentFormValidator.isValid
+              ? "entry__button-submit_type_disabled"
+              : ""
           } `}
           type="submit"
           // выключить кнопку, если отправляется запрос или введенные данные невалидны.
