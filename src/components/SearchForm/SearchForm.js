@@ -5,8 +5,8 @@ import useFormValidator from "../../hooks/useFormValidator";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 
 export default function SearchForm({
-  moviesSearchValueCheckboxes,
-  moviesSortingCheckboxes,
+  searchValueCheckboxes,
+  sortingCheckboxes,
   onSearchMovies,
   previousValueSearchForm,
 }) {
@@ -71,7 +71,7 @@ export default function SearchForm({
         </div>
         <fieldset className="search-form__fieldset">
           <legend className="search-form__legend">Критерии поиска</legend>
-          {moviesSearchValueCheckboxes.map((checkbox, i) => (
+          {searchValueCheckboxes.map((checkbox, i) => (
             <FilterCheckbox
               key={i}
               checkboxOn={checkbox.state}
@@ -82,7 +82,7 @@ export default function SearchForm({
         </fieldset>
         <fieldset className="search-form__fieldset">
           <legend className="search-form__legend">Сортировка</legend>
-          {moviesSortingCheckboxes.map((checkbox, i) => (
+          {sortingCheckboxes.map((checkbox, i) => (
             <FilterCheckbox
               key={i}
               checkboxOn={checkbox.state}

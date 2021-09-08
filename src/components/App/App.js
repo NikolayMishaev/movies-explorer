@@ -53,6 +53,7 @@ export default function App() {
   const location = useLocation();
   const history = useHistory();
 
+  // общие стейты приложения.
   // стейт для авторизации пользователя.
   const [loggedIn, setLoggedIn] = useState(false);
   // стейт с данными текущего авторизованного пользователя.
@@ -87,10 +88,7 @@ export default function App() {
   // стейт пути URL для перехода после авторизации пользователя.
   const [pathURL, setPathURL] = useState("");
 
-  // стейт с ключевым словом поиска в форме фильмов.
-  const [searchValueMovies, setSearchValueMovies] = useState("");
-  // стейт чекбокса короткомертажных фильмов.
-  const [shortMoviesCheckbox, setShortMoviesCheckbox] = useState(false);
+  // стейты чекбосов страницы "Фильмы".
   // стейт чекбокса поиска по названию фильма.
   const [nameMoviesCheckbox, setNameMoviesCheckbox] = useState(false);
   // стейт чекбокса поиска по году фильма.
@@ -102,6 +100,12 @@ export default function App() {
   // стейт чекбокса поиска по описанию фильма.
   const [descriptionMoviesCheckbox, setDescriptionMoviesCheckbox] =
     useState(false);
+  // стейт чекбокса короткомертажных фильмов.
+  const [shortMoviesCheckbox, setShortMoviesCheckbox] = useState(false);
+
+  // остальные стейты страницы "Фильмы".
+  // стейт с ключевым словом поиска в форме фильмов.
+  const [searchValueMovies, setSearchValueMovies] = useState("");
   // стейт сообщения с результатами поиска в форме поиска фильмов.
   const [messageWithResultSearchMovies, setMessageWithResultSearchMovies] =
     useState("");
@@ -110,6 +114,7 @@ export default function App() {
   // стейт отфильтрованных карточек фильмов.
   const [filteredMoviesCards, setFilteredMoviesCards] = useState([]);
   // стейт отфильтрованных карточек фильмов только по ключевому слову.
+  // стейт нужен для того, чтобы при отметке чекбоксов из группы "Сортировка" фильтрация проходила уже по отсортированным карточкам по ключевому слову, а не по всем имеющимся карточкам
   const [
     filteredMoviesCardsOnlyBySearcyValue,
     setFilteredMoviesCardsOnlyBySearcyValue,
@@ -119,11 +124,27 @@ export default function App() {
   // стейт с общим количеством карточек для отображения. Если добавляли карточки кнопкой "Еще".
   const [totalNumberMoviesCards, setTotalNumberMoviesCards] = useState(0);
 
-  // стейт с ключевым словом поиска в форме сохраненных фильмов.
-  const [searchValueSavedMovies, setSearchValueSavedMovies] = useState("");
+  // стейты чекбосов страницы "Сохраненные фильмы".
+  // стейт чекбокса поиска по названию фильма.
+  const [nameSavedMoviesCheckbox, setNameSavedMoviesCheckbox] = useState(false);
+  // стейт чекбокса поиска по году фильма.
+  const [yearSavedMoviesCheckbox, setYearSavedMoviesCheckbox] = useState(false);
+  // стейт чекбокса поиска по стране фильма.
+  const [countrySavedMoviesCheckbox, setCountrySavedMoviesCheckbox] =
+    useState(false);
+  // стейт чекбокса поиска по режиссеру фильма.
+  const [directorSavedMoviesCheckbox, setDirectorSavedMoviesCheckbox] =
+    useState(false);
+  // стейт чекбокса поиска по описанию фильма.
+  const [descriptionSavedMoviesCheckbox, setDescriptionSavedMoviesCheckbox] =
+    useState(false);
   // стейт чекбокса короткомертажных сохнаненных фильмов.
   const [shortSavedMoviesCheckbox, setShortSavedMoviesCheckbox] =
     useState(false);
+
+  // остальные стейты страницы "Сохраненные фильмы".
+  // стейт с ключевым словом поиска в форме сохраненных фильмов.
+  const [searchValueSavedMovies, setSearchValueSavedMovies] = useState("");
   // стейт сообщения с результатами поиска в форме поиска сохраненных фильмов.
   const [
     messageWithResultSearchSavedMovies,
@@ -202,7 +223,7 @@ export default function App() {
     if (shortMoviesCheckbox && filteredMoviesCards.length) {
       const { resultFiltered } = filterMoviesCards({
         cards: filteredMoviesCards,
-        checkbox: shortMoviesCheckbox,
+        checkboxes: { short: shortMoviesCheckbox },
       });
       setFilteredMoviesCards(resultFiltered);
     } else {
@@ -213,6 +234,9 @@ export default function App() {
   }, [shortMoviesCheckbox]);
 
   useEffect(() => {
+    const checkboxes = {
+      short: shortSavedMoviesCheckbox,
+    };
     loggedIn &&
       localStorage.setItem(
         "shortSavedMoviesCheckbox",
@@ -221,7 +245,7 @@ export default function App() {
     if (shortSavedMoviesCheckbox && filteredSavedMoviesCards.length) {
       const { resultFiltered } = filterMoviesCards({
         cards: filteredSavedMoviesCards,
-        checkbox: shortSavedMoviesCheckbox,
+        checkboxes,
       });
       setFilteredSavedMoviesCards(resultFiltered);
     } else {
@@ -235,7 +259,7 @@ export default function App() {
     ) {
       const { resultFiltered } = filterMoviesCards({
         cards: savedMoviesCards,
-        checkbox: shortSavedMoviesCheckbox,
+        checkboxes,
       });
       setFilteredSavedMoviesCards(resultFiltered);
       setFilteredSavedMoviesCardsOnlyBySearcyValue(savedMoviesCards);
@@ -388,7 +412,7 @@ export default function App() {
           searchValueMovies,
           searchValueSavedMovies,
           moviesCheckboxes,
-          shortSavedMoviesCheckbox,
+          savedMoviesCheckboxes,
           totalNumberMoviesCards,
         } = getAllSavedValuesFromLocalStorage();
         moviesCards && setMoviesCards(moviesCards);
@@ -405,8 +429,20 @@ export default function App() {
           setDescriptionMoviesCheckbox(moviesCheckboxes.description);
         moviesCheckboxes.short &&
           setShortMoviesCheckbox(moviesCheckboxes.short);
-        shortSavedMoviesCheckbox &&
-          setShortSavedMoviesCheckbox(shortSavedMoviesCheckbox);
+
+        savedMoviesCheckboxes.name &&
+          setNameSavedMoviesCheckbox(savedMoviesCheckboxes.name);
+        savedMoviesCheckboxes.year &&
+          setYearSavedMoviesCheckbox(savedMoviesCheckboxes.year);
+        savedMoviesCheckboxes.country &&
+          setCountrySavedMoviesCheckbox(savedMoviesCheckboxes.country);
+        savedMoviesCheckboxes.director &&
+          setDirectorSavedMoviesCheckbox(savedMoviesCheckboxes.director);
+        savedMoviesCheckboxes.description &&
+          setDescriptionSavedMoviesCheckbox(savedMoviesCheckboxes.description);
+        savedMoviesCheckboxes.short &&
+          setShortSavedMoviesCheckbox(savedMoviesCheckboxes.short);
+
         totalNumberMoviesCards &&
           setTotalNumberMoviesCards(totalNumberMoviesCards);
         setLoggedIn(true);
@@ -447,15 +483,14 @@ export default function App() {
     const searchValueMovies = getSearchValueMoviesFromLocalStorage();
     const searchValueSavedMovies = getSearchValueSavedMoviesFromLocalStorage();
     const moviesCheckboxes = getMoviesCheckboxesFromLocalStorage();
-    const shortSavedMoviesCheckbox =
-      getshortSavedMoviesCheckboxFromLocalStorage();
+    const savedMoviesCheckboxes = getSavedMoviesCheckboxexFromLocalStorage();
     const moviesCards = getMoviesCardsFromLocalStorage();
     const totalNumberMoviesCards = getTotalNumberMoviesCardsFromLocalStorage();
     return {
       searchValueMovies,
       searchValueSavedMovies,
       moviesCheckboxes,
-      shortSavedMoviesCheckbox,
+      savedMoviesCheckboxes,
       moviesCards,
       totalNumberMoviesCards,
     };
@@ -481,8 +516,17 @@ export default function App() {
     return checkboxes;
   }
 
-  function getshortSavedMoviesCheckboxFromLocalStorage() {
-    return localStorage.getItem("shortSavedMoviesCheckbox") === "true";
+  function getSavedMoviesCheckboxexFromLocalStorage() {
+    const checkboxes = {
+      name: localStorage.getItem("nameSavedMoviesCheckbox") === "true",
+      year: localStorage.getItem("yearSavedMoviesCheckbox") === "true",
+      country: localStorage.getItem("countrySavedMoviesCheckbox") === "true",
+      director: localStorage.getItem("directorSavedMoviesCheckbox") === "true",
+      description:
+        localStorage.getItem("descriptionSavedMoviesCheckbox") === "true",
+      short: localStorage.getItem("shortSavedMoviesCheckbox") === "true",
+    };
+    return checkboxes;
   }
 
   function getMoviesCardsFromLocalStorage() {
@@ -501,7 +545,17 @@ export default function App() {
     localStorage.removeItem("moviesCards");
     localStorage.removeItem("searchValueMovies");
     localStorage.removeItem("searchValueSavedMovies");
+    localStorage.removeItem("nameMoviesCheckbox");
+    localStorage.removeItem("yearMoviesCheckbox");
+    localStorage.removeItem("countryMoviesCheckbox");
+    localStorage.removeItem("directorMoviesCheckbox");
+    localStorage.removeItem("descriptionMoviesCheckbox");
     localStorage.removeItem("shortMoviesCheckbox");
+    localStorage.removeItem("nameSavedMoviesCheckbox");
+    localStorage.removeItem("yearSavedMoviesCheckbox");
+    localStorage.removeItem("countrySavedMoviesCheckbox");
+    localStorage.removeItem("directorSavedMoviesCheckbox");
+    localStorage.removeItem("descriptionSavedMoviesCheckbox");
     localStorage.removeItem("shortSavedMoviesCheckbox");
     localStorage.removeItem("totalNumberMoviesCards");
   }
@@ -510,7 +564,17 @@ export default function App() {
     setCurrentUser({});
     setSearchValueMovies("");
     setSearchValueSavedMovies("");
+    setNameMoviesCheckbox(true);
+    setYearMoviesCheckbox(false);
+    setCountryMoviesCheckbox(false);
+    setDirectorMoviesCheckbox(false);
+    setDescriptionMoviesCheckbox(false);
     setShortMoviesCheckbox(false);
+    setNameSavedMoviesCheckbox(true);
+    setYearSavedMoviesCheckbox(false);
+    setCountrySavedMoviesCheckbox(false);
+    setDirectorSavedMoviesCheckbox(false);
+    setDescriptionSavedMoviesCheckbox(false);
     setShortSavedMoviesCheckbox(false);
     setMessageWithResultSearchMovies("");
     setMessageWithResultSearchSavedMovies("");
@@ -541,6 +605,14 @@ export default function App() {
     setSearchValueMovies(searchValue);
     localStorage.setItem("searchValueMovies", searchValue);
     setMessageWithResultSearchMovies("");
+    const checkboxes = {
+      name: nameMoviesCheckbox,
+      year: yearMoviesCheckbox,
+      country: countryMoviesCheckbox,
+      director: directorMoviesCheckbox,
+      description: descriptionMoviesCheckbox,
+      short: shortMoviesCheckbox,
+    };
     if (!moviesCards.length) {
       const moviesCards = await getMoviesCardsFromAPI();
       if (moviesCards) {
@@ -549,14 +621,14 @@ export default function App() {
         handleFilterMoviesCards({
           cards: moviesCards,
           search: searchValue,
-          checkbox: shortMoviesCheckbox,
+          checkboxes,
         });
       }
     } else {
       handleFilterMoviesCards({
         cards: moviesCards,
         search: searchValue,
-        checkbox: shortMoviesCheckbox,
+        checkboxes,
       });
     }
   }
@@ -570,7 +642,14 @@ export default function App() {
       filterMoviesCards({
         cards: savedMoviesCards,
         search: searchValue,
-        checkbox: shortSavedMoviesCheckbox,
+        checkboxes: {
+          name: nameSavedMoviesCheckbox,
+          year: yearSavedMoviesCheckbox,
+          country: countrySavedMoviesCheckbox,
+          director: directorSavedMoviesCheckbox,
+          description: descriptionSavedMoviesCheckbox,
+          short: shortSavedMoviesCheckbox,
+        },
       });
     setFilteredSavedMoviesCards(resultFiltered);
     setFilteredSavedMoviesCardsOnlyBySearcyValue(
@@ -592,12 +671,12 @@ export default function App() {
       });
   }
 
-  function handleFilterMoviesCards({ cards, search, checkbox }) {
+  function handleFilterMoviesCards({ cards, search, checkboxes }) {
     const { resultFiltered, resultFilteredOnlyBySearcyValue } =
       filterMoviesCards({
         cards,
         search,
-        checkbox,
+        checkboxes,
       });
     setFilteredMoviesCards(resultFiltered);
     setFilteredMoviesCardsOnlyBySearcyValue(resultFilteredOnlyBySearcyValue);
@@ -606,7 +685,7 @@ export default function App() {
 
   // фильтр карточек по введенному ключевому слову в форму поиска и отмеченным флажкам.
   // заложена масштабируемость, для возможности фильтрации по нескольким чекбоксам.
-  function filterMoviesCards({ cards, search, checkbox }) {
+  function filterMoviesCards({ cards, search, checkboxes }) {
     console.log("фильтр");
     const filteredMoviesCardsOnlyBySearcyValue = [];
     const filteredMoviesCards = cards.filter((card) => {
@@ -625,20 +704,20 @@ export default function App() {
     });
 
     function findMatchSearchValueCheckboxes(card) {
-      if (yearMoviesCheckbox && !findMatchSearchValue(card.year)) return false;
-      if (countryMoviesCheckbox && !findMatchSearchValue(card.country))
+      if (checkboxes.year && !findMatchSearchValue(card.year)) return false;
+      if (checkboxes.country && !findMatchSearchValue(card.country))
         return false;
-      if (directorMoviesCheckbox && !findMatchSearchValue(card.director))
+      if (checkboxes.director && !findMatchSearchValue(card.director))
         return false;
-      if (descriptionMoviesCheckbox && !findMatchSearchValue(card.description))
+      if (checkboxes.description && !findMatchSearchValue(card.description))
         return false;
-      if (nameMoviesCheckbox && !findMatchMovieName([card.nameRU, card.nameEN]))
+      if (checkboxes.name && !findMatchMovieName([card.nameRU, card.nameEN]))
         return false;
       return true;
     }
 
     function findMatchSortingCheckboxes(card) {
-      if (checkbox && !findMatchMovieShort(card.duration)) {
+      if (checkboxes.short && !findMatchMovieShort(card.duration)) {
         // если хотя бы один из чекбоксов не прошел проверку вернуть false.
         return false;
       }
@@ -766,19 +845,54 @@ export default function App() {
     setDescriptionMoviesCheckbox(!descriptionMoviesCheckbox);
   }
 
-  function checkMinimumOneEnabledSearchValueCheckboxes() {
-    return (
-      nameMoviesCheckbox ||
-      yearMoviesCheckbox ||
-      countryMoviesCheckbox ||
-      directorMoviesCheckbox ||
-      descriptionMoviesCheckbox
+  function checkMinimumOneEnabledSearchValueCheckboxes(checkboxes) {
+    const { name, year, country, director, description } = checkboxes;
+    return name || year || country || director || description;
+  }
+
+  function handleNameSavedMoviesCheckbox() {
+    localStorage.setItem("nameSavedMoviesCheckbox", !nameSavedMoviesCheckbox);
+    setNameSavedMoviesCheckbox(!nameSavedMoviesCheckbox);
+  }
+
+  function handleYearSavedMoviesCheckbox() {
+    localStorage.setItem("yearSavedMoviesCheckbox", !yearSavedMoviesCheckbox);
+    setYearSavedMoviesCheckbox(!yearSavedMoviesCheckbox);
+  }
+
+  function handleCountrySavedMoviesCheckbox() {
+    localStorage.setItem(
+      "countrySavedMoviesCheckbox",
+      !countrySavedMoviesCheckbox
     );
+    setCountrySavedMoviesCheckbox(!countrySavedMoviesCheckbox);
+  }
+
+  function handleDirectorSavedMoviesCheckbox() {
+    localStorage.setItem(
+      "directorSavedMoviesCheckbox",
+      !directorSavedMoviesCheckbox
+    );
+    setDirectorSavedMoviesCheckbox(!directorSavedMoviesCheckbox);
+  }
+
+  function handleDescriptionSavedMoviesCheckbox() {
+    localStorage.setItem(
+      "descriptionSavedMoviesCheckbox",
+      !descriptionSavedMoviesCheckbox
+    );
+    setDescriptionSavedMoviesCheckbox(!descriptionSavedMoviesCheckbox);
   }
 
   useEffect(() => {
     if (loggedIn) {
-      checkMinimumOneEnabledSearchValueCheckboxes()
+      checkMinimumOneEnabledSearchValueCheckboxes({
+        name: nameMoviesCheckbox,
+        year: yearMoviesCheckbox,
+        country: countryMoviesCheckbox,
+        director: directorMoviesCheckbox,
+        description: descriptionMoviesCheckbox,
+      })
         ? searchValueMovies && onSearchMovies(searchValueMovies)
         : // т.к. setNameMoviesCheckbox(true) вернет undefined, для выполнения следующей за ним операции, использутеся оператор ||.
           setNameMoviesCheckbox(true) ||
@@ -790,6 +904,28 @@ export default function App() {
     countryMoviesCheckbox,
     directorMoviesCheckbox,
     descriptionMoviesCheckbox,
+  ]);
+
+  useEffect(() => {
+    if (loggedIn) {
+      checkMinimumOneEnabledSearchValueCheckboxes({
+        name: nameSavedMoviesCheckbox,
+        year: yearSavedMoviesCheckbox,
+        country: countrySavedMoviesCheckbox,
+        director: directorSavedMoviesCheckbox,
+        description: descriptionSavedMoviesCheckbox,
+      })
+        ? searchValueSavedMovies && onSearchSavedMovies(searchValueSavedMovies)
+        : // т.к. setNameSavedMoviesCheckbox(true) вернет undefined, для выполнения следующей за ним операции, использутеся оператор ||.
+          setNameSavedMoviesCheckbox(true) ||
+          localStorage.setItem("nameSavedMoviesCheckbox", true);
+    }
+  }, [
+    nameSavedMoviesCheckbox,
+    yearSavedMoviesCheckbox,
+    countrySavedMoviesCheckbox,
+    directorSavedMoviesCheckbox,
+    descriptionSavedMoviesCheckbox,
   ]);
 
   return (
@@ -906,8 +1042,40 @@ export default function App() {
                 exact
                 path="/saved-movies"
                 component={SavedMovies}
-                checkboxOn={shortSavedMoviesCheckbox}
-                handleShortMovieCheckbox={handleShortMovieCheckbox}
+                savedMoviesSearchValueCheckboxes={[
+                  {
+                    title: "Название",
+                    state: nameSavedMoviesCheckbox,
+                    handler: handleNameSavedMoviesCheckbox,
+                  },
+                  {
+                    title: "Год",
+                    state: yearSavedMoviesCheckbox,
+                    handler: handleYearSavedMoviesCheckbox,
+                  },
+                  {
+                    title: "Страна",
+                    state: countrySavedMoviesCheckbox,
+                    handler: handleCountrySavedMoviesCheckbox,
+                  },
+                  {
+                    title: "Режиссер",
+                    state: directorSavedMoviesCheckbox,
+                    handler: handleDirectorSavedMoviesCheckbox,
+                  },
+                  {
+                    title: "Описание",
+                    state: descriptionSavedMoviesCheckbox,
+                    handler: handleDescriptionSavedMoviesCheckbox,
+                  },
+                ]}
+                savedMoviesSortingCheckboxes={[
+                  {
+                    title: "Короткометражки",
+                    state: shortSavedMoviesCheckbox,
+                    handler: handleShortMovieCheckbox,
+                  },
+                ]}
                 locationSavedMovies={locationSavedMovies}
                 openPopupError={handleOpenErrorMessagePopup}
                 loggedIn={loggedIn}

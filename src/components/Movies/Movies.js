@@ -27,8 +27,8 @@ export default function Movies({
   return (
     <>
       <SearchForm
-        moviesSearchValueCheckboxes={moviesSearchValueCheckboxes}
-        moviesSortingCheckboxes={moviesSortingCheckboxes}
+        searchValueCheckboxes={moviesSearchValueCheckboxes}
+        sortingCheckboxes={moviesSortingCheckboxes}
         handleMoviesCards={handleMoviesCards}
         handleSearchValue={handleSearchValue}
         onSearchMovies={onSearchMovies}
