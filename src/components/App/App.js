@@ -91,6 +91,17 @@ export default function App() {
   const [searchValueMovies, setSearchValueMovies] = useState("");
   // стейт чекбокса короткомертажных фильмов.
   const [shortMoviesCheckbox, setShortMoviesCheckbox] = useState(false);
+  // стейт чекбокса поиска по названию фильма.
+  const [nameMoviesCheckbox, setNameMoviesCheckbox] = useState(false);
+  // стейт чекбокса поиска по году фильма.
+  const [yearMoviesCheckbox, setYearMoviesCheckbox] = useState(false);
+  // стейт чекбокса поиска по стране фильма.
+  const [countryMoviesCheckbox, setCountryMoviesCheckbox] = useState(false);
+  // стейт чекбокса поиска по режиссеру фильма.
+  const [directorMoviesCheckbox, setDirectorMoviesCheckbox] = useState(false);
+  // стейт чекбокса поиска по описанию фильма.
+  const [descriptionMoviesCheckbox, setDescriptionMoviesCheckbox] =
+    useState(false);
   // стейт сообщения с результатами поиска в форме поиска фильмов.
   const [messageWithResultSearchMovies, setMessageWithResultSearchMovies] =
     useState("");
@@ -194,12 +205,7 @@ export default function App() {
         checkbox: shortMoviesCheckbox,
       });
       setFilteredMoviesCards(resultFiltered);
-      !resultFiltered.length &&
-        setMessageWithResultSearchMovies(
-          MOVIE_SEARCH_FORM_MESSAGES.nothingWasFound
-        );
     } else {
-      setMessageWithResultSearchMovies("");
       // если в отфильтрованных только по слову ничего нет, тогда не обновляем стейт отфильтрованных карточек.
       filteredMoviesCardsOnlyBySearcyValue.length &&
         setFilteredMoviesCards(filteredMoviesCardsOnlyBySearcyValue);
@@ -247,6 +253,19 @@ export default function App() {
         totalNumberMoviesCards || numberCards
       );
     totalNumberMoviesCards && setTotalNumberMoviesCards(0);
+  }, [filteredMoviesCards]);
+
+  useEffect(() => {
+    // если отфильтрованных карточек нет и есть слово в форме поиска.
+    if (!filteredMoviesCards.length && searchValueMovies) {
+      setMessageWithResultSearchMovies(
+        MOVIE_SEARCH_FORM_MESSAGES.nothingWasFound
+      );
+      // иначе, если отфильтрованные сохраненные карточки есть.
+    } else {
+      setMessageWithResultSearchMovies("");
+      // иначе, если нет отфильтрованных сохраненных карточек и отмечен чекбокс сохраненных фильмов и есть сохраненные карточки.
+    }
   }, [filteredMoviesCards]);
 
   useEffect(() => {
@@ -368,7 +387,7 @@ export default function App() {
           moviesCards,
           searchValueMovies,
           searchValueSavedMovies,
-          shortMoviesCheckbox,
+          moviesCheckboxes,
           shortSavedMoviesCheckbox,
           totalNumberMoviesCards,
         } = getAllSavedValuesFromLocalStorage();
@@ -376,7 +395,16 @@ export default function App() {
         searchValueMovies && setSearchValueMovies(searchValueMovies);
         searchValueSavedMovies &&
           setSearchValueSavedMovies(searchValueSavedMovies);
-        shortMoviesCheckbox && setShortMoviesCheckbox(shortMoviesCheckbox);
+        moviesCheckboxes.name && setNameMoviesCheckbox(moviesCheckboxes.name);
+        moviesCheckboxes.year && setYearMoviesCheckbox(moviesCheckboxes.year);
+        moviesCheckboxes.country &&
+          setCountryMoviesCheckbox(moviesCheckboxes.country);
+        moviesCheckboxes.director &&
+          setDirectorMoviesCheckbox(moviesCheckboxes.director);
+        moviesCheckboxes.description &&
+          setDescriptionMoviesCheckbox(moviesCheckboxes.description);
+        moviesCheckboxes.short &&
+          setShortMoviesCheckbox(moviesCheckboxes.short);
         shortSavedMoviesCheckbox &&
           setShortSavedMoviesCheckbox(shortSavedMoviesCheckbox);
         totalNumberMoviesCards &&
@@ -418,7 +446,7 @@ export default function App() {
   function getAllSavedValuesFromLocalStorage() {
     const searchValueMovies = getSearchValueMoviesFromLocalStorage();
     const searchValueSavedMovies = getSearchValueSavedMoviesFromLocalStorage();
-    const shortMoviesCheckbox = getshortMovieCheckboxFromLocalStorage();
+    const moviesCheckboxes = getMoviesCheckboxesFromLocalStorage();
     const shortSavedMoviesCheckbox =
       getshortSavedMoviesCheckboxFromLocalStorage();
     const moviesCards = getMoviesCardsFromLocalStorage();
@@ -426,7 +454,7 @@ export default function App() {
     return {
       searchValueMovies,
       searchValueSavedMovies,
-      shortMoviesCheckbox,
+      moviesCheckboxes,
       shortSavedMoviesCheckbox,
       moviesCards,
       totalNumberMoviesCards,
@@ -441,8 +469,16 @@ export default function App() {
     return localStorage.getItem("searchValueSavedMovies");
   }
 
-  function getshortMovieCheckboxFromLocalStorage() {
-    return localStorage.getItem("shortMoviesCheckbox") === "true";
+  function getMoviesCheckboxesFromLocalStorage() {
+    const checkboxes = {
+      name: localStorage.getItem("nameMoviesCheckbox") === "true",
+      year: localStorage.getItem("yearMoviesCheckbox") === "true",
+      country: localStorage.getItem("countryMoviesCheckbox") === "true",
+      director: localStorage.getItem("directorMoviesCheckbox") === "true",
+      description: localStorage.getItem("descriptionMoviesCheckbox") === "true",
+      short: localStorage.getItem("shortMoviesCheckbox") === "true",
+    };
+    return checkboxes;
   }
 
   function getshortSavedMoviesCheckboxFromLocalStorage() {
@@ -494,7 +530,7 @@ export default function App() {
     setPathURL("");
   }
 
-  function handleMovieCheckbox() {
+  function handleShortMovieCheckbox() {
     locationSavedMovies
       ? setShortSavedMoviesCheckbox(!shortSavedMoviesCheckbox)
       : setShortMoviesCheckbox(!shortMoviesCheckbox);
@@ -565,31 +601,50 @@ export default function App() {
       });
     setFilteredMoviesCards(resultFiltered);
     setFilteredMoviesCardsOnlyBySearcyValue(resultFilteredOnlyBySearcyValue);
-    !resultFiltered.length &&
-      setMessageWithResultSearchMovies(
-        MOVIE_SEARCH_FORM_MESSAGES.nothingWasFound
-      );
     setVisiblePreloaderMovies(false);
   }
 
   // фильтр карточек по введенному ключевому слову в форму поиска и отмеченным флажкам.
   // заложена масштабируемость, для возможности фильтрации по нескольким чекбоксам.
   function filterMoviesCards({ cards, search, checkbox }) {
+    console.log("фильтр");
     const filteredMoviesCardsOnlyBySearcyValue = [];
     const filteredMoviesCards = cards.filter((card) => {
       // если не задано ключевое слово, не ищем по нему, ищем по оставшимся фильтрам.
       const matchBySearchValue = search
         ? // передать массив с именами фильмов в функцию для поиска совпадения по ключевому слову.
-          findMatchMovieName([card.nameRU, card.nameEN])
+          findMatchSearchValueCheckboxes(card)
         : true;
       search &&
         matchBySearchValue &&
         filteredMoviesCardsOnlyBySearcyValue.push(card);
       return (
-        // если совпадение по ключевому слову есть, передать картчоку в функцию проверки совпадений согласно установленным чекбоксам.
-        matchBySearchValue && findMatchCheckboxes(card)
+        // если совпадение по ключевому слову есть, передать картчоку в функцию проверки совпадений согласно установленным чекбоксам сортировки.
+        matchBySearchValue && findMatchSortingCheckboxes(card)
       );
     });
+
+    function findMatchSearchValueCheckboxes(card) {
+      if (yearMoviesCheckbox && !findMatchSearchValue(card.year)) return false;
+      if (countryMoviesCheckbox && !findMatchSearchValue(card.country))
+        return false;
+      if (directorMoviesCheckbox && !findMatchSearchValue(card.director))
+        return false;
+      if (descriptionMoviesCheckbox && !findMatchSearchValue(card.description))
+        return false;
+      if (nameMoviesCheckbox && !findMatchMovieName([card.nameRU, card.nameEN]))
+        return false;
+      return true;
+    }
+
+    function findMatchSortingCheckboxes(card) {
+      if (checkbox && !findMatchMovieShort(card.duration)) {
+        // если хотя бы один из чекбоксов не прошел проверку вернуть false.
+        return false;
+      }
+      // если все проверки (для каждого чекбокса) прошли успешно, вернуть true.
+      return true;
+    }
 
     function findMatchMovieName(arrayWithCardNameS) {
       return arrayWithCardNameS.some(
@@ -597,15 +652,8 @@ export default function App() {
       );
     }
 
-    function findMatchCheckboxes(card) {
-      // если флажок "короткометражки" отмечен, передать продолжительность фильма в функцию проверки совпадения по длительности.
-      // если совпадение есть, инвертировать результат, чтобы условие не выполнилось, перейти к проверке следующего чекбокса.
-      if (checkbox && !findMatchMovieShort(card.duration)) {
-        // если хотя бы один из чекбоксов не прошел проверку вернуть false.
-        return false;
-      }
-      // если все проверки (для каждого чекбокса) прошли успешно, вернуть true.
-      return true;
+    function findMatchSearchValue(value) {
+      return value && value.toLowerCase().includes(search);
     }
 
     function findMatchMovieShort(duration) {
@@ -690,6 +738,60 @@ export default function App() {
     setDisplayedMoviesCards(filteredMoviesCards.slice(0, totalNumberCards));
   }
 
+  function handleNameMoviesCheckbox() {
+    localStorage.setItem("nameMoviesCheckbox", !nameMoviesCheckbox);
+    setNameMoviesCheckbox(!nameMoviesCheckbox);
+  }
+
+  function handleYearMoviesCheckbox() {
+    localStorage.setItem("yearMoviesCheckbox", !yearMoviesCheckbox);
+    setYearMoviesCheckbox(!yearMoviesCheckbox);
+  }
+
+  function handleCountryMoviesCheckbox() {
+    localStorage.setItem("countryMoviesCheckbox", !countryMoviesCheckbox);
+    setCountryMoviesCheckbox(!countryMoviesCheckbox);
+  }
+
+  function handleDirectorMoviesCheckbox() {
+    localStorage.setItem("directorMoviesCheckbox", !directorMoviesCheckbox);
+    setDirectorMoviesCheckbox(!directorMoviesCheckbox);
+  }
+
+  function handleDescriptionMoviesCheckbox() {
+    localStorage.setItem(
+      "descriptionMoviesCheckbox",
+      !descriptionMoviesCheckbox
+    );
+    setDescriptionMoviesCheckbox(!descriptionMoviesCheckbox);
+  }
+
+  function checkMinimumOneEnabledSearchValueCheckboxes() {
+    return (
+      nameMoviesCheckbox ||
+      yearMoviesCheckbox ||
+      countryMoviesCheckbox ||
+      directorMoviesCheckbox ||
+      descriptionMoviesCheckbox
+    );
+  }
+
+  useEffect(() => {
+    if (loggedIn) {
+      checkMinimumOneEnabledSearchValueCheckboxes()
+        ? searchValueMovies && onSearchMovies(searchValueMovies)
+        : // т.к. setNameMoviesCheckbox(true) вернет undefined, для выполнения следующей за ним операции, использутеся оператор ||.
+          setNameMoviesCheckbox(true) ||
+          localStorage.setItem("nameMoviesCheckbox", true);
+    }
+  }, [
+    nameMoviesCheckbox,
+    yearMoviesCheckbox,
+    countryMoviesCheckbox,
+    directorMoviesCheckbox,
+    descriptionMoviesCheckbox,
+  ]);
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page page_align_center">
@@ -752,8 +854,40 @@ export default function App() {
                 exact
                 path="/movies"
                 component={Movies}
-                checkboxOn={shortMoviesCheckbox}
-                handleMovieCheckbox={handleMovieCheckbox}
+                moviesSearchValueCheckboxes={[
+                  {
+                    title: "Название",
+                    state: nameMoviesCheckbox,
+                    handler: handleNameMoviesCheckbox,
+                  },
+                  {
+                    title: "Год",
+                    state: yearMoviesCheckbox,
+                    handler: handleYearMoviesCheckbox,
+                  },
+                  {
+                    title: "Страна",
+                    state: countryMoviesCheckbox,
+                    handler: handleCountryMoviesCheckbox,
+                  },
+                  {
+                    title: "Режиссер",
+                    state: directorMoviesCheckbox,
+                    handler: handleDirectorMoviesCheckbox,
+                  },
+                  {
+                    title: "Описание",
+                    state: descriptionMoviesCheckbox,
+                    handler: handleDescriptionMoviesCheckbox,
+                  },
+                ]}
+                moviesSortingCheckboxes={[
+                  {
+                    title: "Короткометражки",
+                    state: shortMoviesCheckbox,
+                    handler: handleShortMovieCheckbox,
+                  },
+                ]}
                 openPopupError={handleOpenErrorMessagePopup}
                 loggedIn={loggedIn}
                 visiblePreloader={visiblePreloaderMovies}
@@ -773,7 +907,7 @@ export default function App() {
                 path="/saved-movies"
                 component={SavedMovies}
                 checkboxOn={shortSavedMoviesCheckbox}
-                handleMovieCheckbox={handleMovieCheckbox}
+                handleShortMovieCheckbox={handleShortMovieCheckbox}
                 locationSavedMovies={locationSavedMovies}
                 openPopupError={handleOpenErrorMessagePopup}
                 loggedIn={loggedIn}

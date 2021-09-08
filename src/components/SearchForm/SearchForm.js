@@ -5,9 +5,8 @@ import useFormValidator from "../../hooks/useFormValidator";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 
 export default function SearchForm({
-  checkboxOn,
-  handleMovieCheckbox,
-  handleSearchValue,
+  moviesSearchValueCheckboxes,
+  moviesSortingCheckboxes,
   onSearchMovies,
   previousValueSearchForm,
 }) {
@@ -70,10 +69,28 @@ export default function SearchForm({
             Нужно ввести ключевое слово
           </span>
         </div>
-        <FilterCheckbox
-          checkboxOn={checkboxOn}
-          handleMovieCheckbox={handleMovieCheckbox}
-        />
+        <fieldset className="search-form__fieldset">
+          <legend className="search-form__legend">Критерии поиска</legend>
+          {moviesSearchValueCheckboxes.map((checkbox, i) => (
+            <FilterCheckbox
+              key={i}
+              checkboxOn={checkbox.state}
+              handleMovieCheckbox={checkbox.handler}
+              title={checkbox.title}
+            />
+          ))}
+        </fieldset>
+        <fieldset className="search-form__fieldset">
+          <legend className="search-form__legend">Сортировка</legend>
+          {moviesSortingCheckboxes.map((checkbox, i) => (
+            <FilterCheckbox
+              key={i}
+              checkboxOn={checkbox.state}
+              handleMovieCheckbox={checkbox.handler}
+              title={checkbox.title}
+            />
+          ))}
+        </fieldset>
       </form>
     </section>
   );

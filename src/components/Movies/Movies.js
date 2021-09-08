@@ -7,8 +7,8 @@ import Preloader from "../Preloader/Preloader";
 import SearchMessage from "../SearchMessage/SearchMessage";
 
 export default function Movies({
-  checkboxOn,
-  handleMovieCheckbox,
+  moviesSearchValueCheckboxes,
+  moviesSortingCheckboxes,
   handleSearchValue,
   openPopupError,
   visiblePreloader,
@@ -27,9 +27,9 @@ export default function Movies({
   return (
     <>
       <SearchForm
+        moviesSearchValueCheckboxes={moviesSearchValueCheckboxes}
+        moviesSortingCheckboxes={moviesSortingCheckboxes}
         handleMoviesCards={handleMoviesCards}
-        checkboxOn={checkboxOn}
-        handleMovieCheckbox={handleMovieCheckbox}
         handleSearchValue={handleSearchValue}
         onSearchMovies={onSearchMovies}
         previousValueSearchForm={previousValueSearchForm}

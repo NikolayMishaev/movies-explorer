@@ -1,7 +1,11 @@
 import React from "react";
 import "./FilterCheckbox.css";
 
-export default function FilterCheckbox({ checkboxOn, handleMovieCheckbox }) {
+export default function FilterCheckbox({
+  title,
+  checkboxOn,
+  handleMovieCheckbox,
+}) {
   return (
     <div className="filter-checkbox">
       <label className="filter-checkbox__field">
@@ -13,7 +17,7 @@ export default function FilterCheckbox({ checkboxOn, handleMovieCheckbox }) {
         ></input>
         <span className="filter-checkbox__visible-checkbox"></span>
       </label>
-      <p className="filter-checkbox__checkbox-name">Короткометражки</p>
+      <p className="filter-checkbox__checkbox-name">{title}</p>
     </div>
   );
 }

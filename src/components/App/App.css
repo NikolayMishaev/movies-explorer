@@ -284,7 +284,7 @@
   left: 50%;
   transform: translateX(-50%);
   top: 70%;
-  color: red;
+  color: #ff4062;
 }
 
 .entry__button-submit_type_profile {

@@ -1,6 +1,6 @@
 // функция конвертации продолжительности из минут в часы
 export function convertMinutesToHours(duration) {
-  const hours = (duration / 60).toFixed();
+  const hours = Math.floor(duration / 60);
   const minutes = duration % 60;
   return `${+hours ? `${hours}ч ` : ""}${+minutes ? `${minutes}м` : ""}`;
 }
