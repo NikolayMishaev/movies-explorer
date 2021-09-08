@@ -1,3 +1,25 @@
+const DURATION_SHORT_MOVIE = 40;
+
+const BREAKPOINTS = {
+  mobile: 629,
+  tablet: 989,
+  laptop: 1279,
+};
+
+const BASIC_NUMBER_CARDS = {
+  mobile: 5,
+  tablet: 8,
+  laptop: 12,
+  desktop: 16,
+};
+
+const NUMBER_CARDS_IN_ROW = {
+  mobile: 1,
+  tablet: 2,
+  laptop: 3,
+  desktop: 4,
+};
+
 const DEFAULT_VALUES_API_DATA = {
   string: "данные отсутствовали в базе BeatfilmMovies",
   number: 0,
@@ -13,4 +35,11 @@ const API = {
   },
 };
 
-export { DEFAULT_VALUES_API_DATA, API };
+export {
+  DEFAULT_VALUES_API_DATA,
+  API,
+  DURATION_SHORT_MOVIE,
+  BREAKPOINTS,
+  BASIC_NUMBER_CARDS,
+  NUMBER_CARDS_IN_ROW,
+};

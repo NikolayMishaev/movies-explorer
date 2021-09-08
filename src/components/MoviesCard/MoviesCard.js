@@ -5,7 +5,6 @@ import { convertMinutesToHours } from "../../utils/utils";
 export default function MoviesCard({
   card,
   locationSavedMovies,
-  openPopupError,
   onCardLike,
   savedMoviesCards,
   onCardDelete,
