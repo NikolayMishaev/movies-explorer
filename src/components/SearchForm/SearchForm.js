@@ -109,16 +109,26 @@ export default function SearchForm({
         </fieldset>
         <fieldset className="search-form__fieldset">
           <legend className="search-form__legend">Настройки</legend>
-          {settingsButtons.map((button, i) => (
-            <button
-              key={i}
-              className="search-form__button-reset"
-              type="reset"
-              onClick={button.handler}
-            >
-              {button.title}
-            </button>
-          ))}
+          {settingsButtons.map((button, i) =>
+            button.type === "button" ? (
+              <button
+                key={i}
+                className="search-form__button-reset"
+                type="reset"
+                onClick={button.handler}
+              >
+                {button.title}
+              </button>
+            ) : (
+              <FilterCheckbox
+                key={i}
+                checkboxOn={button.state}
+                handleMovieCheckbox={button.handler}
+                title={button.title}
+                className={button.className}
+              />
+            )
+          )}
           <div
             className={`search-form__overlay ${
               previousValueSearchForm || currentFormValidator.values.movie

@@ -113,6 +113,8 @@ export default function App() {
   const [shortMoviesCheckbox, setShortMoviesCheckbox] = useState(false);
   // стейт чекбокса сортировки по алфавиту фильмов.
   const [alphabetMoviesCheckbox, setAlphabetMoviesCheckbox] = useState(false);
+  // стейт чекбокса мульти выбора чекбокосов фильмов.
+  const [multiMoviesCheckbox, setMultiMoviesCheckbox] = useState(false);
 
   // остальные стейты страницы "Фильмы".
   // стейт с ключевым словом поиска в форме фильмов.
@@ -269,7 +271,11 @@ export default function App() {
     } else {
       // если в отфильтрованных только по слову ничего нет, тогда не обновляем стейт отфильтрованных карточек.
       filteredMoviesCardsOnlyBySearcyValue.length &&
-        setFilteredMoviesCards(filteredMoviesCardsOnlyBySearcyValue);
+        setFilteredMoviesCards(
+          alphabetMoviesCheckbox
+            ? [...sortAlphabetically(filteredMoviesCardsOnlyBySearcyValue)]
+            : filteredMoviesCardsOnlyBySearcyValue
+        );
     }
   }, [shortMoviesCheckbox]);
 
@@ -736,22 +742,42 @@ export default function App() {
 
   function handleNameMoviesCheckbox() {
     localStorage.setItem("nameMoviesCheckbox", !nameMoviesCheckbox);
-    setNameMoviesCheckbox(!nameMoviesCheckbox);
+    if (!multiMoviesCheckbox) {
+      resetAllStatesMoviesCheckboxes();
+      setNameMoviesCheckbox(true);
+    } else {
+      setNameMoviesCheckbox(!nameMoviesCheckbox);
+    }
   }
 
   function handleYearMoviesCheckbox() {
     localStorage.setItem("yearMoviesCheckbox", !yearMoviesCheckbox);
-    setYearMoviesCheckbox(!yearMoviesCheckbox);
+    if (!multiMoviesCheckbox) {
+      resetAllStatesMoviesCheckboxes();
+      setYearMoviesCheckbox(true);
+    } else {
+      setYearMoviesCheckbox(!yearMoviesCheckbox);
+    }
   }
 
   function handleCountryMoviesCheckbox() {
     localStorage.setItem("countryMoviesCheckbox", !countryMoviesCheckbox);
-    setCountryMoviesCheckbox(!countryMoviesCheckbox);
+    if (!multiMoviesCheckbox) {
+      resetAllStatesMoviesCheckboxes();
+      setCountryMoviesCheckbox(true);
+    } else {
+      setCountryMoviesCheckbox(!countryMoviesCheckbox);
+    }
   }
 
   function handleDirectorMoviesCheckbox() {
     localStorage.setItem("directorMoviesCheckbox", !directorMoviesCheckbox);
-    setDirectorMoviesCheckbox(!directorMoviesCheckbox);
+    if (!multiMoviesCheckbox) {
+      resetAllStatesMoviesCheckboxes();
+      setDirectorMoviesCheckbox(true);
+    } else {
+      setDirectorMoviesCheckbox(!directorMoviesCheckbox);
+    }
   }
 
   function handleDescriptionMoviesCheckbox() {
@@ -759,7 +785,20 @@ export default function App() {
       "descriptionMoviesCheckbox",
       !descriptionMoviesCheckbox
     );
-    setDescriptionMoviesCheckbox(!descriptionMoviesCheckbox);
+    if (!multiMoviesCheckbox) {
+      resetAllStatesMoviesCheckboxes();
+      setDescriptionMoviesCheckbox(true);
+    } else {
+      setDescriptionMoviesCheckbox(!descriptionMoviesCheckbox);
+    }
+  }
+
+  function resetAllStatesMoviesCheckboxes() {
+    setNameMoviesCheckbox(false);
+    setYearMoviesCheckbox(false);
+    setCountryMoviesCheckbox(false);
+    setDirectorMoviesCheckbox(false);
+    setDescriptionMoviesCheckbox(false);
   }
 
   // обработчики чекбосов на странице "Сохраненные фильмы".
@@ -816,10 +855,17 @@ export default function App() {
   }
 
   useEffect(() => {
-    alphabetMoviesCheckbox
-      ? setFilteredMoviesCards([...sortAlphabetically(filteredMoviesCards)])
-      : onSearchMovies(searchValueMovies);
+    if (loggedIn) {
+      alphabetMoviesCheckbox
+        ? setFilteredMoviesCards([...sortAlphabetically(filteredMoviesCards)])
+        : onSearchMovies(searchValueMovies);
+    }
   }, [alphabetMoviesCheckbox]);
+
+  function handleMultiMoviesCheckbox() {
+    localStorage.setItem("multiMoviesCheckbox", !multiMoviesCheckbox);
+    setMultiMoviesCheckbox(!multiMoviesCheckbox);
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -924,8 +970,16 @@ export default function App() {
                 ]}
                 moviesSettingsButtons={[
                   {
+                    title: "Мульти",
+                    state: multiMoviesCheckbox,
+                    handler: handleMultiMoviesCheckbox,
+                    type: "checkbox,",
+                    className: "multi",
+                  },
+                  {
                     title: "Сбросить",
                     handler: handleResetMovies,
+                    type: "button",
                   },
                 ]}
                 loggedIn={loggedIn}

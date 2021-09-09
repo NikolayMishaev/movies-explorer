@@ -5,9 +5,10 @@ export default function FilterCheckbox({
   title,
   checkboxOn,
   handleMovieCheckbox,
+  className,
 }) {
   return (
-    <div className="filter-checkbox">
+    <div className={` filter-checkbox  `}>
       <label className="filter-checkbox__field">
         <input
           className="filter-checkbox__checkbox"
@@ -15,7 +16,9 @@ export default function FilterCheckbox({
           checked={checkboxOn}
           onChange={handleMovieCheckbox}
         ></input>
-        <span className="filter-checkbox__visible-checkbox"></span>
+        <span
+          className={` filter-checkbox__visible-checkbox filter-checkbox__visible-checkbox_type_${className} `}
+        ></span>
       </label>
       <p className="filter-checkbox__checkbox-name">{title}</p>
     </div>

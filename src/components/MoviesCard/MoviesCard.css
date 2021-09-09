@@ -8,7 +8,7 @@
   overflow: hidden;
   position: relative;
   transition: all 1s;
-  z-index: 1;
+  z-index: 0;
 }
 
 .movies-card__link:hover {
@@ -245,7 +245,7 @@
 
 .card-overlay__description::-webkit-scrollbar-thumb {
   border-radius: 5px;
-  background-color: #65e90d;
+  background-color: #2be080;
 }
 
 .card-overlay__title::-webkit-scrollbar {

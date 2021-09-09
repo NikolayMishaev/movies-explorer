@@ -54,12 +54,12 @@
 .search-form__fieldset {
   display: flex;
   justify-content: center;
-  padding: 0 15px;
+  padding: 0 0 0 15px;
   flex-wrap: wrap;
   border-radius: 30px;
   border: 1px solid rgb(214, 214, 214);
   box-shadow: 2px 2px 5px rgb(214, 214, 214);
-  margin: 10px;
+  margin: 5px;
   position: relative;
 }
 
@@ -148,22 +148,37 @@
 .search-form__button-reset {
   border: none;
   border-radius: 30px;
-  height: 25px;
+  height: 20px;
   font-style: normal;
   font-weight: normal;
   font-size: 12px;
   line-height: 18px;
-  margin: 8px;
+  margin: 15px 15px 15px 0;
   padding: 0 10px;
   color: white;
   background: #000000;
   transition: all 0.5s;
+  position: relative;
 }
 
 @media (max-width: 400px) {
   .search-form__button-reset {
     font-size: 11px;
   }
+}
+
+.search-form__button-reset:hover::after {
+  content: "кнопка сброса поискового запроса, предыдущего результата и флажков чекбоксов";
+  position: absolute;
+  color: green;
+  font-size: 11px;
+  line-height: 14px;
+  width: 140px;
+  left: -30px;
+  top: 31px;
+  border: 1px dashed green;
+  border-radius: 15px;
+  padding: 5px;
 }
 
 .search-form__button-reset:hover {
