@@ -5,7 +5,6 @@ import MoviesCard from "../MoviesCard/MoviesCard";
 
 export default function MoviesCardList({
   locationSavedMovies,
-  openPopupError,
   moviesCards,
   onCardLike,
   savedMoviesCards,
@@ -26,7 +25,6 @@ export default function MoviesCardList({
             card={card}
             key={card._id || card.id}
             locationSavedMovies={locationSavedMovies}
-            openPopupError={openPopupError}
             onCardLike={onCardLike}
             savedMoviesCards={savedMoviesCards}
             onCardDelete={onCardDelete}

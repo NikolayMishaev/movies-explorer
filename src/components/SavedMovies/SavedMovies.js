@@ -10,7 +10,6 @@ export default function SavedMovies({
   savedMoviesSearchValueCheckboxes,
   savedMoviesSortingCheckboxes,
   savedMoviesSettingsButtons,
-  openPopupError,
   preloaderVisible,
   locationSavedMovies,
   savedMoviesCards,
@@ -28,6 +27,7 @@ export default function SavedMovies({
         settingsButtons={savedMoviesSettingsButtons}
         onSearchMovies={onSearchSavedMovies}
         previousValueSearchForm={previousValueSearchForm}
+        locationSavedMovies={locationSavedMovies}
       />
       {preloaderVisible ? (
         <Preloader />
@@ -37,7 +37,6 @@ export default function SavedMovies({
         <MoviesCardList
           moviesCards={savedMoviesCards}
           locationSavedMovies={locationSavedMovies}
-          openPopupError={openPopupError}
           onCardLike={onCardLike}
           onCardDelete={onCardDelete}
           savedMoviesCards={savedMoviesCards}

@@ -58,8 +58,9 @@
   flex-wrap: wrap;
   border-radius: 30px;
   border: 1px solid rgb(214, 214, 214);
-  box-shadow: 2px 2px 5px rgb(214, 214, 214);;
+  box-shadow: 2px 2px 5px rgb(214, 214, 214);
   margin: 10px;
+  position: relative;
 }
 
 @media (max-width: 700px) {
@@ -159,9 +160,9 @@
   transition: all 0.5s;
 }
 .search-form__button-reset:hover {
-cursor: pointer;
-opacity: 0.7;
-transform: scale(1.05);
+  cursor: pointer;
+  opacity: 0.7;
+  transform: scale(1.05);
 }
 
 .search-form__button-reset:active:hover {
@@ -191,4 +192,23 @@ transform: scale(1.05);
 .search-form__input-error_active {
   color: #ff4062;
   display: block;
+}
+
+.search-form__overlay {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: white;
+  opacity: 0.8;
+  border-radius: 15px 15px 25px 25px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s;
+}
+
+.search-form__overlay_active {
+  opacity: 0.8;
+  visibility: visible;
 }

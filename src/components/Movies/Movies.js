@@ -11,7 +11,6 @@ export default function Movies({
   moviesSortingCheckboxes,
   moviesSettingsButtons,
   handleSearchValue,
-  openPopupError,
   visiblePreloader,
   handleMoviesCards,
   moviesCards,
@@ -43,7 +42,6 @@ export default function Movies({
       ) : (
         <MoviesCardList
           moviesCards={moviesCards}
-          openPopupError={openPopupError}
           onCardLike={onCardLike}
           onCardDelete={onCardDelete}
           savedMoviesCards={savedMoviesCards}

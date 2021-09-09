@@ -372,11 +372,6 @@ export default function App() {
     }
   }, [filteredSavedMoviesCards]);
 
-  // обработчик открытия модального окна с ошибкой.
-  function handleOpenErrorMessagePopup(errorMessage) {
-    setErrorMessagePopupForError(errorMessage);
-  }
-
   // обработчик закрытия модального окна с ошибкой.
   function handleCloseErrorMessagePopup() {
     setErrorMessagePopupForError("");
@@ -910,7 +905,6 @@ export default function App() {
                     handler: handleResetMovies,
                   },
                 ]}
-                openPopupError={handleOpenErrorMessagePopup}
                 loggedIn={loggedIn}
                 visiblePreloader={visiblePreloaderMovies}
                 filteredMoviesCards={filteredMoviesCards}
@@ -969,7 +963,6 @@ export default function App() {
                   },
                 ]}
                 locationSavedMovies={locationSavedMovies}
-                openPopupError={handleOpenErrorMessagePopup}
                 loggedIn={loggedIn}
                 // если есть отфильтрованные сохраненные фильмы или форма поиска уже была отправлена,
                 // показывать всегда все отфильтрованные сохраненные фильмы, иначе показать только все сохраненные фильмы.

@@ -10,6 +10,7 @@ export default function SearchForm({
   settingsButtons,
   onSearchMovies,
   previousValueSearchForm,
+  locationSavedMovies,
 }) {
   const currentFormValidator = useFormValidator();
   // стейт, для проверки данных в поле инпута, т.к. при вставке в поле инпута значения из localStorage, событие onChange еще не сработало
@@ -78,6 +79,13 @@ export default function SearchForm({
               title={checkbox.title}
             />
           ))}
+          <div
+            className={`search-form__overlay ${
+              previousValueSearchForm || currentFormValidator.values.movie
+                ? ""
+                : "search-form__overlay_active"
+            }`}
+          ></div>
         </fieldset>
         <fieldset className="search-form__fieldset">
           <legend className="search-form__legend">Сортировка</legend>
@@ -89,6 +97,15 @@ export default function SearchForm({
               title={checkbox.title}
             />
           ))}
+          {!locationSavedMovies && (
+            <div
+              className={`search-form__overlay ${
+                previousValueSearchForm || currentFormValidator.values.movie
+                  ? ""
+                  : "search-form__overlay_active"
+              }`}
+            ></div>
+          )}
         </fieldset>
         <fieldset className="search-form__fieldset">
           <legend className="search-form__legend">Настройки</legend>
@@ -102,6 +119,13 @@ export default function SearchForm({
               {button.title}
             </button>
           ))}
+          <div
+            className={`search-form__overlay ${
+              previousValueSearchForm || currentFormValidator.values.movie
+                ? ""
+                : "search-form__overlay_active"
+            }`}
+          ></div>
         </fieldset>
       </form>
     </section>
