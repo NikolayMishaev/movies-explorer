@@ -25,6 +25,7 @@ import {
   getNumberCardsForAlignLastRow,
   filterMoviesCards,
   checkMinimumOneEnabledSearchValueCheckboxes,
+  sortAlphabetically,
 } from "../../utils/utils";
 import {
   getAllSavedValuesFromLocalStorage,
@@ -110,6 +111,8 @@ export default function App() {
     useState(false);
   // стейт чекбокса короткомертажных фильмов.
   const [shortMoviesCheckbox, setShortMoviesCheckbox] = useState(false);
+  // стейт чекбокса сортировки по алфавиту фильмов.
+  const [alphabetMoviesCheckbox, setAlphabetMoviesCheckbox] = useState(false);
 
   // остальные стейты страницы "Фильмы".
   // стейт с ключевым словом поиска в форме фильмов.
@@ -257,7 +260,10 @@ export default function App() {
     if (shortMoviesCheckbox && filteredMoviesCards.length) {
       const { resultFiltered } = filterMoviesCards({
         cards: filteredMoviesCards,
-        checkboxes: { short: shortMoviesCheckbox },
+        checkboxes: {
+          short: shortMoviesCheckbox,
+          alphabet: alphabetMoviesCheckbox,
+        },
       });
       setFilteredMoviesCards(resultFiltered);
     } else {
@@ -577,6 +583,7 @@ export default function App() {
       director: directorMoviesCheckbox,
       description: descriptionMoviesCheckbox,
       short: shortMoviesCheckbox,
+      alphabet: alphabetMoviesCheckbox,
     };
     if (!moviesCards.length) {
       const moviesCards = await getMoviesCardsFromAPI();
@@ -803,6 +810,17 @@ export default function App() {
     window.location.reload();
   }
 
+  function handleAlphabetMoviesCheckbox() {
+    localStorage.setItem("alphabetMoviesCheckbox", !alphabetMoviesCheckbox);
+    setAlphabetMoviesCheckbox(!alphabetMoviesCheckbox);
+  }
+
+  useEffect(() => {
+    alphabetMoviesCheckbox
+      ? setFilteredMoviesCards([...sortAlphabetically(filteredMoviesCards)])
+      : onSearchMovies(searchValueMovies);
+  }, [alphabetMoviesCheckbox]);
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page page_align_center">
@@ -897,6 +915,11 @@ export default function App() {
                     title: "Короткометражки",
                     state: shortMoviesCheckbox,
                     handler: handleShortMoviesCheckbox,
+                  },
+                  {
+                    title: "Алфавит",
+                    state: alphabetMoviesCheckbox,
+                    handler: handleAlphabetMoviesCheckbox,
                   },
                 ]}
                 moviesSettingsButtons={[

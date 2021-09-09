@@ -98,7 +98,9 @@ export function filterMoviesCards({ cards, search, checkboxes }) {
   function findMatchMovieShort(duration) {
     return duration && duration <= DURATION_SHORT_MOVIE;
   }
-
+  checkboxes.alphabet && sortAlphabetically(filteredMoviesCards);
+  checkboxes.alphabet &&
+    sortAlphabetically(filteredMoviesCardsOnlyBySearcyValue);
   return {
     resultFiltered: filteredMoviesCards,
     resultFilteredOnlyBySearcyValue: filteredMoviesCardsOnlyBySearcyValue,
@@ -109,4 +111,10 @@ export function filterMoviesCards({ cards, search, checkboxes }) {
 export function checkMinimumOneEnabledSearchValueCheckboxes(checkboxes) {
   const { name, year, country, director, description } = checkboxes;
   return name || year || country || director || description;
+}
+
+export function sortAlphabetically(cards) {
+  return cards.sort((a, b) =>
+    a.nameRU.toLowerCase().trim() < b.nameRU.toLowerCase().trim() ? -1 : 1
+  );
 }
