@@ -11,6 +11,10 @@ export default function MoviesCard({
   statusLikeDislikeMovieCard,
 }) {
   const isLiked = savedMoviesCards.some((i) => i.movieId === card.id);
+  const duration = card.duration
+    ? convertMinutesToHours(card.duration)
+    : "нет данных";
+
   function handleLikeClick(e) {
     isLiked ? handleDeleteCard() : onCardLike(card);
   }
@@ -40,6 +44,26 @@ export default function MoviesCard({
             }`}
             alt={card.nameRU}
           />
+          <div className="card-overlay">
+            <h2 className="card-overlay__title">
+              {card.nameRU || "нет данных"}
+            </h2>
+            <p className="card-overlay__year">
+              Год: {card.year || "нет данных"}
+            </p>
+            <p className="card-overlay__country">
+              Страна: {card.country || "нет данных"}
+            </p>
+            <p className="card-overlay__director">
+              Режиссер: {card.director || "нет данных"}
+            </p>
+            <p className="card-overlay__description">
+              {card.description || "нет данных"}
+            </p>
+            <p className="card-overlay__duration">
+              Продолжительность: {duration}
+            </p>
+          </div>
         </a>
         <div className="movies-card__description">
           <h2 className="movies-card__title">{card.nameRU}</h2>
@@ -54,11 +78,7 @@ export default function MoviesCard({
             type="button"
             onClick={locationSavedMovies ? handleDeleteCard : handleLikeClick}
           ></button>
-          <p className="movies-card__duration">
-            {card.duration
-              ? convertMinutesToHours(card.duration)
-              : "нет данных"}
-          </p>
+          <p className="movies-card__duration">{duration}</p>
         </div>
       </li>
     </>

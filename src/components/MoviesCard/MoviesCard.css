@@ -6,6 +6,36 @@
 .movies-card__link {
   flex: 1;
   overflow: hidden;
+  position: relative;
+  transition: all 1s;
+  z-index: 1;
+}
+
+.movies-card__link:hover {
+  transform: scale(1.3);
+  transition: all 1s 1s;
+  z-index: 11;
+  border-radius: 10px;
+  /* border: 1px solid#f3c1f8; */
+  box-shadow: 0 0 10px #ea74f5;
+}
+
+@media (max-width: 800px) {
+  .movies-card__link:hover {
+    transform: scale(1.16);
+  }
+}
+
+@media (max-width: 629px) {
+  .movies-card__link:hover {
+    transform: scale(1.12);
+  }
+}
+
+@media (max-width: 400px) {
+  .movies-card__link:hover {
+    transform: scale(1.07);
+  }
 }
 
 .movies-card__wallpaper {
@@ -13,16 +43,16 @@
   height: 100%;
   object-fit: contain;
   object-position: center;
-  transform: scale(1.1);
+  /* transform: scale(1.1); */
   transition: all 0.7s;
   background-color: black;
 }
 
-.movies-card__wallpaper:hover {
+/* .movies-card__wallpaper:hover {
   opacity: 0.7;
   transform: scale(1);
   cursor: pointer;
-}
+} */
 
 @media (max-width: 1239px) {
   .movies-card__wallpaper {
@@ -128,4 +158,104 @@
   .movies-card__duration::before {
     margin-bottom: 6px;
   }
+}
+
+.card-overlay {
+  padding: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  cursor: pointer;
+  transition: all 1s 0.2s;
+  opacity: 0;
+  visibility: hidden;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 10px;
+  color: black;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.movies-card__link:hover .card-overlay {
+  opacity: 1;
+  visibility: visible;
+  z-index: 11;
+}
+
+.card-overlay__description {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow-y: scroll;
+  overflow-x: unset;
+  font-size: 10px;
+  line-height: 1;
+  margin: 0;
+}
+
+@media (max-width: 629px) {
+  .card-overlay__description {
+    -webkit-line-clamp: 12;
+  }
+}
+
+@media (max-width: 500px) {
+  .card-overlay__description {
+    -webkit-line-clamp: 7;
+  }
+}
+
+.card-overlay__title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hide;
+  font-size: 12px;
+  line-height: 1;
+  margin: 5px 0;
+}
+
+.card-overlay__year {
+  margin: 3px 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.card-overlay__country {
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.card-overlay__director {
+  margin: 3px 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.card-overlay__description::-webkit-scrollbar {
+  width: 10px;
+}
+
+.card-overlay__description::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #65e90d;
+}
+
+.card-overlay__title::-webkit-scrollbar {
+  width: 3px;
+}
+
+.card-overlay__title::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #e8e6e6;
+}
+
+.card-overlay__duration {
+  margin: 5px 0 0;
 }
