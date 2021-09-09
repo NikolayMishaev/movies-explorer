@@ -144,6 +144,32 @@
   transition: transform 0.1s;
 }
 
+.search-form__button-reset {
+  border: none;
+  border-radius: 30px;
+  height: 25px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 18px;
+  margin: 8px;
+  padding: 0 10px;
+  color: white;
+  background: #000000;
+  transition: all 0.5s;
+}
+.search-form__button-reset:hover {
+cursor: pointer;
+opacity: 0.7;
+transform: scale(1.05);
+}
+
+.search-form__button-reset:active:hover {
+  opacity: 0.8;
+  transform: scale(1);
+  transition: transform 0.1s;
+}
+
 .search-form__input-error {
   position: absolute;
   top: 50px;

@@ -9,6 +9,7 @@ import SearchMessage from "../SearchMessage/SearchMessage";
 export default function SavedMovies({
   savedMoviesSearchValueCheckboxes,
   savedMoviesSortingCheckboxes,
+  savedMoviesSettingsButtons,
   openPopupError,
   preloaderVisible,
   locationSavedMovies,
@@ -24,6 +25,7 @@ export default function SavedMovies({
       <SearchForm
         searchValueCheckboxes={savedMoviesSearchValueCheckboxes}
         sortingCheckboxes={savedMoviesSortingCheckboxes}
+        settingsButtons={savedMoviesSettingsButtons}
         onSearchMovies={onSearchSavedMovies}
         previousValueSearchForm={previousValueSearchForm}
       />

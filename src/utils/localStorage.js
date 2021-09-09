@@ -64,17 +64,25 @@ export function removeItemsFromLocalStorage() {
   localStorage.removeItem("moviesCards");
   localStorage.removeItem("searchValueMovies");
   localStorage.removeItem("searchValueSavedMovies");
+  localStorage.removeItem("totalNumberMoviesCards");
+  removeMoviesCheckboxes();
+  removeSavedMoviesCheckboxes();
+}
+
+export function removeMoviesCheckboxes() {
   localStorage.removeItem("nameMoviesCheckbox");
   localStorage.removeItem("yearMoviesCheckbox");
   localStorage.removeItem("countryMoviesCheckbox");
   localStorage.removeItem("directorMoviesCheckbox");
   localStorage.removeItem("descriptionMoviesCheckbox");
   localStorage.removeItem("shortMoviesCheckbox");
+}
+
+export function removeSavedMoviesCheckboxes() {
   localStorage.removeItem("nameSavedMoviesCheckbox");
   localStorage.removeItem("yearSavedMoviesCheckbox");
   localStorage.removeItem("countrySavedMoviesCheckbox");
   localStorage.removeItem("directorSavedMoviesCheckbox");
   localStorage.removeItem("descriptionSavedMoviesCheckbox");
   localStorage.removeItem("shortSavedMoviesCheckbox");
-  localStorage.removeItem("totalNumberMoviesCards");
 }

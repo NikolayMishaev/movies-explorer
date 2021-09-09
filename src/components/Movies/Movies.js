@@ -9,6 +9,7 @@ import SearchMessage from "../SearchMessage/SearchMessage";
 export default function Movies({
   moviesSearchValueCheckboxes,
   moviesSortingCheckboxes,
+  moviesSettingsButtons,
   handleSearchValue,
   openPopupError,
   visiblePreloader,
@@ -29,6 +30,7 @@ export default function Movies({
       <SearchForm
         searchValueCheckboxes={moviesSearchValueCheckboxes}
         sortingCheckboxes={moviesSortingCheckboxes}
+        settingsButtons={moviesSettingsButtons}
         handleMoviesCards={handleMoviesCards}
         handleSearchValue={handleSearchValue}
         onSearchMovies={onSearchMovies}

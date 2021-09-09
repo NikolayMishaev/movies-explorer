@@ -7,18 +7,17 @@ import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 export default function SearchForm({
   searchValueCheckboxes,
   sortingCheckboxes,
+  settingsButtons,
   onSearchMovies,
   previousValueSearchForm,
 }) {
   const currentFormValidator = useFormValidator();
   // стейт, для проверки данных в поле инпута, т.к. при вставке в поле инпута значения из localStorage, событие onChange еще не сработало
   const [inputValue, setInputValue] = useState(false);
-
   function handleSubmit(e) {
     e.preventDefault();
     onSearchMovies(formatInputValue());
   }
-
   function formatInputValue() {
     const inputValue = currentFormValidator.isValid
       ? currentFormValidator.values.movie
@@ -89,6 +88,19 @@ export default function SearchForm({
               handleMovieCheckbox={checkbox.handler}
               title={checkbox.title}
             />
+          ))}
+        </fieldset>
+        <fieldset className="search-form__fieldset">
+          <legend className="search-form__legend">Настройки</legend>
+          {settingsButtons.map((button, i) => (
+            <button
+              key={i}
+              className="search-form__button-reset"
+              type="reset"
+              onClick={button.handler}
+            >
+              {button.title}
+            </button>
           ))}
         </fieldset>
       </form>

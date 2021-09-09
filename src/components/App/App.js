@@ -29,6 +29,8 @@ import {
 import {
   getAllSavedValuesFromLocalStorage,
   removeItemsFromLocalStorage,
+  removeMoviesCheckboxes,
+  removeSavedMoviesCheckboxes,
 } from "../../utils/localStorage";
 // импорт сообщений ошибок.
 import {
@@ -561,7 +563,7 @@ export default function App() {
   }
 
   // обработчик чекбокса короткометражных фильмов.
-  function handleShortMovieCheckbox() {
+  function handleShortMoviesCheckbox() {
     locationSavedMovies
       ? setShortSavedMoviesCheckbox(!shortSavedMoviesCheckbox)
       : setShortMoviesCheckbox(!shortMoviesCheckbox);
@@ -794,6 +796,18 @@ export default function App() {
     setDescriptionSavedMoviesCheckbox(!descriptionSavedMoviesCheckbox);
   }
 
+  function handleResetMovies() {
+    localStorage.removeItem("searchValueMovies");
+    removeMoviesCheckboxes();
+    window.location.reload();
+  }
+
+  function handleResetSavedMovies() {
+    localStorage.removeItem("searchValueSavedMovies");
+    removeSavedMoviesCheckboxes();
+    window.location.reload();
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page page_align_center">
@@ -887,7 +901,13 @@ export default function App() {
                   {
                     title: "Короткометражки",
                     state: shortMoviesCheckbox,
-                    handler: handleShortMovieCheckbox,
+                    handler: handleShortMoviesCheckbox,
+                  },
+                ]}
+                moviesSettingsButtons={[
+                  {
+                    title: "Сбросить",
+                    handler: handleResetMovies,
                   },
                 ]}
                 openPopupError={handleOpenErrorMessagePopup}
@@ -939,7 +959,13 @@ export default function App() {
                   {
                     title: "Короткометражки",
                     state: shortSavedMoviesCheckbox,
-                    handler: handleShortMovieCheckbox,
+                    handler: handleShortMoviesCheckbox,
+                  },
+                ]}
+                savedMoviesSettingsButtons={[
+                  {
+                    title: "Сбросить",
+                    handler: handleResetSavedMovies,
                   },
                 ]}
                 locationSavedMovies={locationSavedMovies}
