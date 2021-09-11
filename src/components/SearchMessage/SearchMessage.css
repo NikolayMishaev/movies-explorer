@@ -15,3 +15,7 @@
     line-height: 22px;
   }
 }
+
+.search-message__message_type_error {
+  color: red;
+}

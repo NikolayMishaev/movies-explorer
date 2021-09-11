@@ -75,6 +75,7 @@ export default function SearchForm({
             {searchValueCheckboxes.map((checkbox, i) => (
               <FilterCheckbox
                 key={i}
+                checkbox={checkbox}
                 checkboxOn={checkbox.state}
                 handleMovieCheckbox={checkbox.handler}
                 title={checkbox.title}

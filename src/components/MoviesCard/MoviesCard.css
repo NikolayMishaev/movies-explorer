@@ -16,7 +16,6 @@
   transition: all 1s 1s;
   z-index: 11;
   border-radius: 10px;
-  /* border: 1px solid#f3c1f8; */
   box-shadow: 0 0 10px #ea74f5;
 }
 
@@ -43,16 +42,9 @@
   height: 100%;
   object-fit: contain;
   object-position: center;
-  /* transform: scale(1.1); */
   transition: all 0.7s;
   background-color: black;
 }
-
-/* .movies-card__wallpaper:hover {
-  opacity: 0.7;
-  transform: scale(1);
-  cursor: pointer;
-} */
 
 @media (max-width: 1239px) {
   .movies-card__wallpaper {

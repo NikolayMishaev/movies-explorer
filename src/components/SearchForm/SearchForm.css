@@ -237,6 +237,7 @@
 .search-form__input-error_active {
   color: #ff4062;
   display: block;
+  z-index: 0;
 }
 
 .search-form__overlay {
