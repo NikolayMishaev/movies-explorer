@@ -8,7 +8,7 @@ export default function FilterCheckbox({
   className,
 }) {
   return (
-    <div className={` filter-checkbox  `}>
+    <li className={` filter-checkbox  `}>
       <label className="filter-checkbox__field">
         <input
           className="filter-checkbox__checkbox"
@@ -21,6 +21,6 @@ export default function FilterCheckbox({
         ></span>
       </label>
       <p className="filter-checkbox__checkbox-name">{title}</p>
-    </div>
+    </li>
   );
 }

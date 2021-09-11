@@ -153,7 +153,7 @@
   font-weight: normal;
   font-size: 12px;
   line-height: 18px;
-  margin: 15px 15px 15px 0;
+  margin: 10px 15px 10px 0;
   padding: 0 10px;
   color: white;
   background: #000000;
@@ -179,6 +179,12 @@
   padding: 5px;
 }
 
+@media (max-width: 650px) {
+  .search-form__button-setup:hover::after {
+    line-height: 11px;
+  }
+}
+
 .search-form__button-setup_type_reset:hover::after {
   content: "кнопка сброса поискового запроса, предыдущего результата и флажков чекбоксов";
   left: -30px;
@@ -189,6 +195,13 @@
   content: "кнопка смены языка в названии фильмов результат поиска будет обновлен в соответствии с выбранным языком";
   left: -55px;
   top: 31px;
+}
+
+@media (max-width: 650px) {
+  .search-form__button-setup_type_lang:hover::after {
+    top: 70px;
+    left: -35px;
+  }
 }
 
 .search-form__button-setup:hover {
@@ -243,4 +256,22 @@
 .search-form__overlay_active {
   opacity: 0.8;
   visibility: visible;
+}
+
+.search-form__list {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 650px) {
+  .search-form__list {
+    flex-direction: column;
+  }
+}
+
+.search-form__item {
+  list-style-type: none;
 }

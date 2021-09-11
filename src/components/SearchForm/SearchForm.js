@@ -71,14 +71,16 @@ export default function SearchForm({
         </div>
         <fieldset className="search-form__fieldset">
           <legend className="search-form__legend">Критерии поиска</legend>
-          {searchValueCheckboxes.map((checkbox, i) => (
-            <FilterCheckbox
-              key={i}
-              checkboxOn={checkbox.state}
-              handleMovieCheckbox={checkbox.handler}
-              title={checkbox.title}
-            />
-          ))}
+          <ul className="search-form__list">
+            {searchValueCheckboxes.map((checkbox, i) => (
+              <FilterCheckbox
+                key={i}
+                checkboxOn={checkbox.state}
+                handleMovieCheckbox={checkbox.handler}
+                title={checkbox.title}
+              />
+            ))}
+          </ul>
           <div
             className={`search-form__overlay ${
               previousValueSearchForm || currentFormValidator.values.movie
@@ -89,14 +91,16 @@ export default function SearchForm({
         </fieldset>
         <fieldset className="search-form__fieldset">
           <legend className="search-form__legend">Сортировка</legend>
-          {sortingCheckboxes.map((checkbox, i) => (
-            <FilterCheckbox
-              key={i}
-              checkboxOn={checkbox.state}
-              handleMovieCheckbox={checkbox.handler}
-              title={checkbox.title}
-            />
-          ))}
+          <ul className="search-form__list">
+            {sortingCheckboxes.map((checkbox, i) => (
+              <FilterCheckbox
+                key={i}
+                checkboxOn={checkbox.state}
+                handleMovieCheckbox={checkbox.handler}
+                title={checkbox.title}
+              />
+            ))}
+          </ul>
           {!locationSavedMovies && (
             <div
               className={`search-form__overlay ${
@@ -109,26 +113,29 @@ export default function SearchForm({
         </fieldset>
         <fieldset className="search-form__fieldset">
           <legend className="search-form__legend">Настройки</legend>
-          {settingsButtons.map((button, i) =>
-            button.type === "button" ? (
-              <button
-                key={i}
-                className={`search-form__button-setup search-form__button-setup_type_${button.className}`}
-                type="button"
-                onClick={button.handler}
-              >
-                {button.title}
-              </button>
-            ) : (
-              <FilterCheckbox
-                key={i}
-                checkboxOn={button.state}
-                handleMovieCheckbox={button.handler}
-                title={button.title}
-                className={button.className}
-              />
-            )
-          )}
+          <ul className="search-form__list">
+            {settingsButtons.map((button, i) =>
+              button.type === "button" ? (
+                <li className="search-form__item" key={i}>
+                  <button
+                    className={`search-form__button-setup search-form__button-setup_type_${button.className}`}
+                    type="button"
+                    onClick={button.handler}
+                  >
+                    {button.title}
+                  </button>
+                </li>
+              ) : (
+                <FilterCheckbox
+                  key={i}
+                  checkboxOn={button.state}
+                  handleMovieCheckbox={button.handler}
+                  title={button.title}
+                  className={button.className}
+                />
+              )
+            )}
+          </ul>
           <div
             className={`search-form__overlay ${
               previousValueSearchForm || currentFormValidator.values.movie

@@ -45,6 +45,14 @@
   padding: 5px;
 }
 
+@media (max-width: 650px) {
+  .filter-checkbox__visible-checkbox_type_multi:hover::after {
+    top: 107px;
+    left: -60px;
+    line-height: 11px;
+  }
+}
+
 .filter-checkbox__visible-checkbox:hover {
   cursor: pointer;
   opacity: 0.8;
