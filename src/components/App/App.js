@@ -811,7 +811,7 @@ export default function App() {
       resetAllStatesSavedMoviesCheckboxes();
       checkbox.setState(true);
     } else {
-      checkbox.setState(!nameSavedMoviesCheckbox);
+      checkbox.setState(!checkbox.state);
     }
     localStorage.setItem(
       checkbox.nameState,
