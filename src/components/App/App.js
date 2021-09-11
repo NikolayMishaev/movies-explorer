@@ -26,6 +26,7 @@ import {
   filterMoviesCards,
   calculateNumberEnabledCheckboxes,
   sortAlphabetically,
+  checkValidityUrl,
 } from "../../utils/utils";
 import {
   getAllSavedValuesFromLocalStorage,
@@ -728,7 +729,9 @@ export default function App() {
       image: card.image.url
         ? `https://api.nomoreparties.co${card.image.url}`
         : DEFAULT_VALUES_API_DATA.URLForImage,
-      trailer: card.trailerLink || DEFAULT_VALUES_API_DATA.URLForVideo,
+      trailer: checkValidityUrl(card.trailerLink)
+        ? card.trailerLink
+        : DEFAULT_VALUES_API_DATA.URLForVideo,
       nameRU: card.nameRU || DEFAULT_VALUES_API_DATA.string,
       nameEN: card.nameEN || DEFAULT_VALUES_API_DATA.string,
       thumbnail: card.image.formats.thumbnail.url
