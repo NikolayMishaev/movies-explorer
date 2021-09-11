@@ -23,6 +23,7 @@ export default function Movies({
   filteredMoviesCards,
   onAddMoreCard,
   statusLikeDislikeMovieCard,
+  moviesCardTitle,
 }) {
   return (
     <>
@@ -48,6 +49,7 @@ export default function Movies({
           filteredMoviesCards={filteredMoviesCards}
           onAddMoreCard={onAddMoreCard}
           statusLikeDislikeMovieCard={statusLikeDislikeMovieCard}
+          moviesCardTitle={moviesCardTitle}
         />
       )}
     </>

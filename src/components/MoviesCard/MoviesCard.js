@@ -9,6 +9,7 @@ export default function MoviesCard({
   savedMoviesCards,
   onCardDelete,
   statusLikeDislikeMovieCard,
+  moviesCardTitle,
 }) {
   const isLiked = savedMoviesCards.some((i) => i.movieId === card.id);
   const duration = card.duration
@@ -46,7 +47,7 @@ export default function MoviesCard({
           />
           <div className="card-overlay">
             <h2 className="card-overlay__title">
-              {card.nameRU || "нет данных"}
+              {moviesCardTitle === "RU" ? card.nameRU || "нет данных" : card.nameEN || "нет данных"}
             </h2>
             <p className="card-overlay__year">
               Год: {card.year || "нет данных"}
@@ -66,7 +67,11 @@ export default function MoviesCard({
           </div>
         </a>
         <div className="movies-card__description">
-          <h2 className="movies-card__title">{card.nameRU}</h2>
+          <h2 className="movies-card__title">
+            {moviesCardTitle === "RU"
+              ? card.nameRU || "нет данных"
+              : card.nameEN || "нет данных"}
+          </h2>
           <button
             disabled={statusLikeDislikeMovieCard}
             className={`movies-card__like ${

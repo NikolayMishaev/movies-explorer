@@ -71,7 +71,12 @@ export function filterMoviesCards({ cards, search, checkboxes }) {
       return false;
     if (checkboxes.description && !findMatchSearchValue(card.description))
       return false;
-    if (checkboxes.name && !findMatchMovieName([card.nameRU, card.nameEN]))
+    if (
+      checkboxes.name &&
+      !findMatchSearchValue(
+        checkboxes.lang === "RU" ? card.nameRU : card.nameEN
+      )
+    )
       return false;
     return true;
   }
@@ -85,11 +90,11 @@ export function filterMoviesCards({ cards, search, checkboxes }) {
     return true;
   }
 
-  function findMatchMovieName(arrayWithCardNameS) {
-    return arrayWithCardNameS.some(
-      (name) => name && name.toLowerCase().includes(search)
-    );
-  }
+  // function findMatchMovieName(arrayWithCardNameS) {
+  //   return arrayWithCardNameS.some(
+  //     (name) => name && name.toLowerCase().includes(search)
+  //   );
+  // }
 
   function findMatchSearchValue(value) {
     return value && value.toLowerCase().includes(search);
@@ -98,9 +103,10 @@ export function filterMoviesCards({ cards, search, checkboxes }) {
   function findMatchMovieShort(duration) {
     return duration && duration <= DURATION_SHORT_MOVIE;
   }
-  checkboxes.alphabet && sortAlphabetically(filteredMoviesCards);
   checkboxes.alphabet &&
-    sortAlphabetically(filteredMoviesCardsOnlyBySearcyValue);
+    sortAlphabetically(filteredMoviesCards, checkboxes.lang);
+  checkboxes.alphabet &&
+    sortAlphabetically(filteredMoviesCardsOnlyBySearcyValue, checkboxes.lang);
   return {
     resultFiltered: filteredMoviesCards,
     resultFilteredOnlyBySearcyValue: filteredMoviesCardsOnlyBySearcyValue,
@@ -108,13 +114,24 @@ export function filterMoviesCards({ cards, search, checkboxes }) {
 }
 
 // проверить, что отмечен минимум один чекбокс группы.
-export function checkMinimumOneEnabledSearchValueCheckboxes(checkboxes) {
-  const { name, year, country, director, description } = checkboxes;
-  return name || year || country || director || description;
+export function calculateNumberEnabledCheckboxes(arrayCheckboxes) {
+  return arrayCheckboxes.reduce((p, i) => (i ? p + i : p), 0);
 }
 
-export function sortAlphabetically(cards) {
-  return cards.sort((a, b) =>
-    a.nameRU.toLowerCase().trim() < b.nameRU.toLowerCase().trim() ? -1 : 1
-  );
+export function sortAlphabetically(cards, lang) {
+  return lang === "RU"
+    ? cards.sort((a, b) => {
+        if (!a.nameRU) return -1;
+        if (!b.nameRU) return 1;
+        return a.nameRU.toLowerCase().trim() < b.nameRU.toLowerCase().trim()
+          ? -1
+          : 1;
+      })
+    : cards.sort((a, b) => {
+        if (!a.nameEN) return -1;
+        if (!b.nameEN) return 1;
+        return a.nameEN.toLowerCase().trim() < b.nameEN.toLowerCase().trim()
+          ? -1
+          : 1;
+      });
 }

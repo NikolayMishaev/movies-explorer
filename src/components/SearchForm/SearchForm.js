@@ -113,8 +113,8 @@ export default function SearchForm({
             button.type === "button" ? (
               <button
                 key={i}
-                className="search-form__button-reset"
-                type="reset"
+                className={`search-form__button-setup search-form__button-setup_type_${button.className}`}
+                type="button"
                 onClick={button.handler}
               >
                 {button.title}

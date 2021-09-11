@@ -24,7 +24,7 @@ import {
   calculateNumberMoviesCards,
   getNumberCardsForAlignLastRow,
   filterMoviesCards,
-  checkMinimumOneEnabledSearchValueCheckboxes,
+  calculateNumberEnabledCheckboxes,
   sortAlphabetically,
 } from "../../utils/utils";
 import {
@@ -152,8 +152,14 @@ export default function App() {
   // стейт чекбокса поиска по описанию фильма.
   const [descriptionSavedMoviesCheckbox, setDescriptionSavedMoviesCheckbox] =
     useState(false);
-  // стейт чекбокса короткомертажных сохнаненных фильмов.
+  // стейт чекбокса короткомертажных фильмов.
   const [shortSavedMoviesCheckbox, setShortSavedMoviesCheckbox] =
+    useState(false);
+  // стейт чекбокса сортировки по алфавиту фильмов.
+  const [alphabetSavedMoviesCheckbox, setAlphabetSavedMoviesCheckbox] =
+    useState(false);
+  // стейт чекбокса мульти выбора чекбокосов фильмов.
+  const [multiSavedMoviesCheckbox, setMultiSavedMoviesCheckbox] =
     useState(false);
 
   // остальные стейты страницы "Сохраненные фильмы".
@@ -173,6 +179,9 @@ export default function App() {
     filteredSavedMoviesCardsOnlyBySearcyValue,
     setFilteredSavedMoviesCardsOnlyBySearcyValue,
   ] = useState([]);
+
+  const [langMoviesCards, setLangMoviesCards] = useState("RU");
+  const [langSavedMoviesCards, setLangSavedMoviesCards] = useState("RU");
 
   useEffect(() => {
     if (loggedIn) {
@@ -234,13 +243,13 @@ export default function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      checkMinimumOneEnabledSearchValueCheckboxes({
-        name: nameMoviesCheckbox,
-        year: yearMoviesCheckbox,
-        country: countryMoviesCheckbox,
-        director: directorMoviesCheckbox,
-        description: descriptionMoviesCheckbox,
-      })
+      calculateNumberEnabledCheckboxes([
+        nameMoviesCheckbox,
+        yearMoviesCheckbox,
+        countryMoviesCheckbox,
+        directorMoviesCheckbox,
+        descriptionMoviesCheckbox,
+      ]) > 0
         ? searchValueMovies && onSearchMovies(searchValueMovies)
         : // т.к. setNameMoviesCheckbox(true) вернет undefined,
           // для выполнения следующей за ним операции, использутеся оператор ||.
@@ -273,7 +282,12 @@ export default function App() {
       filteredMoviesCardsOnlyBySearcyValue.length &&
         setFilteredMoviesCards(
           alphabetMoviesCheckbox
-            ? [...sortAlphabetically(filteredMoviesCardsOnlyBySearcyValue)]
+            ? [
+                ...sortAlphabetically(
+                  filteredMoviesCardsOnlyBySearcyValue,
+                  langMoviesCards
+                ),
+              ]
             : filteredMoviesCardsOnlyBySearcyValue
         );
     }
@@ -303,13 +317,13 @@ export default function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      checkMinimumOneEnabledSearchValueCheckboxes({
-        name: nameSavedMoviesCheckbox,
-        year: yearSavedMoviesCheckbox,
-        country: countrySavedMoviesCheckbox,
-        director: directorSavedMoviesCheckbox,
-        description: descriptionSavedMoviesCheckbox,
-      })
+      calculateNumberEnabledCheckboxes([
+        nameSavedMoviesCheckbox,
+        yearSavedMoviesCheckbox,
+        countrySavedMoviesCheckbox,
+        directorSavedMoviesCheckbox,
+        descriptionSavedMoviesCheckbox,
+      ]) > 0
         ? searchValueSavedMovies && onSearchSavedMovies(searchValueSavedMovies)
         : // т.к. setNameSavedMoviesCheckbox(true) вернет undefined, для выполнения следующей за ним операции, использутеся оператор ||.
           setNameSavedMoviesCheckbox(true) ||
@@ -327,6 +341,8 @@ export default function App() {
   useEffect(() => {
     const checkboxes = {
       short: shortSavedMoviesCheckbox,
+      alphabet: alphabetSavedMoviesCheckbox,
+      lang: langSavedMoviesCards,
     };
     loggedIn &&
       localStorage.setItem(
@@ -338,9 +354,19 @@ export default function App() {
         cards: filteredSavedMoviesCards,
         checkboxes,
       });
+
       setFilteredSavedMoviesCards(resultFiltered);
     } else {
-      setFilteredSavedMoviesCards(filteredSavedMoviesCardsOnlyBySearcyValue);
+      setFilteredSavedMoviesCards(
+        alphabetSavedMoviesCheckbox
+          ? [
+              ...sortAlphabetically(
+                filteredSavedMoviesCardsOnlyBySearcyValue,
+                langSavedMoviesCards
+              ),
+            ]
+          : filteredSavedMoviesCardsOnlyBySearcyValue
+      );
     }
     if (
       shortSavedMoviesCheckbox &&
@@ -353,7 +379,11 @@ export default function App() {
         checkboxes,
       });
       setFilteredSavedMoviesCards(resultFiltered);
-      setFilteredSavedMoviesCardsOnlyBySearcyValue(savedMoviesCards);
+      setFilteredSavedMoviesCardsOnlyBySearcyValue(
+        alphabetSavedMoviesCheckbox
+          ? [...sortAlphabetically(savedMoviesCards, langSavedMoviesCards)]
+          : savedMoviesCards
+      );
     }
   }, [shortSavedMoviesCheckbox]);
 
@@ -489,6 +519,8 @@ export default function App() {
         setDirectorMoviesCheckbox(moviesCheckboxes.director);
         setDescriptionMoviesCheckbox(moviesCheckboxes.description);
         setShortMoviesCheckbox(moviesCheckboxes.short);
+        setAlphabetMoviesCheckbox(moviesCheckboxes.alphabet);
+        setMultiMoviesCheckbox(moviesCheckboxes.multi);
         setNameSavedMoviesCheckbox(savedMoviesCheckboxes.name);
         setYearSavedMoviesCheckbox(savedMoviesCheckboxes.year);
         setCountrySavedMoviesCheckbox(savedMoviesCheckboxes.country);
@@ -497,6 +529,8 @@ export default function App() {
         setShortSavedMoviesCheckbox(savedMoviesCheckboxes.short);
         totalNumberMoviesCards &&
           setTotalNumberMoviesCards(totalNumberMoviesCards);
+        setAlphabetSavedMoviesCheckbox(savedMoviesCheckboxes.alphabet);
+        setMultiSavedMoviesCheckbox(savedMoviesCheckboxes.multi);
         setLoggedIn(true);
       }
     }
@@ -590,6 +624,7 @@ export default function App() {
       description: descriptionMoviesCheckbox,
       short: shortMoviesCheckbox,
       alphabet: alphabetMoviesCheckbox,
+      lang: langMoviesCards,
     };
     if (!moviesCards.length) {
       const moviesCards = await getMoviesCardsFromAPI();
@@ -628,11 +663,15 @@ export default function App() {
           director: directorSavedMoviesCheckbox,
           description: descriptionSavedMoviesCheckbox,
           short: shortSavedMoviesCheckbox,
+          alphabet: alphabetSavedMoviesCheckbox,
+          lang: langSavedMoviesCards,
         },
       });
     setFilteredSavedMoviesCards(resultFiltered);
     setFilteredSavedMoviesCardsOnlyBySearcyValue(
-      searchValue ? resultFilteredOnlyBySearcyValue : savedMoviesCards
+      searchValue
+        ? resultFilteredOnlyBySearcyValue
+        : [...sortAlphabetically(savedMoviesCards)]
     );
     setVisiblePreloaderMovies(false);
   }
@@ -741,59 +780,76 @@ export default function App() {
   // обработчики чекбосов на странице "Фильмы".
 
   function handleNameMoviesCheckbox() {
-    localStorage.setItem("nameMoviesCheckbox", !nameMoviesCheckbox);
     if (!multiMoviesCheckbox) {
       resetAllStatesMoviesCheckboxes();
       setNameMoviesCheckbox(true);
     } else {
       setNameMoviesCheckbox(!nameMoviesCheckbox);
     }
+    localStorage.setItem(
+      "nameMoviesCheckbox",
+      !multiMoviesCheckbox ? true : !nameMoviesCheckbox
+    );
   }
 
   function handleYearMoviesCheckbox() {
-    localStorage.setItem("yearMoviesCheckbox", !yearMoviesCheckbox);
     if (!multiMoviesCheckbox) {
       resetAllStatesMoviesCheckboxes();
       setYearMoviesCheckbox(true);
     } else {
       setYearMoviesCheckbox(!yearMoviesCheckbox);
     }
+    localStorage.setItem(
+      "yearMoviesCheckbox",
+      !multiMoviesCheckbox ? true : !yearMoviesCheckbox
+    );
   }
 
   function handleCountryMoviesCheckbox() {
-    localStorage.setItem("countryMoviesCheckbox", !countryMoviesCheckbox);
     if (!multiMoviesCheckbox) {
       resetAllStatesMoviesCheckboxes();
       setCountryMoviesCheckbox(true);
     } else {
       setCountryMoviesCheckbox(!countryMoviesCheckbox);
     }
+    localStorage.setItem(
+      "countryMoviesCheckbox",
+      !multiMoviesCheckbox ? true : !countryMoviesCheckbox
+    );
   }
 
   function handleDirectorMoviesCheckbox() {
-    localStorage.setItem("directorMoviesCheckbox", !directorMoviesCheckbox);
     if (!multiMoviesCheckbox) {
       resetAllStatesMoviesCheckboxes();
       setDirectorMoviesCheckbox(true);
     } else {
       setDirectorMoviesCheckbox(!directorMoviesCheckbox);
     }
+    localStorage.setItem(
+      "directorMoviesCheckbox",
+      !multiMoviesCheckbox ? true : !directorMoviesCheckbox
+    );
   }
 
   function handleDescriptionMoviesCheckbox() {
-    localStorage.setItem(
-      "descriptionMoviesCheckbox",
-      !descriptionMoviesCheckbox
-    );
     if (!multiMoviesCheckbox) {
       resetAllStatesMoviesCheckboxes();
       setDescriptionMoviesCheckbox(true);
     } else {
       setDescriptionMoviesCheckbox(!descriptionMoviesCheckbox);
     }
+    localStorage.setItem(
+      "descriptionMoviesCheckbox",
+      !multiMoviesCheckbox ? true : !descriptionMoviesCheckbox
+    );
   }
 
   function resetAllStatesMoviesCheckboxes() {
+    localStorage.setItem("nameMoviesCheckbox", false);
+    localStorage.setItem("yearMoviesCheckbox", false);
+    localStorage.setItem("countryMoviesCheckbox", false);
+    localStorage.setItem("directorMoviesCheckbox", false);
+    localStorage.setItem("descriptionMoviesCheckbox", false);
     setNameMoviesCheckbox(false);
     setYearMoviesCheckbox(false);
     setCountryMoviesCheckbox(false);
@@ -801,40 +857,84 @@ export default function App() {
     setDescriptionMoviesCheckbox(false);
   }
 
+  function resetAllStatesSavedMoviesCheckboxes() {
+    localStorage.setItem("nameSavedMoviesCheckbox", false);
+    localStorage.setItem("yearSavedMoviesCheckbox", false);
+    localStorage.setItem("countrySavedMoviesCheckbox", false);
+    localStorage.setItem("directorSavedMoviesCheckbox", false);
+    localStorage.setItem("descriptionSavedMoviesCheckbox", false);
+    setNameSavedMoviesCheckbox(false);
+    setYearSavedMoviesCheckbox(false);
+    setCountrySavedMoviesCheckbox(false);
+    setDirectorSavedMoviesCheckbox(false);
+    setDescriptionSavedMoviesCheckbox(false);
+  }
+
   // обработчики чекбосов на странице "Сохраненные фильмы".
 
   function handleNameSavedMoviesCheckbox() {
-    localStorage.setItem("nameSavedMoviesCheckbox", !nameSavedMoviesCheckbox);
-    setNameSavedMoviesCheckbox(!nameSavedMoviesCheckbox);
+    if (!multiSavedMoviesCheckbox) {
+      resetAllStatesSavedMoviesCheckboxes();
+      setNameSavedMoviesCheckbox(true);
+    } else {
+      setNameSavedMoviesCheckbox(!nameSavedMoviesCheckbox);
+    }
+    localStorage.setItem(
+      "nameSavedMoviesCheckbox",
+      !multiSavedMoviesCheckbox ? true : !nameSavedMoviesCheckbox
+    );
   }
 
   function handleYearSavedMoviesCheckbox() {
-    localStorage.setItem("yearSavedMoviesCheckbox", !yearSavedMoviesCheckbox);
-    setYearSavedMoviesCheckbox(!yearSavedMoviesCheckbox);
+    if (!multiSavedMoviesCheckbox) {
+      resetAllStatesSavedMoviesCheckboxes();
+      setYearSavedMoviesCheckbox(true);
+    } else {
+      setYearSavedMoviesCheckbox(!yearSavedMoviesCheckbox);
+    }
+    localStorage.setItem(
+      "yearSavedMoviesCheckbox",
+      !multiSavedMoviesCheckbox ? true : !yearSavedMoviesCheckbox
+    );
   }
 
   function handleCountrySavedMoviesCheckbox() {
+    if (!multiSavedMoviesCheckbox) {
+      resetAllStatesSavedMoviesCheckboxes();
+      setCountrySavedMoviesCheckbox(true);
+    } else {
+      setCountrySavedMoviesCheckbox(!countrySavedMoviesCheckbox);
+    }
     localStorage.setItem(
       "countrySavedMoviesCheckbox",
-      !countrySavedMoviesCheckbox
+      !multiSavedMoviesCheckbox ? true : !countrySavedMoviesCheckbox
     );
-    setCountrySavedMoviesCheckbox(!countrySavedMoviesCheckbox);
   }
 
   function handleDirectorSavedMoviesCheckbox() {
+    if (!multiSavedMoviesCheckbox) {
+      resetAllStatesSavedMoviesCheckboxes();
+      setDirectorSavedMoviesCheckbox(true);
+    } else {
+      setDirectorSavedMoviesCheckbox(!directorSavedMoviesCheckbox);
+    }
     localStorage.setItem(
       "directorSavedMoviesCheckbox",
-      !directorSavedMoviesCheckbox
+      !multiSavedMoviesCheckbox ? true : !directorSavedMoviesCheckbox
     );
-    setDirectorSavedMoviesCheckbox(!directorSavedMoviesCheckbox);
   }
 
   function handleDescriptionSavedMoviesCheckbox() {
+    if (!multiSavedMoviesCheckbox) {
+      resetAllStatesSavedMoviesCheckboxes();
+      setDescriptionSavedMoviesCheckbox(true);
+    } else {
+      setDescriptionSavedMoviesCheckbox(!descriptionSavedMoviesCheckbox);
+    }
     localStorage.setItem(
       "descriptionSavedMoviesCheckbox",
-      !descriptionSavedMoviesCheckbox
+      !multiSavedMoviesCheckbox ? true : !descriptionSavedMoviesCheckbox
     );
-    setDescriptionSavedMoviesCheckbox(!descriptionSavedMoviesCheckbox);
   }
 
   function handleResetMovies() {
@@ -857,15 +957,83 @@ export default function App() {
   useEffect(() => {
     if (loggedIn) {
       alphabetMoviesCheckbox
-        ? setFilteredMoviesCards([...sortAlphabetically(filteredMoviesCards)])
+        ? setFilteredMoviesCards([
+            ...sortAlphabetically(filteredMoviesCards, langMoviesCards),
+          ])
         : onSearchMovies(searchValueMovies);
     }
   }, [alphabetMoviesCheckbox]);
 
+  function handleAlphabetSavedMoviesCheckbox() {
+    localStorage.setItem(
+      "alphabetSavedMoviesCheckbox",
+      !alphabetSavedMoviesCheckbox
+    );
+    setAlphabetSavedMoviesCheckbox(!alphabetSavedMoviesCheckbox);
+  }
+
+  useEffect(() => {
+    if (loggedIn) {
+      alphabetSavedMoviesCheckbox
+        ? setFilteredSavedMoviesCards([
+            ...sortAlphabetically(
+              filteredSavedMoviesCards,
+              langSavedMoviesCards
+            ),
+          ])
+        : onSearchSavedMovies(searchValueSavedMovies);
+    }
+  }, [alphabetSavedMoviesCheckbox]);
+
   function handleMultiMoviesCheckbox() {
     localStorage.setItem("multiMoviesCheckbox", !multiMoviesCheckbox);
     setMultiMoviesCheckbox(!multiMoviesCheckbox);
+    multiMoviesCheckbox &&
+      calculateNumberEnabledCheckboxes([
+        nameMoviesCheckbox,
+        yearMoviesCheckbox,
+        countryMoviesCheckbox,
+        directorMoviesCheckbox,
+        descriptionMoviesCheckbox,
+      ]) > 1 &&
+      resetAllStatesMoviesCheckboxes();
   }
+
+  function handleMultiSavedMoviesCheckbox() {
+    localStorage.setItem("multiSavedMoviesCheckbox", !multiSavedMoviesCheckbox);
+    setMultiSavedMoviesCheckbox(!multiSavedMoviesCheckbox);
+    multiSavedMoviesCheckbox &&
+      calculateNumberEnabledCheckboxes([
+        nameSavedMoviesCheckbox,
+        yearSavedMoviesCheckbox,
+        countrySavedMoviesCheckbox,
+        directorSavedMoviesCheckbox,
+        descriptionSavedMoviesCheckbox,
+      ]) > 1 &&
+      resetAllStatesSavedMoviesCheckboxes();
+  }
+
+  function handleLangMovies() {
+    langMoviesCards === "RU"
+      ? setLangMoviesCards("EN")
+      : setLangMoviesCards("RU");
+  }
+
+  useEffect(() => {
+    loggedIn && searchValueMovies && onSearchMovies(searchValueMovies);
+  }, [langMoviesCards]);
+
+  function handleLangSavedMovies() {
+    langSavedMoviesCards === "RU"
+      ? setLangSavedMoviesCards("EN")
+      : setLangSavedMoviesCards("RU");
+  }
+
+  useEffect(() => {
+    loggedIn &&
+      searchValueSavedMovies &&
+      onSearchSavedMovies(searchValueSavedMovies);
+  }, [langSavedMoviesCards]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -977,11 +1145,19 @@ export default function App() {
                     className: "multi",
                   },
                   {
+                    title: langMoviesCards,
+                    handler: handleLangMovies,
+                    type: "button",
+                    className: "lang",
+                  },
+                  {
                     title: "Сбросить",
                     handler: handleResetMovies,
                     type: "button",
+                    className: "reset",
                   },
                 ]}
+                moviesCardTitle={langMoviesCards}
                 loggedIn={loggedIn}
                 visiblePreloader={visiblePreloaderMovies}
                 filteredMoviesCards={filteredMoviesCards}
@@ -1032,13 +1208,34 @@ export default function App() {
                     state: shortSavedMoviesCheckbox,
                     handler: handleShortMoviesCheckbox,
                   },
+                  {
+                    title: "Алфавит",
+                    state: alphabetSavedMoviesCheckbox,
+                    handler: handleAlphabetSavedMoviesCheckbox,
+                  },
                 ]}
                 savedMoviesSettingsButtons={[
                   {
+                    title: "Мульти",
+                    state: multiSavedMoviesCheckbox,
+                    handler: handleMultiSavedMoviesCheckbox,
+                    type: "checkbox,",
+                    className: "multi",
+                  },
+                  {
+                    title: langSavedMoviesCards,
+                    handler: handleLangSavedMovies,
+                    type: "button",
+                    className: "lang",
+                  },
+                  {
                     title: "Сбросить",
                     handler: handleResetSavedMovies,
+                    type: "button",
+                    className: "reset",
                   },
                 ]}
+                moviesCardTitle={langSavedMoviesCards}
                 locationSavedMovies={locationSavedMovies}
                 loggedIn={loggedIn}
                 // если есть отфильтрованные сохраненные фильмы или форма поиска уже была отправлена,
