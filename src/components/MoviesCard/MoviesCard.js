@@ -47,7 +47,9 @@ export default function MoviesCard({
           />
           <div className="card-overlay">
             <h2 className="card-overlay__title">
-              {moviesCardTitle === "RU" ? card.nameRU || "нет данных" : card.nameEN || "нет данных"}
+              {moviesCardTitle === "RU"
+                ? card.nameRU || card.nameEN || "нет данных"
+                : card.nameEN || card.nameRU || "нет данных"}
             </h2>
             <p className="card-overlay__year">
               Год: {card.year || "нет данных"}
@@ -69,8 +71,8 @@ export default function MoviesCard({
         <div className="movies-card__description">
           <h2 className="movies-card__title">
             {moviesCardTitle === "RU"
-              ? card.nameRU || "нет данных"
-              : card.nameEN || "нет данных"}
+              ? card.nameRU || card.nameEN || "нет данных"
+              : card.nameEN || card.nameRU || "нет данных"}
           </h2>
           <button
             disabled={statusLikeDislikeMovieCard}

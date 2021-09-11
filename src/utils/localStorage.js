@@ -33,6 +33,7 @@ function getMoviesCheckboxesFromLocalStorage() {
     short: localStorage.getItem("shortMoviesCheckbox") === "true",
     alphabet: localStorage.getItem("alphabetMoviesCheckbox") === "true",
     multi: localStorage.getItem("multiMoviesCheckbox") === "true",
+    lang: localStorage.getItem("langMoviesCards"),
   };
   return checkboxes;
 }
@@ -48,6 +49,7 @@ function getSavedMoviesCheckboxexFromLocalStorage() {
     short: localStorage.getItem("shortSavedMoviesCheckbox") === "true",
     alphabet: localStorage.getItem("alphabetSavedMoviesCheckbox") === "true",
     multi: localStorage.getItem("multiSavedMoviesCheckbox") === "true",
+    lang: localStorage.getItem("langSavedMoviesCards"),
   };
   return checkboxes;
 }
@@ -82,6 +84,7 @@ export function removeMoviesCheckboxes() {
   localStorage.removeItem("shortMoviesCheckbox");
   localStorage.removeItem("alphabetMoviesCheckbox");
   localStorage.removeItem("multiMoviesCheckbox");
+  localStorage.removeItem("langMoviesCards");
 }
 
 export function removeSavedMoviesCheckboxes() {
@@ -93,4 +96,5 @@ export function removeSavedMoviesCheckboxes() {
   localStorage.removeItem("shortSavedMoviesCheckbox");
   localStorage.removeItem("alphabetSavedMoviesCheckbox");
   localStorage.removeItem("multiSavedMoviesCheckbox");
+  localStorage.removeItem("langSavedMoviesCards");
 }

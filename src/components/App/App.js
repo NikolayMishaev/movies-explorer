@@ -521,16 +521,19 @@ export default function App() {
         setShortMoviesCheckbox(moviesCheckboxes.short);
         setAlphabetMoviesCheckbox(moviesCheckboxes.alphabet);
         setMultiMoviesCheckbox(moviesCheckboxes.multi);
+        moviesCheckboxes.lang && setLangMoviesCards(moviesCheckboxes.lang);
         setNameSavedMoviesCheckbox(savedMoviesCheckboxes.name);
         setYearSavedMoviesCheckbox(savedMoviesCheckboxes.year);
         setCountrySavedMoviesCheckbox(savedMoviesCheckboxes.country);
         setDirectorSavedMoviesCheckbox(savedMoviesCheckboxes.director);
         setDescriptionSavedMoviesCheckbox(savedMoviesCheckboxes.description);
         setShortSavedMoviesCheckbox(savedMoviesCheckboxes.short);
-        totalNumberMoviesCards &&
-          setTotalNumberMoviesCards(totalNumberMoviesCards);
         setAlphabetSavedMoviesCheckbox(savedMoviesCheckboxes.alphabet);
         setMultiSavedMoviesCheckbox(savedMoviesCheckboxes.multi);
+        savedMoviesCheckboxes.lang &&
+          setLangSavedMoviesCards(savedMoviesCheckboxes.lang);
+        totalNumberMoviesCards &&
+          setTotalNumberMoviesCards(totalNumberMoviesCards);
         setLoggedIn(true);
       }
     }
@@ -650,7 +653,7 @@ export default function App() {
   function onSearchSavedMovies(searchValue) {
     setVisiblePreloaderMovies(true);
     setSearchValueSavedMovies(searchValue);
-    localStorage.setItem("searchValueSavedMovies", searchValue);
+    searchValue && localStorage.setItem("searchValueSavedMovies", searchValue);
     setMessageWithResultSearchSavedMovies("");
     const { resultFiltered, resultFilteredOnlyBySearcyValue } =
       filterMoviesCards({
@@ -1020,7 +1023,10 @@ export default function App() {
   }
 
   useEffect(() => {
-    loggedIn && searchValueMovies && onSearchMovies(searchValueMovies);
+    if (loggedIn) {
+      localStorage.setItem("langMoviesCards", langMoviesCards);
+      searchValueMovies && onSearchMovies(searchValueMovies);
+    }
   }, [langMoviesCards]);
 
   function handleLangSavedMovies() {
@@ -1030,9 +1036,10 @@ export default function App() {
   }
 
   useEffect(() => {
-    loggedIn &&
-      searchValueSavedMovies &&
-      onSearchSavedMovies(searchValueSavedMovies);
+    if (loggedIn) {
+      localStorage.setItem("langSavedMoviesCards", langSavedMoviesCards);
+      searchValueSavedMovies && onSearchSavedMovies(searchValueSavedMovies);
+    }
   }, [langSavedMoviesCards]);
 
   return (

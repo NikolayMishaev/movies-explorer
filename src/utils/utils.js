@@ -74,11 +74,19 @@ export function filterMoviesCards({ cards, search, checkboxes }) {
     if (
       checkboxes.name &&
       !findMatchSearchValue(
-        checkboxes.lang === "RU" ? card.nameRU : card.nameEN
+        checkboxes.lang === "RU"
+          ? (checkRuLetters(card.nameRU) && card.nameRU) ||
+              (checkRuLetters(card.nameEN) && card.nameEN)
+          : !checkRuLetters(card.nameEN) && card.nameEN
       )
-    )
+    ) {
       return false;
+    }
     return true;
+  }
+
+  function checkRuLetters(cardName) {
+    return /[а-яА-Яё]/g.test(cardName);
   }
 
   function findMatchSortingCheckboxes(card) {
@@ -89,12 +97,6 @@ export function filterMoviesCards({ cards, search, checkboxes }) {
     // если все проверки (для каждого чекбокса) прошли успешно, вернуть true.
     return true;
   }
-
-  // function findMatchMovieName(arrayWithCardNameS) {
-  //   return arrayWithCardNameS.some(
-  //     (name) => name && name.toLowerCase().includes(search)
-  //   );
-  // }
 
   function findMatchSearchValue(value) {
     return value && value.toLowerCase().includes(search);
@@ -121,13 +123,17 @@ export function calculateNumberEnabledCheckboxes(arrayCheckboxes) {
 export function sortAlphabetically(cards, lang) {
   return lang === "RU"
     ? cards.sort((a, b) => {
-        if (!a.nameRU) return -1;
-        if (!b.nameRU) return 1;
+        a.nameRU = a.nameRU || a.nameEN;
+        b.nameRU = b.nameRU || b.nameEN;
+        if (!a.nameEN) return -1;
+        if (!b.nameEN) return 1;
         return a.nameRU.toLowerCase().trim() < b.nameRU.toLowerCase().trim()
           ? -1
           : 1;
       })
     : cards.sort((a, b) => {
+        a.nameEN = a.nameEN || a.nameRU;
+        b.nameEN = b.nameEN || b.nameRU;
         if (!a.nameEN) return -1;
         if (!b.nameEN) return 1;
         return a.nameEN.toLowerCase().trim() < b.nameEN.toLowerCase().trim()
