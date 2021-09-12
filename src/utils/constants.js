@@ -2,7 +2,7 @@ const DURATION_SHORT_MOVIE = 40;
 
 const BREAKPOINTS = {
   mobile: 629,
-  tablet: 989,
+  tablet: 979,
   laptop: 1279,
 };
 
