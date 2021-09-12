@@ -60,11 +60,11 @@ export default function MoviesCard({
             <p className="card-overlay__director">
               Режиссер: {card.director || "нет данных"}
             </p>
-            <p className="card-overlay__description">
-              {card.description || "нет данных"}
-            </p>
             <p className="card-overlay__duration">
               Продолжительность: {duration}
+            </p>
+            <p className="card-overlay__description">
+              {card.description || "нет данных"}
             </p>
           </div>
         </a>
