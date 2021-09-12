@@ -27,13 +27,13 @@
 
 @media (max-width: 629px) {
   .movies-card__link:hover {
-    transform: scale(1.12);
+    transform: scale(1.08);
   }
 }
 
 @media (max-width: 400px) {
   .movies-card__link:hover {
-    transform: scale(1.07);
+    transform: scale(1.04);
   }
 }
 
@@ -167,11 +167,18 @@
   font-style: normal;
   font-weight: 500;
   font-size: 10px;
+  line-height: 1;
   color: black;
   z-index: 1;
   background-color: rgba(255, 255, 255, 0.7);
   overflow-y: scroll;
   overflow-x: unset;
+}
+
+@media (max-width: 629px) {
+  .card-overlay {
+    font-size: 13px;
+  }
 }
 
 .movies-card__link:hover .card-overlay {
@@ -181,16 +188,21 @@
 }
 
 .card-overlay__description {
-  font-size: 10px;
-  line-height: 1;
-  margin: 0;
+  line-height: 1.2;
+  margin: 5px 0;
   padding: 2px 0;
 }
 
 .card-overlay__title {
-  font-size: 12px;
   line-height: 1;
   margin: 5px 0;
+}
+
+.card-overlay__title::after {
+content: "";
+display: block;
+border-bottom: 1px solid rgb(150, 150, 150);
+margin: 5px 0;
 }
 
 .card-overlay__year {
@@ -200,7 +212,7 @@
   overflow: hidden;
 }
 .card-overlay__country {
-  margin: 0;
+  margin: 5px 0;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -224,3 +236,10 @@
 .card-overlay__duration {
   margin: 5px 0;
 }
+
+.card-overlay__duration::after {
+  content: "";
+  display: block;
+  border-bottom: 1px solid rgb(150, 150, 150);
+  margin: 5px 0;
+  }

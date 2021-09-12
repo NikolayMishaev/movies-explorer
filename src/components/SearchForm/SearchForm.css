@@ -68,6 +68,8 @@
 @media (max-width: 700px) {
   .search-form__fieldset {
     flex-direction: column;
+    min-width: 170px;
+    padding: 0 10px;
   }
 }
 
@@ -272,6 +274,9 @@
 @media (max-width: 650px) {
   .search-form__list {
     flex-direction: column;
+  }
+  .search-form__list_type_setup {
+    flex-direction: row;
   }
 }
 

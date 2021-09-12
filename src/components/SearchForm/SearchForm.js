@@ -114,7 +114,7 @@ export default function SearchForm({
         </fieldset>
         <fieldset className="search-form__fieldset">
           <legend className="search-form__legend">Настройки</legend>
-          <ul className="search-form__list">
+          <ul className="search-form__list search-form__list_type_setup">
             {settingsButtons.map((button, i) =>
               button.type === "button" ? (
                 <li className="search-form__item" key={i}>
