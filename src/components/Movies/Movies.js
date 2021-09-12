@@ -1,35 +1,55 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Movies.css";
+// импорт компонентов
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Preloader from "../Preloader/Preloader";
-import { movieCards } from "../../utils/constants";
+import SearchMessage from "../SearchMessage/SearchMessage";
 
 export default function Movies({
-  checkboxOn,
-  handleMovieCheckbox,
-  openPopupError,
+  moviesSearchValueCheckboxes,
+  moviesSortingCheckboxes,
+  moviesSettingsButtons,
+  handleSearchValue,
+  visiblePreloader,
+  handleMoviesCards,
+  moviesCards,
+  searchMessageMovies,
+  onCardLike,
+  savedMoviesCards,
+  onSearchMovies,
+  onCardDelete,
+  previousValueSearchForm,
+  filteredMoviesCards,
+  onAddMoreCard,
+  statusLikeDislikeMovieCard,
+  moviesCardTitle,
 }) {
-  const [showPreloader, setShowPreloader] = useState(false);
-
-  function handlePreloader() {
-    setShowPreloader(!showPreloader);
-    setTimeout(() => setShowPreloader(false), 1500); // временный таймер для демонстрации работы прелоадера
-  }
-
   return (
     <>
       <SearchForm
-        handlePreloader={handlePreloader}
-        checkboxOn={checkboxOn}
-        handleMovieCheckbox={handleMovieCheckbox}
+        searchValueCheckboxes={moviesSearchValueCheckboxes}
+        sortingCheckboxes={moviesSortingCheckboxes}
+        settingsButtons={moviesSettingsButtons}
+        handleMoviesCards={handleMoviesCards}
+        handleSearchValue={handleSearchValue}
+        onSearchMovies={onSearchMovies}
+        previousValueSearchForm={previousValueSearchForm}
       />
-      {showPreloader ? (
+      {visiblePreloader ? (
         <Preloader />
+      ) : searchMessageMovies ? (
+        <SearchMessage searchMessage={searchMessageMovies} />
       ) : (
         <MoviesCardList
-          movieCards={movieCards}
-          openPopupError={openPopupError}
+          moviesCards={moviesCards}
+          onCardLike={onCardLike}
+          onCardDelete={onCardDelete}
+          savedMoviesCards={savedMoviesCards}
+          filteredMoviesCards={filteredMoviesCards}
+          onAddMoreCard={onAddMoreCard}
+          statusLikeDislikeMovieCard={statusLikeDislikeMovieCard}
+          moviesCardTitle={moviesCardTitle}
         />
       )}
     </>

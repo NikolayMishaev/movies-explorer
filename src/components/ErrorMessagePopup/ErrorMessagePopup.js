@@ -1,11 +1,11 @@
 import React from "react";
 import Popup from "../Popup/Popup";
 
-export default function ErrorMessagePopup({ errorMessage, isOpen, onClose }) {
+export default function ErrorMessagePopup({ errorMessage, onClose }) {
   return (
     <Popup
       name="error-message"
-      isOpen={isOpen}
+      isOpen={errorMessage}
       title={errorMessage}
       onClose={onClose}
     />

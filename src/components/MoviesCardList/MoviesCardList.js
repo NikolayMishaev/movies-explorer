@@ -1,40 +1,48 @@
 import React from "react";
 import "./MoviesCardList.css";
-import MoviesCard from "../MoviesCard/MoviesCard"; // временные захардкоженные карточки
+// импорт компонентов
+import MoviesCard from "../MoviesCard/MoviesCard";
 
 export default function MoviesCardList({
-  movieCards,
-  cardMovieDelete,
-  openPopupError,
+  locationSavedMovies,
+  moviesCards,
+  onCardLike,
+  savedMoviesCards,
+  onCardDelete,
+  filteredMoviesCards = [],
+  onAddMoreCard,
+  statusLikeDislikeMovieCard,
+  moviesCardTitle,
 }) {
   return (
     <section
       className={` movies-card-list ${
-        cardMovieDelete ? "movies-card-list_place_saved-movies" : ""
+        locationSavedMovies ? "movies-card-list_place_saved-movies" : ""
       } `}
     >
-      <ul className={` movies-card-list__container ${cardMovieDelete && "movies-card-list__container_place_saved-movies"} `}>
-        {movieCards.map((card, i) => (
+      <ul className={"movies-card-list__container"}>
+        {moviesCards.map((card) => (
           <MoviesCard
             card={card}
-            key={i}
-            cardMovieDelete={cardMovieDelete}
-            openPopupError={openPopupError}
+            key={card._id || card.id}
+            locationSavedMovies={locationSavedMovies}
+            onCardLike={onCardLike}
+            savedMoviesCards={savedMoviesCards}
+            onCardDelete={onCardDelete}
+            statusLikeDislikeMovieCard={statusLikeDislikeMovieCard}
+            moviesCardTitle={moviesCardTitle}
           />
         ))}
       </ul>
       <button
         className={` ${
-          cardMovieDelete
+          locationSavedMovies ||
+          moviesCards.length === filteredMoviesCards.length
             ? "display-none"
             : "movies-card-list__button-add-more-cards"
         } `}
         type="button"
-        onClick={() =>
-          openPopupError(
-            "Данный функционал еще не реализован. Демонстрация работы попапа для отображения ошибок при работе с API."
-          )
-        }
+        onClick={onAddMoreCard}
       >
         Ещё
       </button>

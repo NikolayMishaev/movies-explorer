@@ -1,14 +1,7 @@
 .filter-checkbox {
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding-top: 19px;
-}
-
-@media (max-width: 400px) {
-  .filter-checkbox {
-    padding-top: 35px;
-  }
+  z-index: 0;
 }
 
 .filter-checkbox__field {
@@ -33,6 +26,31 @@
   height: 20px;
   background: url(../../images/movie-checkbox-turn-off.svg) no-repeat;
   transition: all 0.25s;
+  position: relative;
+  z-index: 2;
+}
+
+.filter-checkbox__visible-checkbox_type_multi:hover::after {
+  content: "режим мульти дает возможность отметить несколько чекбоксов группы 'Критерии поиска'";
+  position: absolute;
+  color: green;
+  font-size: 11px;
+  line-height: 14px;
+  width: 140px;
+  left: -50px;
+  top: 31px;
+  text-align: center;
+  border: 1px dashed green;
+  border-radius: 15px;
+  padding: 5px;
+}
+
+@media (max-width: 650px) {
+  .filter-checkbox__visible-checkbox_type_multi:hover::after {
+    font-size: 10px;
+    line-height: 10px;
+    left: -30px;
+  }
 }
 
 .filter-checkbox__visible-checkbox:hover {
@@ -47,7 +65,8 @@
   font-weight: normal;
   font-size: 12px;
   line-height: 18px;
-  padding-left: 12px;
+  padding-left: 7px;
+  padding-right: 15px;
 }
 
 @media (max-width: 400px) {

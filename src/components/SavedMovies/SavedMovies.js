@@ -1,37 +1,47 @@
-import React, { useState } from "react";
+import React from "react";
 import "./SavedMovies.css";
+// импорт компонентов
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Preloader from "../Preloader/Preloader";
-import { movieCardsLike } from "../../utils/constants";
+import SearchMessage from "../SearchMessage/SearchMessage";
 
 export default function SavedMovies({
-  checkboxOn,
-  handleMovieCheckbox,
-  cardMovieDelete,
-  openPopupError,
+  savedMoviesSearchValueCheckboxes,
+  savedMoviesSortingCheckboxes,
+  savedMoviesSettingsButtons,
+  preloaderVisible,
+  locationSavedMovies,
+  savedMoviesCards,
+  onCardLike,
+  onCardDelete,
+  onSearchSavedMovies,
+  searchMessageSavedMovies,
+  previousValueSearchForm,
+  moviesCardTitle,
 }) {
-  const [showPreloader, setShowPreloader] = useState(false);
-
-  function handlePreloader() {
-    setShowPreloader(!showPreloader);
-    setTimeout(() => setShowPreloader(false), 1500); // временный таймер для демонстрации работы прелоадера
-  }
-
   return (
     <>
       <SearchForm
-        handlePreloader={handlePreloader}
-        checkboxOn={checkboxOn}
-        handleMovieCheckbox={handleMovieCheckbox}
+        searchValueCheckboxes={savedMoviesSearchValueCheckboxes}
+        sortingCheckboxes={savedMoviesSortingCheckboxes}
+        settingsButtons={savedMoviesSettingsButtons}
+        onSearchMovies={onSearchSavedMovies}
+        previousValueSearchForm={previousValueSearchForm}
+        locationSavedMovies={locationSavedMovies}
       />
-      {showPreloader ? (
+      {preloaderVisible ? (
         <Preloader />
+      ) : searchMessageSavedMovies ? (
+        <SearchMessage searchMessage={searchMessageSavedMovies} />
       ) : (
         <MoviesCardList
-          movieCards={movieCardsLike}
-          cardMovieDelete={cardMovieDelete}
-          openPopupError={openPopupError}
+          moviesCards={savedMoviesCards}
+          locationSavedMovies={locationSavedMovies}
+          onCardLike={onCardLike}
+          onCardDelete={onCardDelete}
+          savedMoviesCards={savedMoviesCards}
+          moviesCardTitle={moviesCardTitle}
         />
       )}
     </>

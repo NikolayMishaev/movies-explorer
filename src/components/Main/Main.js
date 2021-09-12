@@ -1,5 +1,6 @@
 import React from "react";
 import "./Main.css";
+// импорт компонентов
 import Promo from "../Promo/Promo";
 import Navigation from "../Navigation/Navigation";
 import AboutProject from "../AboutProject/AboutProject";

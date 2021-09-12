@@ -1,39 +1,49 @@
 .movies-card {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 
-/*  временной решение для совпадения макету на данном разрешении */
+.movies-card__link {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  transition: all 1s;
+  z-index: 0;
+}
+
+.movies-card__link:hover {
+  transform: scale(1.3);
+  transition: all 1s 1s;
+  z-index: 11;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #ea74f5;
+}
+
 @media (max-width: 800px) {
-  .movies-card:nth-child(n + 9) {
-    display: none;
+  .movies-card__link:hover {
+    transform: scale(1.16);
   }
 }
 
-/*  временной решение для совпадения макету на данном разрешении */
-@media (max-width: 400px) {
-  .movies-card:nth-child(n + 6) {
-    display: none;
+@media (max-width: 629px) {
+  .movies-card__link:hover {
+    transform: scale(1.08);
   }
 }
 
-/*  временной решение для совпадения макету на данном разрешении */
 @media (max-width: 400px) {
-  .movies-card_place_saved-movies:nth-child(n + 3) {
-    display: none;
+  .movies-card__link:hover {
+    transform: scale(1.04);
   }
 }
 
 .movies-card__wallpaper {
   width: 100%;
-  object-fit: cover;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
   transition: all 0.7s;
-}
-
-.movies-card__wallpaper:hover {
-  opacity: 0.7;
-  transform: scale(1.03);
-  cursor: pointer;
+  background-color: black;
 }
 
 @media (max-width: 1239px) {
@@ -140,4 +150,96 @@
   .movies-card__duration::before {
     margin-bottom: 6px;
   }
+}
+
+.card-overlay {
+  padding: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  cursor: pointer;
+  transition: all 1s 0.2s;
+  opacity: 0;
+  visibility: hidden;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 1;
+  color: black;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.7);
+  overflow-y: scroll;
+  overflow-x: unset;
+}
+
+@media (max-width: 629px) {
+  .card-overlay {
+    font-size: 13px;
+  }
+}
+
+.movies-card__link:hover .card-overlay {
+  opacity: 1;
+  visibility: visible;
+  z-index: 11;
+}
+
+.card-overlay__description {
+  line-height: 1.2;
+  margin: 5px 0;
+  padding: 2px 0;
+}
+
+.card-overlay__title {
+  line-height: 1;
+  margin: 5px 0;
+}
+
+.card-overlay__title::after {
+  content: "";
+  display: block;
+  border-bottom: 1px solid rgb(150, 150, 150);
+  margin: 5px 0;
+}
+
+.card-overlay__year {
+  margin: 5px 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.card-overlay__country {
+  margin: 5px 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.card-overlay__director {
+  margin: 5px 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.card-overlay::-webkit-scrollbar {
+  width: 10px;
+}
+
+.card-overlay::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #2be080;
+}
+
+.card-overlay__duration {
+  margin: 5px 0;
+}
+
+.card-overlay__duration::after {
+  content: "";
+  display: block;
+  border-bottom: 1px solid rgb(150, 150, 150);
+  margin: 5px 0;
 }

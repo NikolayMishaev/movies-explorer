@@ -67,6 +67,14 @@
     height: 100%;
     justify-content: unset;
     transition: all 1s;
+    min-height: 100vh;
+  }
+}
+
+@media (max-height: 428px) {
+  .navigation__links_type_mobile-menu {
+    overflow-y: auto;
+    flex-wrap: nowrap;
   }
 }
 
@@ -190,13 +198,19 @@
 
 @media (max-width: 800px) {
   .navigation__list_type_mobile-menu-account {
-    margin: 623px 0 0;
+    margin: auto 0 92px;
   }
 }
 
 @media (max-width: 400px) {
   .navigation__list_type_mobile-menu-account {
-    margin-top: 446px;
+    margin-bottom: 48px;
+  }
+}
+
+@media (max-height: 428px) {
+  .navigation__list_type_mobile-menu-account {
+    margin-top: 28px;
   }
 }
 
@@ -289,14 +303,6 @@
 
 .navigation__link_type_signin {
   color: #fff;
-  position: relative;
-}
-
-.navigation__link_type_signin::after {
-  content:"Для удобства, можно псевдоавторизоваться через кнопку 'Войти' ";
-  position: absolute;
-  top: 34px;
-  left: -110px;
 }
 
 .navigation__link_type_menu {
