@@ -47,9 +47,9 @@
 
 @media (max-width: 650px) {
   .filter-checkbox__visible-checkbox_type_multi:hover::after {
-    top: 107px;
-    left: -60px;
-    line-height: 11px;
+    font-size: 10px;
+    line-height: 10px;
+    left: -30px;
   }
 }
 

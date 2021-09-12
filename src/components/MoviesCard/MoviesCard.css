@@ -199,10 +199,10 @@
 }
 
 .card-overlay__title::after {
-content: "";
-display: block;
-border-bottom: 1px solid rgb(150, 150, 150);
-margin: 5px 0;
+  content: "";
+  display: block;
+  border-bottom: 1px solid rgb(150, 150, 150);
+  margin: 5px 0;
 }
 
 .card-overlay__year {
@@ -242,4 +242,4 @@ margin: 5px 0;
   display: block;
   border-bottom: 1px solid rgb(150, 150, 150);
   margin: 5px 0;
-  }
+}
