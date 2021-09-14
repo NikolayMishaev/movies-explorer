@@ -84,7 +84,7 @@ export default function Profile({
               required
               name="email"
               minLength="5"
-              pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.+.[a-zA-Z]{2,4}"
+              pattern="([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}"
               title="введен некорректный адрес электронной почты"
               className={` entry__input entry__input_type_profile ${
                 currentFormValidator.errors.email
