@@ -1,9 +1,8 @@
 # Приложение Movies Explorer
 ***
 
-- публичный IP-адрес сервера: https://movies-star.nikolaym.nomoredomains.club
-- домен: 178.154.192.65
-- ссылка на макет: https://www.figma.com/file/R36z0irzxo8M6cSifndd7X/ревью-диплом-Мишаев-от-24.08?node-id=891%3A3857
+- [ссылка на приложение](https://movies-star.nikolaym.nomoredomains.club)
+- [ссылка на макет](https://www.figma.com/file/R36z0irzxo8M6cSifndd7X/ревью-диплом-Мишаев-от-24.08?node-id=891%3A3857)
 
 ## Описание
 сервис Movies Explorer - это приложение, в котором можно:
@@ -13,6 +12,9 @@
 - добавлять и удалять понравившиеся фильмы в/из собственной базы фильмов;
 - при наведении на карточку, можно прочитать подробную информацию по фильму(год, режиссер, страна, описание);
 - редактировать данные профиля;
+
+## Скриншот
+![Форма станицы Куда пойти](https://github.com/NikolayMishaev/movies-explorer-frontend/raw/main/src/images/readme/search.jpg)
 
 ## Функциональность
 - добавлены дополнительные фильтры для поиска и сортировки фильмов;
