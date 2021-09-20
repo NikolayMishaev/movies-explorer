@@ -17,7 +17,7 @@ export default function AboutProject() {
         </li>
         <li className="about-project__description-item">
           <p className="about-project__subtitle">
-            На&nbsp;выполнение диплома ушло 5&nbsp;недель
+            На&nbsp;выполнение диплома ушло 4&nbsp;недели
           </p>
           <p className="about-project__text">
             У&nbsp;каждого этапа был мягкий и&nbsp;жёсткий дедлайн, которые
@@ -32,7 +32,7 @@ export default function AboutProject() {
         </li>
         <li className="about-project__direction-item about-project__direction-item_style_front-end">
           <p className="about-project__time about-project__time_style_front-end">
-            4 недели
+            3 недели
           </p>
           <p className="about-project__direction">Front-end</p>
         </li>
