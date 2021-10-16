@@ -16,10 +16,11 @@
 ## Скриншот
 ![Фильмы поиск фильтры](https://github.com/NikolayMishaev/movies-explorer-frontend/raw/main/src/images/readme/search.jpg)
 ![](https://github.com/NikolayMishaev/movies-explorer-frontend/raw/main/src/images/readme/mobile.jpg)
-![](https://github.com/NikolayMishaev/movies-explorer-frontend/raw/main/src/images/readme/profile.jpg)
-![](https://github.com/NikolayMishaev/movies-explorer-frontend/raw/main/src/images/readme/about-me.jpg)
 ![](https://github.com/NikolayMishaev/movies-explorer-frontend/raw/main/src/images/readme/more-button.jpg)
 ![](https://github.com/NikolayMishaev/movies-explorer-frontend/raw/main/src/images/readme/login.jpg)
+![](https://github.com/NikolayMishaev/movies-explorer-frontend/raw/main/src/images/readme/profile.jpg)
+![](https://github.com/NikolayMishaev/movies-explorer-frontend/raw/main/src/images/readme/about-me.jpg)
+![](https://github.com/NikolayMishaev/movies-explorer-frontend/raw/main/src/images/readme/search-mob.jpg)
 
 ## Функциональность
 - добавлены дополнительные фильтры для поиска и сортировки фильмов;
