@@ -13,7 +13,7 @@
 - при наведении на карточку, можно прочитать подробную информацию по фильму(год, режиссер, страна, описание);
 - редактировать данные профиля;
 
-## Скриншот
+## Скриншоты
 ![Фильмы поиск фильтры](https://github.com/NikolayMishaev/movies-explorer-frontend/raw/main/src/images/readme/search.jpg)
 ![](https://github.com/NikolayMishaev/movies-explorer-frontend/raw/main/src/images/readme/mobile.jpg)
 ![](https://github.com/NikolayMishaev/movies-explorer-frontend/raw/main/src/images/readme/more-button.jpg)
