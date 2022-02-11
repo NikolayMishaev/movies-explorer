@@ -1,7 +1,7 @@
 # Приложение «Movies Explorer»
 ***
-- [ссылка на приложение](https://movies-star.nikolaym.nomoredomains.club)
-- [ссылка на макет](https://www.figma.com/file/R36z0irzxo8M6cSifndd7X/ревью-диплом-Мишаев-от-24.08?node-id=891%3A3857)
+- [приложение](https://movies-star.nikolaym.nomoredomains.club)
+- [макет](https://www.figma.com/file/R36z0irzxo8M6cSifndd7X/ревью-диплом-Мишаев-от-24.08?node-id=891%3A3857)
 
 ## Описание
 - приложение-обозреватель фильмов, со своим API
