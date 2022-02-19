@@ -10,41 +10,61 @@ export default function Portfolio() {
           <li className="portfolio__list">
             <a
               className="portfolio__link"
-              href="https://nikolaymishaev.github.io/how-to-learn/index.html"
+              href="https://nikolaymishaev.github.io/bbbs/index.html"
               target="_blank"
               rel="noreferrer"
             >
-              Статичный сайт
+              Верстка боевого проекта «BBBS»
             </a>
           </li>
           <li className="portfolio__list">
             <a
               className="portfolio__link"
-              href="https://nikolaymishaev.github.io/russian-travel/index.html"
+              href="https://dashboard-kit-2022.herokuapp.com/"
               target="_blank"
               rel="noreferrer"
             >
-              Адаптивный сайт
+              Приложение «Dashboard Kit»
             </a>
           </li>
           <li className="portfolio__list">
             <a
               className="portfolio__link"
-              href="https://mestorussia.nikolaym.nomoredomains.club"
+              href="https://mestorussia.nikolaym.nomoredomains.club/"
               target="_blank"
               rel="noreferrer"
             >
-              Одностраничное приложение
+              Приложение «Mesto»
             </a>
           </li>
           <li className="portfolio__list">
             <a
               className="portfolio__link"
-              href="https://nikolaymishaev.github.io/BBBS/index.html"
+              href="https://nikolaymishaev.github.io/russian-travel-add/index.html"
               target="_blank"
               rel="noreferrer"
             >
-              Верстка боевого проекта
+              Адаптивная верстка «Путешествия по России»
+            </a>
+          </li>
+          <li className="portfolio__list">
+            <a
+              className="portfolio__link"
+              href="https://nikolaymishaev.github.io/stacking-game/index.html"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Игра «Stacking»
+            </a>
+          </li>
+          <li className="portfolio__list">
+            <a
+              className="portfolio__link"
+              href="https://nikolaymishaev.github.io/solve-an-example-game/solve-an-example-game.html"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Игра «Solve an example»
             </a>
           </li>
         </ul>
